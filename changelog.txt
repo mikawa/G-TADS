@@ -1,0 +1,142 @@
+Version 1.0.D - 24.04.2012
+
+	-- Fehlerbehebung bei GiveToRev
+	-- Entfernen des EnterOn Resolvers
+	-- Verbessern der Standardantworten
+
+Version 1.0.E - 27.04.2012
+
+	-- Erweiterte Verbdefinitionen mit "ss" statt "ß"
+
+Version 1.0.F - 16.05.2012
+
+	-- Korrektur bei Parsernachfragen ASK und TELL ("wonach/wovon")
+	-- Verbessern der Standardantworten
+	-- Entfernen eines Fehler bei Pronomensetzung (setHim etc ...)
+	-- Hinzufügen der Textersetzungen {in obj} {auf obj} etc ...
+	-- Korrektur der Standardantworten dahingehend
+	-- Ersetzen einer immer noch englischen Verbrule bei SwitchAction
+
+Version 1.0.G - 16.05.2012
+
+	-- Kleinere Verbesserungen
+
+Version 1.0.H - 21.05.2012
+
+	-- Komplettumstellung - Definitionen wie GerX, Wörterbucheinträge mit ae oe ue ss usw.
+	-- Korrekturen der Standardantworten attach - detach
+	-- noch offene Parserantworten bei viele(txt) und keine(txt) bei Adjektiven ...
+
+Version 1.0.G - 25.05.2012
+
+	-- testweise stringComparator für Umlaute gesetzt, dann wieder verworfen
+	- Fehler bei Parsernachfrage behoben (erst in den Bus steigen)
+	-- directNPCmessages überarbeitet
+
+Version 1.0.H - 28.05.2012
+
+	-- Fehler bei changing gender behoben, das die property malesynflag etc. einem grammar predicate objekt
+  	  zuweisen wollte, falls die Eingabe mit einem Verb übereinstimmt, z.B. drück l (kurz für l-Taste, aber gleichzeitig für Look)
+	-- "u" für Examine ergänzt 
+	-- "Pronomen" als Debug Verb ergänzt
+	-- Fehler der Pronomensetzung bei Pluraleingabe korrigiert
+
+Version 1.0.I - 01.06.2012
+
+	-- kleine Korrektur der Standardantworten
+
+Version 1.0.J - 09.06.2012
+
+	-- Versuch der Implementierung der Umlautersetzung über StringComparator
+
+Version 1.0.K - 14.06.2012
+
+	-- Ergänzung Listenschreiben mit definiertem / undefiniertem Artikel
+
+Version 1.0.L - 18.06.2012
+
+	-- Ergänzungen der Tokens bei replaceToken(txt)
+	-- Ergänzungen der Kommentare
+	-- Bugfix bei setIt, setHim, setHer etc. (Änderung in &neuterSyn, &maleSyn, &femaleSyn usw.)
+	-- Kommentare überarbeitet (jetzt einheitlich in Englisch)
+	-- Änderung bei keinen(txt) - gibt jetzt die gleiche Meldung aus wie im Englischen:
+  	  "Du siehst hier kein "tisch weiss"
+  	  aber:
+  	  "Du siehst hier keinen Tisch"
+  	  "nichts, was ich mit dem Begriff <q><<strangeWord>></q>in Verbindung bringen kann"
+  	  Zusätzliche Definition bei Synonymen für Akkusativ-n erforderlich
+  	  'affe[-n]/typ/mann'
+  	  "Du siehst hier keinen Affen"
+
+Version 1.0.M - 11.07.2012
+
+	-- Error with "&amp;rsquo;s" in keinen(txt) output
+	-- komplette Überarbeitung der Routinen
+  		- keinen(txt)
+  		- viele(txt)
+  		- welchen(txt)
+  	Der unbekannte String (txt) wird geparst und mit Textergänzungen versehen
+  	Dann werden die Routinen keinenName, vieleName und welchenName in
+  	dem strangeObj Objekt aufgerufen
+
+Version 1.0.N - 17.07.2012
+
+	-- Anpassungen an Tads 3.1.1
+	-- Entfernen unnötiger Codezeilen (Überbleibsel Englisch)
+	-- Entfernen des temporären Umlaut-Ersetzungcodes
+	-- Drei neue Funktionen in "Thing" zur einwandfreien Genuswandlung ohne Doppeldefinition
+		- changeIt();
+		- changeHim();
+		- changeHer();
+		- changePlural();
+	-- probeweise wurde eine Flagge namens "noTxt" in die gameMain Routine 
+
+Version 1.0.P - 24.07.2012
+
+	-- Überarbeitung aller VerbRules - die singleNounPreps sind ans Deutsche angepasst
+           worden und arbeiten jetzt einwandfrei, z.B. aufSingleNoun, unterSingleNoun, etc.
+           Dies ist eine wichtige Änderung, die alle Verbdefinitionen betrifft
+        -- kleiner Fehler im Status Line Exit Lister behoben: Hyperlink funktionierte nicht
+           mit WebUI
+
+Version 1.0.Q - 05.08.2012
+
+	-- Neue property "preferredIobj" für alle TIAction:
+	   bei Schablonen ohne Präposition wird das dobj und iobj vertauscht,
+	   fall sich eine Objekt der Klasse preferredIobj im dobj slot befindet
+
+Version 1.0.R - 30.08.2012
+
+	-- kleinere Bugfixes
+	-- neue Endung [-ses] für Wörter wie 'Geheimnis[-ses]'
+	-- neue Funktion cutEndings(txt), die von dem String 'txt' Sonderendungen abschneidet
+	   dies findet Verwendung z.B. bei nachträglichen Wörterbucheinträgen von einem String
+
+Version 1.0.S - 30.10.2012
+
+	-- nameWithOwner ist überarbeitet
+	-- kleiner Fehler bei keinen(txt) behoben, falls ein Wort mit apostS keinen Sinn ergibt
+
+Version 1.o.T - 12.11.2012
+
+	-- nameWithOwner erneut überarbeitet
+	-- spellOneFrom(obj) gibt die korrekte "eins" in Abhängigkeit des Genus des Zielobjekts aus
+	-- stilistische Korrketur: bei Besitzern, die nicht isProperName sind, wird jetzt der Genitiv
+	   "Der Hut des Müllmanns" ausgegeben, im Parser wurde eine Schablone ergänzt ("untersuche den
+	   Hut des Müllmanns")
+	-- Korrektur der Speicherung der Tokens bei tok[3]: hier wird jetzt korrekterweise das
+	   ungekürzte, originale Token hinterlegt, für die Routine der Wiederherstellung der Token
+	   bei der UNDO message
+
+Version 1.1 -
+
+	-- Bereinigen des codes, Entfernen doppelter Funktionen in den "name" Routinen
+	-- Hinzufügen der Konstanten FourthPerson, FifthPerson, SixthPerson für actor.referralPerson
+	   (Umschalten der Parserantworten auf vierte, fünfte, sechste Person)
+	-- Korrektur der Ausgabe bei den destInfo Objekten, wenn die Richtung "innen" ist
+	-- neue Property in gameMain: useCapitalizedAdress setzt alle Posessivpronomen und Anrede auf
+	   Großschreibung (Du / Ihr habt den Stein nun ...)
+	-- Überarbeitung aller Standardmessages
+	-- Überarbeitung aller VerbRules (gibt nun exaktere Rückmeldung, welche Schablone
+	   verstanden wurde
+
