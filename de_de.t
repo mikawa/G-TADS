@@ -51,7 +51,7 @@
 // -- setup of version info for Library
 
 libraryInfo: object
-    version = '1.5 - 131023'
+    version = '2.0 - 140327'
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -1186,7 +1186,7 @@ modify Thing
             txt = txt.findReplace('[-s]', 's', ReplaceAll);   // -- print noun genitive endings
             txt = txt.findReplace('[-es]', 'es', ReplaceAll); // -- print noun genitive endings
             txt = txt.findReplace('[-ses]', 'ses', ReplaceAll); // -- print noun genitive endings
-            txt = txt.findReplace('[-n]', '', ReplaceAll);    // -- remove noun accusative/dative endings
+            txt = txt.findReplace('[-n]', 'n', ReplaceAll);    // -- print noun genitive endings
             txt = txt.findReplace('[-en]', 'en', ReplaceAll); // -- print noun genitive endings
         }
         else if (curcase.isDat || curcase.isAkk){
@@ -1385,19 +1385,29 @@ modify Thing
     
     //itPossAdj { return ['seine', 'ihre', 'seine', 'ihre'][pronounSelector]; }
     //itPossNoun { return ['seine', 'ihre', 'seine', 'ihre'][pronounSelector]; }
- 
     //esPossAdj { return ['seiner', 'ihrer', 'seiner', 'ihre'][pronounSelector]; }
     
+    dArt { return curcase.isNom ? ['das', 'der', 'die', 'die'][pronounSelector]
+            : curcase.isGen ? ['des', 'des', 'der', 'der'][pronounSelector]
+            : curcase.isDat ? ['dem', 'dem', 'der', 'den'][pronounSelector]
+            : ['das', 'den', 'die', 'den'][pronounSelector]; }
+            
     /* get the object reflexive pronoun (itself, etc) */
     itReflexive
     {
         return ['sich' , 'sich' , 'sich' , 'sich']
-               [pronounSelector];
+               [pronounSelector] + ' selbst';
     }
     itReflexiveDat
     {
         return ['sich', 'sich', 'sich', 'sich']
-               [pronounSelector];
+               [pronounSelector] + ' selbst';
+    }
+
+    itReflexiveDatWithoutSelf
+    {
+        return ['sich', 'sich', 'sich', 'sich']
+               [pronounSelector] + ' selbst';
     }
     
     // German -- get our correct possessive pronoun (for distinguisher's use)
@@ -1827,6 +1837,11 @@ modify Thing
     einesName = (!isDefinite ? einesNameFrom(name) : desNameFrom(name))
     einemName = (!isDefinite ? einemNameFrom(name) : demNameFrom(name))
     einenName = (!isDefinite ? einenNameFrom(name) : denNameFrom(name))
+    
+    keinName = (isPlural ? 'keine ' + pureNameFrom(name) : 'k'+einNameFrom(name))
+    keinesName = (isPlural ? 'keiner ' + pureNameFrom(name) : 'k'+einesNameFrom(name))
+    keinemName = (isPlural ? 'keinen ' + pureNameFrom(name) : 'k'+einemNameFrom(name))
+    keinenName = (isPlural ? 'keine ' + pureNameFrom(name) : 'k'+einenNameFrom(name))
     
     pureName = (pureNameFrom(name))
     pureAkkName = (pureAkkNameFrom(name))
@@ -2902,7 +2917,7 @@ modify Thing
      *   that have the last consonant repeated before the past -ed ending,
      *   such as "deter".
      */
-    //    nameVerb(verb) { return theName + ' ' + conjugateRegularVerb(verb); }
+
     // -- German: obsolete, use
     // -- output depending on the case
     derNameVerb(verb) { return derName + ' ' + conjugateRegularVerb(verb); }
@@ -2910,194 +2925,706 @@ modify Thing
     demNameVerb(verb) { return demName + ' ' + conjugateRegularVerb(verb); }
     denNameVerb(verb) { return denName + ' ' + conjugateRegularVerb(verb); }
     
-    /* being verb agreeing with this object as subject */
-    verbToBe
-    {
-        return tSel(isPlural ? 'are' : 'is', isPlural ? 'were' : 'was');
-    }
-    // ******
-    // -- German: German verbs, used in msd_neu.t for the standard responses
-    // ******
+    // -- German: German verbs for things, used in msd_neu.t for the standard responses
+    // -- which means we have olny third person, either singular or plural --
+
     verbZuSein
     {
-        return tSel(isPlural ? 'sind' : 'ist', isPlural ? 'waren' : 'war');
-    }
+        conjugateVerb(['','','gewesen','gewesen','sein','gewesen sein'][tenseSelector],        
+              tSelect(['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }  
     verbWuerdeWaere
     {
         return tSel(isPlural ? 'würden' : 'würde', isPlural ? 'wären' : 'wäre');
     }
     verbMoechteSoll
     {
-        return tSel(isPlural ? 'möchten' : 'möchte', isPlural ? 'sollten' : 'solltef');
+        return tSel(isPlural ? 'möchten' : 'möchte', isPlural ? 'sollten' : 'sollte');
     }
     verbZuKann
     {
-        return tSel(isPlural ? 'können' : 'kann', isPlural ? 'konnten' : 'konnte');
+        conjugateVerb(['','','gekonnt','gekonnt','können','gekonnt haben'][tenseSelector],
+              tSelect(['kann', 'können'],
+                      ['konnte', 'konnten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
     }
     verbZuKennen
     {
-        return tSel(isPlural ? 'kennen' : 'kennt', isPlural ? 'kannten' : 'kannte');
-    }
+        conjugateVerb(['','','gekannt','gekannt','kennen','gekannt haben'][tenseSelector],
+              tSelect(['kennt', 'kennen'],
+                      ['kannte', 'kannten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }    
     verbZuHaben
     {
-        return tSel(isPlural ? 'haben' : 'hat', isPlural ? 'hatten' : 'hatte');
-    }
+         conjugateVerb(['','','gehabt','gehabt','haben','gehabt haben'][tenseSelector],
+              tSelect(['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }  
     verbZuScheinen
     {
-        return tSel(isPlural ? 'scheinen' : 'scheint', isPlural ? 'schienen' : 'schien');
-    }
+        conjugateVerb(['','','gescheint','gescheint','scheinen','gescheint haben'][tenseSelector],
+              tSelect(['scheint', 'scheinen'],
+                      ['schien', 'schienen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }  
+    verbZuErscheinen
+    {
+        conjugateVerb(['','','erschienen','erschienen','erscheinen','erschienen sein'][tenseSelector],
+              tSelect(['erscheint', 'erscheinen'],
+                      ['erschien', 'erschienen'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }  
     verbZuBezwecken
     {
-        return tSel(isPlural ? 'bezwecken' : 'bezweckt', isPlural ? 'bezweckten' : 'bezweckte');
+        conjugateVerb(['','','bezweckt','bezweckt','bezwecken','bezweckt haben'][tenseSelector],
+              tSelect(['bezweckt', 'bezwecken'],
+                      ['bezweckte', 'bezweckten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
     }
     verbZuGefallen
     {
-        return tSel(isPlural ? 'gefallen' : 'gefällt', isPlural ? 'gefielen' : 'gefiel');
-    }
+        conjugateVerb(['','','gefallen','gefallen','gefallen','gefallen haben'][tenseSelector],
+              tSelect(['gefällt', 'gefallen'],
+                      ['gefiel', 'gefielen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }  
     verbZuBekommen
     {
-        return tSel(isPlural ? 'bekommen' : 'bekommt', isPlural ? 'bekamen' : 'bekam');
+        conjugateVerb(['','','bekommen','bekommen','bekommen','bekommen haben'][tenseSelector],
+              tSelect(['bekommt', 'bekommen'],
+                      ['bekam', 'bekamen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
     }
     verbZuSehen
     {
-        return tSel(isPlural ? 'sehen' : 'sieht', isPlural ? 'sahen' : 'sah');
-    }
+        conjugateVerb(['','','gesehen','gesehen','sehen','gesehen haben'][tenseSelector],
+              tSelect(['sieht', 'sehen'],
+                      ['sah', 'sahen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }     
+    verbZuHoeren
+    {
+        conjugateVerb(['','','gehört','gehört','hören','gehört haben'][tenseSelector],
+              tSelect(['hört', 'hören'],
+                      ['hörte', 'hörten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }    
     verbZuSprechen
     {
-        return tSel(isPlural ? 'sprechen' : 'spricht', isPlural ? 'sprachen' : 'sprach');
-    }
+        conjugateVerb(['','','gesprochen','gesprochen','sprechen','gesprochen haben'][tenseSelector],
+              tSelect(['spricht', 'sprechen'],
+                      ['sprach', 'sprachen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    } 
     verbZuBetreten
     {
-        return tSel(isPlural ? 'betreten' : 'betritt', isPlural ? 'betraten' : 'betrat');
-    }
+        conjugateVerb(['','','betreten','betreten','betreten','betreten haben'][tenseSelector],
+              tSelect(['betritt', 'betreten'],
+                      ['betrat', 'betraten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    } 
     verbZuBemerken
     {
-        return tSel(isPlural ? 'bemerken' : 'bemerkt', isPlural ? 'bemerkten' : 'bemerkte');
-    }
+        conjugateVerb(['','','bemerkt','bemerkt','bemerken','bemerkt haben'][tenseSelector],
+              tSelect(['bemerkt', 'bemerken'],
+                      ['bemerkte', 'bemerkten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }     
     verbZuSagen
     {
-        return tSel(isPlural ? 'sagen' : 'sagt', isPlural ? 'sagten' : 'sagte');
-    }
+        conjugateVerb(['','','gesagt','gesagt','sagen','gesagt haben'][tenseSelector],
+              tSelect(['sagt', 'sagen'],
+                      ['sagte', 'sagten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }  
     verbZuAntworten
     {
-        return tSel(isPlural ? 'antworten' : 'antwortet', isPlural ? 'anworteten' : 'antwortete');
-    }
+        conjugateVerb(['','','geantwortet','geantwortet','antworten','geantwortet haben'][tenseSelector],
+              tSelect(['antwortet', 'antworten'],
+                      ['antwortete', 'antworteten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }  
     verbZuMuessen
     {
-        return tSel(isPlural ? 'müssen' : 'muss', isPlural ? 'mussten' : 'musste');
-    }    
-     verbZuRiechen
+        conjugateVerb(['','','müssen','müssen','müssen','gemusst haben'][tenseSelector],
+              tSelect(['muss', 'müssen'],
+                      ['musste', 'mussten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }  
+    verbZuRiechen
     {
-        return tSel(isPlural ? 'riechen' : 'riecht', isPlural ? 'rochen' : 'roch');
-    }   
+        conjugateVerb(['','','gerochen','gerochen','riechen','gerochen haben'][tenseSelector],
+              tSelect(['riecht', 'riechen'],
+                      ['roch', 'rochen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }     
     verbZuNehmen
     {
-        return tSel(isPlural ? 'nehmen' : 'nimmt', isPlural ? 'nahmen' : 'nahm');
-    }
+        conjugateVerb(['','','genommen','genommen','nehmen','genommen haben'][tenseSelector],
+              tSelect(['nimmt', 'nehmen'],
+                      ['nahm', 'nahmen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }        
     verbZuGeben
     {
-        return tSel(isPlural ? 'geben' : 'gibt', isPlural ? 'gaben' : 'gab');
+        conjugateVerb(['','','gegeben','gegeben','geben','gegeben haben'][tenseSelector],
+              tSelect(['gibt', 'geben'],
+                      ['gab', 'gaben'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
     }  
     verbZuFallen
     {
-        return tSel(isPlural ? 'fallen' : 'fällt', isPlural ? 'fielen' : 'fiel');
-    } 
+        conjugateVerb(['','','gefallen','gefallen','fallen','gefallen sein'][tenseSelector],        
+              tSelect(['fällt', 'fallen'],
+                      ['fiel', 'fielen'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }     
     verbZuWollen
     {
-        return tSel(isPlural ? 'wollen' : 'will', isPlural ? 'wollten' : 'wollte');
-    } 
+        conjugateVerb(['','','wollen','wollen','wollen','wollen haben'][tenseSelector],
+              tSelect(['will', 'wollen'],
+                      ['wollte', 'wollten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }      
     verbZuBefinden
     {
-        return tSel(isPlural ? 'befinden' : 'befindet', isPlural ? 'befanden' : 'befand');
-    } 
+        conjugateVerb(['','','befunden','befunden','befinden','befunden haben'][tenseSelector],
+              tSelect(['befindet', 'befinden'],
+                      ['befand', 'befanden'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuZiehen
     {
-        return tSel(isPlural ? 'ziehen' : 'zieht', isPlural ? 'zogen' : 'zog');
-    } 
+        conjugateVerb(['','','gezogen','gezogen','ziehen','gezogen haben'][tenseSelector],
+              tSelect(['zieht', 'ziehen'],
+                      ['zog', 'zogen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuDruecken
+    {
+        conjugateVerb(['','','gedrückt','gedrückt','drücken','gedrückt haben'][tenseSelector],
+              tSelect(['drückt', 'drücken'],
+                      ['drückte', 'drückten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuBrennen
     {
-        return tSel(isPlural ? 'brennen' : 'brennt', isPlural ? 'brannten' : 'brannte');
-    } 
+        conjugateVerb(['','','gebrannt','gebrannt','brennen','gebrannt haben'][tenseSelector],
+              tSelect(['brennt', 'brennen'],
+                      ['brannte', 'brannten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuSchliessen
     {
-        return tSel(isPlural ? 'schließen' : 'schließt', isPlural ? 'schlossen' : 'schloss');
-    } 
+        conjugateVerb(['','','geschlossen','geschlossen','schließen','geschlossen haben'][tenseSelector],
+              tSelect(['schließt', 'schließen'],
+                      ['schloss', 'schlossen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuGehen
     {
-        return tSel(isPlural ? 'gehen' : 'geht', isPlural ? 'gingen' : 'ging');
-    } 
+        conjugateVerb(['','','gegangen','gegangen','gehen','gegangen sein'][tenseSelector],        
+              tSelect(['geht', 'gehen'],
+                      ['ging', 'gingen'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuVergehen
+    {
+        conjugateVerb(['','','vergangen','vergangen','vergehen','vergangen sein'][tenseSelector],        
+              tSelect(['vergeht', 'vergehen'],
+                      ['verging', 'vergingen'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]); 
+    }
+    
+    verbZuFuehren
+    {
+        conjugateVerb(['','','geführt','geführt','führen','geführt haben'][tenseSelector],        
+              tSelect(['führt', 'führen'],
+                      ['führte', 'führten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuWissen
     {
-        return tSel(isPlural ? 'wissen' : 'weiß', isPlural ? 'wussten' : 'wusste');
-    } 
+        conjugateVerb(['','','gewusst','gewusst','wissen','gewusst haben'][tenseSelector],
+              tSelect(['weiß', 'wissen'],
+                      ['wusste', 'wussten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }    
     verbZuSchreien
     {
-        return tSel(isPlural ? 'schreien' : 'schreit', isPlural ? 'schrien' : 'schrie');
-    } 
+        conjugateVerb(['','','geschrien','geschrien','schreien','geschrien haben'][tenseSelector],
+              tSelect(['schreit', 'schreien'],
+                      ['schrie', 'schrien'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuSpringen
     {
-        return tSel(isPlural ? 'springen' : 'springt', isPlural ? 'sprangen' : 'sprang');
-    } 
+        conjugateVerb(['','','gesprungen','gesprungen','springen','gesprungen sein'][tenseSelector],        
+              tSelect(['springt', 'springen'],
+                      ['sprang', 'sprangen'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuSchieben
     {
-        return tSel(isPlural ? 'schieben' : 'schiebt', isPlural ? 'schoben' : 'schob');
-    } 
+        conjugateVerb(['','','geschoben','geschoben','schieben','geschoben haben'][tenseSelector],
+              tSelect(['schiebt', 'schieben'],
+                      ['schob', 'schoben'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuPassen
     {
-        return tSel(isPlural ? 'passen' : 'passt', isPlural ? 'passten' : 'passte');
+        conjugateVerb(['','','gepasst','gepasst','passen','gepasst haben'][tenseSelector],
+              tSelect(['passt', 'passen'],
+                      ['passte', 'passten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
     }
     verbZuStehen
     {
-        return tSel(isPlural ? 'stehen' : 'steht', isPlural ? 'standen' : 'stand');
-    } 
+        conjugateVerb(['','','gestanden','gestanden','stehen','gestanden sein'][tenseSelector],
+              tSelect(['steht', 'stehen'],
+                      ['stand', 'standen'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuLiegen
     {
-        return tSel(isPlural ? 'liegen' : 'liegt', isPlural ? 'lagen' : 'lag');
-    } 
+        conjugateVerb(['','','gelegen','gelegen','liegen','gelegen sein'][tenseSelector],
+              tSelect(['liegt', 'liegen'],
+                      ['lag', 'lagen'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuSitzen
     {
-        return tSel(isPlural ? 'sitzen' : 'sitzt', isPlural ? 'saßen' : 'saß');
-    } 
+        conjugateVerb(['','','gesessen','gesessen','sitzen','gesessen sein'][tenseSelector],
+              tSelect(['sitzt', 'sitzen'],
+                      ['saß', 'saßen'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuTreffen
     {
-        return tSel(isPlural ? 'treffen' : 'trifft', isPlural ? 'trafen' : 'traf');
-    } 
+        conjugateVerb(['','','getroffen','getroffen','treffen','getroffen haben'][tenseSelector],
+              tSelect(['trifft', 'treffen'],
+                      ['traf', 'trafen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuFangen
     {
-        return tSel(isPlural ? 'fangen' : 'fängt', isPlural ? 'fingen' : 'fing');
-    }    
+        conjugateVerb(['','','gefangen','gefangen','fangen','gefangen haben'][tenseSelector],
+              tSelect(['fängt', 'fangen'],
+                      ['fing', 'fingen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuEnthalten
     {
-        return tSel(isPlural ? 'enthalten' : 'enthält', isPlural ? 'enthielten' : 'enthielt');
-    }    
+        conjugateVerb(['','','enthalten','enthalten','enthalten','enthalten haben'][tenseSelector],
+              tSelect(['enthält', 'enthalten'],
+                      ['enthielt', 'enthielten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuEntscheiden
     {
-        return tSel(isPlural ? 'entscheiden' : 'entscheidet', isPlural ? 'entschieden' : 'entschied');
+        conjugateVerb(['','','entschieden','entschieden','entscheiden','entschieden haben'][tenseSelector],
+              tSelect(['entscheidet', 'entscheiden'],
+                      ['entschied', 'entschieden'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);  
     }
     verbZuFragen
     {
-        return tSel(isPlural ? 'fragen' : 'frägt', isPlural ? 'fragten' : 'fragte');
-    }  
+        conjugateVerb(['','','gefragt','gefragt','fragen','gefragt haben'][tenseSelector],
+              tSelect(['fragt', 'fragen'],
+                      ['fragte', 'fragten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuVerlassen
     {
-        return tSel(isPlural ? 'verlassen' : 'verlässt', isPlural ? 'verließen' : 'verließ');
-    } 
+        conjugateVerb(['','','verlassen','verlassen','verlassen','verlassen haben'][tenseSelector],
+              tSelect(['verlässt', 'verlassen'],
+                      ['verließ', 'verließen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuKommen
     {
-        return tSel(isPlural ? 'kommen' : 'kommt', isPlural ? 'kamen' : 'kam');
-    } 
+        conjugateVerb(['','','gekommen','gekommen','kommen','gekommen sein'][tenseSelector],
+              tSelect(['kommt', 'kommen'],
+                      ['kam', 'kamen'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuWerden
     {
-        return tSel(isPlural ? 'werden' : 'wird', isPlural ? 'wurden' : 'wurde');
-    } 
+        conjugateVerb(['','','werden','werden','werden','geworden sein'][tenseSelector],
+              tSelect(['wird', 'werden'],
+                      ['wird', 'werden'],
+                      ['wird', 'werden'],
+                      ['wird', 'werden'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuLassen
     {
-        return tSel(isPlural ? 'lassen' : 'läßt', isPlural ? 'ließen' : 'ließ');
-    } 
+        conjugateVerb(['','','gelassen','gelassen','lassen','gelassen haben'][tenseSelector],
+              tSelect(['läßt', 'lassen'],
+                      ['ließ', 'ließen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
     verbZuKannKon
     {
-        return tSel(isPlural ? 'könnten' : 'könnte', isPlural ? 'konnten' : 'konnte');
-    } 
+        conjugateVerb(['','','können','können','können','gekonnt haben'][tenseSelector],
+              tSelect(['kann', 'können'],
+                      ['konnte', 'konnten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuWeigern
+    {
+        conjugateVerb(['','','geweigert','geweigert','weigern','geweigert haben'][tenseSelector],
+              tSelect(['weigert', 'weigern'],
+                      ['weigerte', 'weigerten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuBringen
+    {
+        conjugateVerb(['','','gebracht','gebracht','bringen','gebracht haben'][tenseSelector],
+              tSelect(['bringt', 'bringen'],
+                      ['brachte', 'brachten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuFolgen
+    {
+        conjugateVerb(['','','gefolgt','gefolgt','folgen','gefolgt haben'][tenseSelector],
+              tSelect(['folgt', 'folgen'],
+                      ['folgte', 'folgten'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuZeigen
+    {
+        conjugateVerb(['','','gezeigt','gezeigt','zeigen','gezeigt haben'][tenseSelector],
+              tSelect(['zeigt', 'zeigen'],
+                      ['zeigte', 'zeigten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuMachen
+    {
+        conjugateVerb(['','','gemacht','gemacht','machen','gemacht haben'][tenseSelector],
+              tSelect(['macht', 'machen'],
+                      ['machte', 'machten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuEssen
+    {
+        conjugateVerb(['','','gegessen','gegessen','essen','gegessen haben'][tenseSelector],
+              tSelect(['isst', 'essen'],
+                      ['aß', 'aßen'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuSchalten
+    {
+        conjugateVerb(['','','geschaltet','geschaltet','schalten','geschaltet haben'][tenseSelector],
+              tSelect(['schaltet', 'schalten'],
+                      ['schaltete', 'schalteten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuPassieren
+    {
+        conjugateVerb(['','','passiert','passiert','passieren','passiert haben'][tenseSelector],
+              tSelect(['passiert', 'passieren'],
+                      ['passierte', 'passierten'],
+                      ['ist', 'sind'],
+                      ['war', 'waren'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuZuenden
+    {
+        conjugateVerb(['','','gezündet','gezündet','zünden','gezündet haben'][tenseSelector],
+              tSelect(['zündet', 'zünden'],
+                      ['zündete', 'zündeten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuLoesen
+    {
+        conjugateVerb(['','','gelöst','gelöst','lösen','gelöst haben'][tenseSelector],
+              tSelect(['löst', 'lösen'],
+                      ['löste', 'lösten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuBrauchen
+    {
+        conjugateVerb(['','','gebraucht','gebraucht','brauchen','gebraucht haben'][tenseSelector],
+              tSelect(['braucht', 'brauchen'],
+                      ['brauchte', 'brauchten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuLegen
+    {
+        conjugateVerb(['','','gelegt','gelegt','legen','gelegt haben'][tenseSelector],
+              tSelect(['legt', 'legen'],
+                      ['legte', 'legten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuHaengen
+    {
+        conjugateVerb(['','','gehängt','gehängt','hängen','gehängt haben'][tenseSelector],
+              tSelect(['hängt', 'hängen'],
+                      ['hängte', 'hängten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuProbieren
+    {
+        conjugateVerb(['','','probiert','probiert','probieren','probiert haben'][tenseSelector],
+              tSelect(['probiert', 'probieren'],
+                      ['probierte', 'probierten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuBenoetigen
+    {
+        conjugateVerb(['','','benötigt','benötigt','benötigen','benötigt haben'][tenseSelector],
+              tSelect(['benötigt', 'benötigen'],
+                      ['benötigte', 'benötigten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuOeffnen
+    {
+        conjugateVerb(['','','geöffnet','geöffnet','öffnen','geöffnet haben'][tenseSelector],
+              tSelect(['öffnet', 'öffnen'],
+                      ['öffnete', 'öffneten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuWarten
+    {
+        conjugateVerb(['','','gewartet','gewartet','warten','gewartet haben'][tenseSelector],
+              tSelect(['wartet', 'warten'],
+                      ['wartete', 'warteten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuVersuchen
+    {
+        conjugateVerb(['','','versucht','versucht','versuchen','versucht haben'][tenseSelector],
+              tSelect(['versucht', 'versuchen'],
+                      ['versuchte', 'versuchten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuStellen
+    {
+        conjugateVerb(['','','gestellt','gestellt','stellen','gestellt haben'][tenseSelector],
+              tSelect(['stellt', 'stellen'],
+                      ['stellte', 'stellten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuLoeschen
+    {
+        conjugateVerb(['','','gelöscht','gelöscht','löschen','gelöscht haben'][tenseSelector],
+              tSelect(['löscht', 'löschen'],
+                      ['löschte', 'löschten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuVerbinden
+    {
+        conjugateVerb(['','','verbunden','verbunden','verbinden','verbunden haben'][tenseSelector],
+              tSelect(['verbindet', 'verbinden'],
+                      ['verband', 'verbanden'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuFuehlen
+    {
+        conjugateVerb(['','','gefühlt','gefühlt','fühlen','gefühlt haben'][tenseSelector],
+              tSelect(['fühlt', 'fühlen'],
+                      ['fühlte', 'fühlten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    verbZuSchmecken
+    {
+        conjugateVerb(['','','geschmeckt','geschmeckt','schmecken','geschmeckt haben'][tenseSelector],
+              tSelect(['schmeckt', 'schmecken'],
+                      ['schmeckte', 'schmeckten'],
+                      ['hat', 'haben'],
+                      ['hatte', 'hatten'],
+                      ['wird', 'werden'])[pluralSelector]);
+    }
+    
+    // dummyVerb returns our participle form or our (in some rare cases needed)
+    // reversed form in side sentences like "wie du {gekonnt hast}"
+    
+    dummyVerb
+    {
+        verbHelper.reversed = nil;
+
+        if (verbHelper.participle == '')
+            return '';
+        else if (verbHelper.blank)
+            return ' ' + verbHelper.participle;
+        else {
+            verbHelper.blank = true;
+            return verbHelper.participle;
+        }
+    }
+    
+    // we store a long participle for lists with nested parts like:
+    // "Ich habe hier einen Bottich (darin ist Wasser gewesen) gesehen. "
+    
+    setPartLong {
+        verbHelper.longParticiple = verbHelper.participle;
+        return '';
+    }
+    
+    printPartLong
+    {
+        return ' ' + verbHelper.longParticiple;
+    }
+    
+    // dummyPart sets our participle form to reverse output. This is needed in
+    // rare cases (mostly side sentences) when the helping verb and the participle
+    // change their position.
+    
+    dummyPart
+    {
+        verbHelper.reversed = true;
+        return '';
+    }
+    
+    // dummyPartWithoutBlank is needed when out pariciple form is tied against an
+    // adjective. This is useful in sentences like "Du {hast} den Fernseher an{-geschaltet}"
+    
+    dummyPartWithoutBlank
+    {
+        verbHelper.blank = nil;
+        return dummyVerb;
+    }
     
     /*
      *   Verb endings for regular '-s' verbs, agreeing with this object as
@@ -3126,13 +3653,6 @@ modify Thing
      *   stored in langMessageBuilder.pastEnding_.  It is used as part of
      *   the string parameter substitution mechanism.
      */
-
-    // ******
-    // -- German: German standard endings for regular verbs
-    // ******
-    verbEndingT { return tSel(isPlural ? 'en' : 't', isPlural ? 'ten' : 'te' ); }
-    verbEndingET { return tSel(isPlural ? 'en' : 'e', isPlural ? 'eten' : 'ete' ); }
-    verbEndingE { return tSel(isPlural ? 'en' : 'e', isPlural ? 'en' : 'e' ); }
     
     /*
      *   Dummy name - this simply displays nothing; it's used for cases
@@ -3142,9 +3662,6 @@ modify Thing
      *   empty string.
      */
     dummyName = ''
-    
-    // The same for our verbmarker
-    dummyVerb = ''
 
     /*
      *   Invoke a property (with an optional argument list) on this object
@@ -3224,6 +3741,12 @@ class NameAsOther: object
     einesName = (targetObj.einesName)
     einemName = (targetObj.einemName)
     einenName = (targetObj.einenName)
+    
+    keinName = (targetObj.keinName)
+    keinesName = (targetObj.keinesName)
+    keinemName = (targetObj.keinemName)
+    keinenName = (targetObj.keinenName)
+    
     derName = (targetObj.derName)
     desName = (targetObj.desName)
     demName = (targetObj.demName)
@@ -3257,6 +3780,10 @@ class NameAsOther: object
  
     itPossNoun = (targetObj.itPossNoun)
     itReflexive = (targetObj.itReflexive)
+    itReflexiveAkk = (targetObj.itReflexiveAkk)
+    itReflexiveDat = (targetObj.itReflexiveDat)
+    itReflexiveDatWithoutSelf = (targetObj.itReflexiveDatWithoutSelf)
+    
     //    thatNom = (targetObj.thatNom)
     //    thatObj = (targetObj.thatObj)
     //    thatIsContraction = (targetObj.thatIsContraction)
@@ -3289,8 +3816,7 @@ class NameAsOther: object
         { targetObj.notePromptByOwnerLoc(ownerPri); }
     notePromptByPossAdj()
         { targetObj.notePromptByPossAdj(); }
-    //    aName = (targetObj.aName)
-    //    aNameObj = (targetObj.aNameObj)
+
     pluralName = (targetObj.pluralName)
     nameIs = (targetObj.nameIs)
     nameIsnt = (targetObj.nameIsnt)
@@ -3314,11 +3840,78 @@ class NameAsOther: object
     verbWill = (targetObj.verbWill)
     verbWont = (targetObj.verbWont)
 
-    verbEndingS = (targetObj.verbEndingS)
-    verbEndingSD = (targetObj.verbEndingSD)
-    verbEndingSEd = (targetObj.verbEndingSEd)
-    verbEndingEs = (targetObj.verbEndingEs)
-    verbEndingIes = (targetObj.verbEndingIes)
+    verbZuSein = (targetObj.verbZuSein)
+    verbZuKann = (targetObj.verbZuKann)
+    verbZuKennen = (targetObj.verbZuKennen)
+    verbZuHaben = (targetObj.verbZuHaben)
+    verbZuScheinen = (targetObj.verbZuScheinen)
+    verbZuErscheinen = (targetObj.verbZuErscheinen)
+    verbZuBezwecken = (targetObj.verbZuBezwecken)
+    verbZuGefallen = (targetObj.verbZuGefallen)
+    verbZuBekommen = (targetObj.verbZuBekommen)
+    verbZuSehen = (targetObj.verbZuSehen)
+    verbZuHoeren = (targetObj.verbZuHoeren)
+    verbZuSprechen = (targetObj.verbZuSprechen)
+    verbZuBetreten = (targetObj.verbZuBetreten)
+    verbZuBemerken = (targetObj.verbZuBemerken)
+    verbZuSagen = (targetObj.verbZuSagen)
+    verbZuAntworten = (targetObj.verbZuAntworten)
+    verbZuMuessen = (targetObj.verbZuMuessen)
+    verbZuRiechen = (targetObj.verbZuRiechen)
+    verbZuNehmen = (targetObj.verbZuNehmen)
+    verbZuGeben = (targetObj.verbZuGeben)
+    verbZuFallen = (targetObj.verbZuFallen)
+    verbZuWollen = (targetObj.verbZuWollen)
+    verbZuBefinden = (targetObj.verbZuBefinden)
+    verbZuZiehen = (targetObj.verbZuZiehen)
+    verbZuDruecken = (targetObj.verbZuDruecken)
+    verbZuBrennen = (targetObj.verbZuBrennen)
+    verbZuSchliessen = (targetObj.verbZuSchliessen)
+    verbZuGehen = (targetObj.verbZuGehen)
+    verbZuVergehen = (targetObj.verbZuVergehen)
+    verbZuFuehren = (targetObj.verbZuFuehren)
+    verbZuWissen = (targetObj.verbZuWissen)
+    verbZuSchreien = (targetObj.verbZuSchreien)
+    verbZuSpringen = (targetObj.verbZuSpringen)
+    verbZuSchieben = (targetObj.verbZuSchieben)
+    verbZuPassen = (targetObj.verbZuPassen)
+    verbZuStehen = (targetObj.verbZuStehen)
+    verbZuLiegen = (targetObj.verbZuLiegen)
+    verbZuSitzen = (targetObj.verbZuSitzen)
+    verbZuTreffen = (targetObj.verbZuTreffen)
+    verbZuFangen = (targetObj.verbZuFangen)
+    verbZuEnthalten = (targetObj.verbZuEnthalten)
+    verbZuEntscheiden = (targetObj.verbZuEntscheiden)
+    verbZuFragen = (targetObj.verbZuFragen)
+    verbZuVerlassen = (targetObj.verbZuVerlassen)
+    verbZuKommen = (targetObj.verbZuKommen)
+    verbZuWerden = (targetObj.verbZuWerden)
+    verbZuLassen = (targetObj.verbZuLassen)
+    verbZuKannKon = (targetObj.verbZuKannKon)
+    verbZuWeigern = (targetObj.verbZuWeigern)
+    verbZuBringen = (targetObj.verbZuBringen)
+    verbZuFolgen = (targetObj.verbZuFolgen)
+    verbZuZeigen = (targetObj.verbZuZeigen)
+    verbZuMachen = (targetObj.verbZuMachen)
+    verbZuEssen = (targetObj.verbZuEssen)
+    verbZuSchalten = (targetObj.verbZuSchalten)
+    verbZuPassieren = (targetObj.verbZuPassieren)
+    verbZuZuenden = (targetObj.verbZuZuenden)
+    verbZuLoesen = (targetObj.verbZuLoesen)
+    verbZuBrauchen = (targetObj.verbZuBrauchen)
+    verbZuLegen = (targetObj.verbZuLegen)
+    verbZuHaengen = (targetObj.verbZuHaengen)
+    verbZuProbieren = (targetObj.verbZuProbieren)
+    verbZuBenoetigen = (targetObj.verbZuBenoetigen)
+    verbZuOeffnen = (targetObj.verbZuOeffnen)
+    verbZuWarten = (targetObj.verbZuWarten)
+    verbZuVersuchen = (targetObj.verbZuVersuchen)
+    verbZuStellen = (targetObj.verbZuStellen)
+    verbZuLoeschen = (targetObj.verbZuLoeschen)
+    verbZuVerbinden = (targetObj.verbZuVerbinden)
+    verbZuFuehlen = (targetObj.verbZuFuehlen)
+    verbZuSchmecken = (targetObj.verbZuSchmecken)
+    
     // -- German adjective endings
     adjEnding = (targetObj.adjEnding)
 ;
@@ -3379,6 +3972,7 @@ modify Surface
     objInPrep = 'auf'
     actorInPrep = 'auf'
     actorOutOfPrep = 'aus dativ'     // -- German: "kommt aus dem Bett heraus
+    dobjFor(Climb) asDobjFor(StandOn)
 ;
 
 modify Underside
@@ -3440,6 +4034,13 @@ modify Actor
                 + (isPlural ? 4 : isHim ? 2 : isHer ? 3 : 1));
     }
 
+    thirdPersonPronounSelector = (isPlural ? 4 : isHer ? 3 : isHim ? 2 : 1)
+    
+    dArt { return curcase.isNom ? ['das', 'der', 'die', 'die'][thirdPersonPronounSelector]
+            : curcase.isGen ? ['des', 'des', 'der', 'der'][thirdPersonPronounSelector]
+            : curcase.isDat ? ['dem', 'dem', 'der', 'den'][thirdPersonPronounSelector]
+            : ['das', 'den', 'die', 'den'][thirdPersonPronounSelector]; }
+    
     /*
      *   get the verb form selector index for the person and number:
      *
@@ -3457,7 +4058,7 @@ modify Actor
      */
     itNom
     {
-        return ((gameMain.useCapitalizedAdress && pronounSelector!=3) ? '\^' : '') + 
+        return ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') + 
             ['ich', 'ich', 'ich', 'wir',
             'du', 'du', 'du', 'sie',
             'es', 'er', 'sie', 'sie',
@@ -3470,7 +4071,7 @@ modify Actor
     
     itGen
     {
-        return 'von ' + ((gameMain.useCapitalizedAdress && pronounSelector!=3) ? '\^' : '') +
+        return 'von ' + ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') +
             ['mir', 'mir', 'mir', 'mir',
             'dir', 'dir', 'dir', 'dir',
             'ihm', 'ihm', 'ihr', 'ihnen',
@@ -3480,7 +4081,7 @@ modify Actor
     }
     itDat
     {
-        return ((gameMain.useCapitalizedAdress && pronounSelector!=3) ? '\^' : '') +
+        return ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') +
             ['mir', 'mir', 'mir', 'mir',
             'dir', 'dir', 'dir', 'dir',
             'ihm', 'ihm', 'ihr', 'ihnen',
@@ -3490,7 +4091,7 @@ modify Actor
     }
     itAkk
     {
-        return ((gameMain.useCapitalizedAdress && pronounSelector!=3) ? '\^' : '') +
+        return ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') +
             ['mich', 'mich', 'mich', 'uns',
             'dich', 'dich', 'dich', 'euch',
             'es', 'ihn', 'sie', 'sie',
@@ -3510,7 +4111,7 @@ modify Actor
     
     itPossAdj
     {
-        return (gameMain.useCapitalizedAdress ? '\^' : '') +
+        return ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') +
             ['mein', 'mein', 'mein', 'unser',
             'dein', 'dein', 'dein', 'euer',
             'sein', 'sein', 'ihr', 'ihre',
@@ -3521,18 +4122,29 @@ modify Actor
     
     itReflexive
     {
-        return (gameMain.useCapitalizedAdress ? '\^' : '') +
+        return ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') +
             ['mich', 'mich', 'mich', 'mich',
             'dich', 'dich', 'dich', 'dich',
             'sich', 'sich', 'sich', 'sich',
             'uns', 'uns', 'uns', 'uns',
             'euch', 'euch', 'euch', 'euch',
-            'ihr', 'ihr', 'ihr', 'ihr'][pronounSelector];
+            'ihr', 'ihr', 'ihr', 'ihr'][pronounSelector] + ' selbst';
     }
     
     itReflexiveDat 
     {
-        return (gameMain.useCapitalizedAdress ? '\^' : '') +
+        return ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') +
+            ['mir', 'mir', 'mir', 'uns',
+            'dir', 'dir', 'dir', 'euch',
+            'sich', 'sich', 'sich', 'sich',
+            'uns', 'uns', 'uns', 'uns',
+            'euch', 'euch', 'euch', 'euch',
+            'ihr', 'ihr', 'ihr', 'ihr'][pronounSelector] + ' selbst';
+    }
+    
+    itReflexiveDatWithoutSelf
+    {
+        return ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') +
             ['mir', 'mir', 'mir', 'uns',
             'dir', 'dir', 'dir', 'euch',
             'sich', 'sich', 'sich', 'sich',
@@ -3585,9 +4197,23 @@ modify Actor
      *   narrator refers to us in the first or second person, use a
      *   pronoun rather than the short description.
      */
-    //    theName
-    //        { return (referralPerson == ThirdPerson ? inherited : itNom); }
 
+    // indefinite article
+    
+    einName
+        { return (referralPerson == ThirdPerson ? inherited : itNom); }
+
+    einesName 
+        { return (referralPerson == ThirdPerson ? inherited : itGen); }
+    
+    einemName
+        { return (referralPerson == ThirdPerson ? inherited : itDat); }
+    
+    einenName
+        { return (referralPerson == ThirdPerson ? inherited : itAkk); }
+
+    // definite article
+    
     derName
         { return (referralPerson == ThirdPerson ? inherited : itNom); }
 
@@ -3635,13 +4261,16 @@ modify Actor
 
     /* being verb agreeing with this object as subject */
 
-    // -- German verbs --
+    // -- German verbs for actors, which means we have all six persons --
 
     verbZuSein
     {
-        return tSel(['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
-                    ['war', 'warst', 'war', 'waren', 'wart', 'waren'])
-               [conjugationSelector];
+        conjugateVerb(['','','gewesen','gewesen','sein','gewesen sein'][tenseSelector],        
+              tSelect(['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }  
     verbWuerdeWaere
     {
@@ -3657,317 +4286,635 @@ modify Actor
     } 
     verbZuKann
     {
-        return tSel(['kann', 'kannst', 'kann', 'können', 'könnt', 'können'],
-                    ['konnte', 'konntest', 'konnte', 'konnten', 'konntet', 'konnten'])
-               [conjugationSelector];
+        conjugateVerb(['','','gekonnt','gekonnt','können','gekonnt haben'][tenseSelector],
+              tSelect(['kann', 'kannst', 'kann', 'können', 'könnt', 'können'],
+                      ['konnte', 'konntest', 'konnte', 'konnten', 'konntet', 'konnten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }     
     verbZuKennen
     {
-        return tSel(['kenne', 'kennst', 'kennt', 'kennen', 'kennt', 'kennen'],
-                    ['kannte', 'kanntest', 'kannte', 'kannten', 'kanntet', 'kannten'])
-               [conjugationSelector];
+        conjugateVerb(['','','gekannt','gekannt','kennen','gekannt haben'][tenseSelector],
+              tSelect(['kenne', 'kennst', 'kennt', 'kennen', 'kennt', 'kennen'],
+                      ['kannte', 'kanntest', 'kannte', 'kannten', 'kanntet', 'kannten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }    
     verbZuHaben
     {
-        return tSel(['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
-                    ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'])
-               [conjugationSelector];
+         conjugateVerb(['','','gehabt','gehabt','haben','gehabt haben'][tenseSelector],
+              tSelect(['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }  
     verbZuScheinen
     {
-        return tSel(['scheine', 'scheinst', 'scheint', 'scheinen', 'scheint', 'scheinen'],
-                    ['schien', 'schienst', 'schien', 'schienen', 'schient', 'schienen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gescheint','gescheint','scheinen','gescheint haben'][tenseSelector],
+              tSelect(['scheine', 'scheinst', 'scheint', 'scheinen', 'scheint', 'scheinen'],
+                      ['schien', 'schienst', 'schien', 'schienen', 'schient', 'schienen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }  
+    verbZuErscheinen
+    {
+        conjugateVerb(['','','erschienen','erschienen','erscheinen','erschienen sein'][tenseSelector],
+              tSelect(['erscheine', 'erscheinst', 'erscheint', 'erscheinen', 'erscheint', 'erscheinen'],
+                      ['erschien', 'erschienst', 'erschien', 'erschienen', 'erschient', 'erschienen'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    } 
     verbZuBezwecken
     {
-        return tSel(['bezwecke', 'bezweckst', 'bezweckt', 'bezwecken', 'bezweckt', 'bezwecken'],
-                    ['bezweckte', 'bezwecktest', 'bezweckte', 'bezweckten', 'bezwecktet', 'bezweckten'])
-               [conjugationSelector];
+        conjugateVerb(['','','bezweckt','bezweckt','bezwecken','bezweckt haben'][tenseSelector],
+              tSelect(['bezwecke', 'bezweckst', 'bezweckt', 'bezwecken', 'bezweckt', 'bezwecken'],
+                      ['bezweckte', 'bezwecktest', 'bezweckte', 'bezweckten', 'bezwecktet', 'bezweckten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuGefallen
     {
-        return tSel(['gefalle', 'gefällst', 'gefällt', 'gefallen', 'gefallt', 'gefallen'],
-                    ['gefiel', 'gefielst', 'gefiel', 'gefielen', 'gefielt', 'gefielen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gefallen','gefallen','gefallen','gefallen haben'][tenseSelector],
+              tSelect(['gefalle', 'gefällst', 'gefällt', 'gefallen', 'gefallt', 'gefallen'],
+                      ['gefiel', 'gefielst', 'gefiel', 'gefielen', 'gefielt', 'gefielen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }  
     verbZuBekommen
     {
-        return tSel(['bekomme', 'bekommst', 'bekommt', 'bekommen', 'bekommt', 'bekommen'],
-                    ['bekam', 'bekamst', 'bekam', 'bekamen', 'bekamt', 'bekamen'])
-               [conjugationSelector];
+        conjugateVerb(['','','bekommen','bekommen','bekommen','bekommen haben'][tenseSelector],
+              tSelect(['bekomme', 'bekommst', 'bekommt', 'bekommen', 'bekommt', 'bekommen'],
+                      ['bekam', 'bekamst', 'bekam', 'bekamen', 'bekamt', 'bekamen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuSehen
     {
-        return tSel(['sehe', 'siehst', 'sieht', 'sehen', 'seht', 'sehen'],
-                    ['sah', 'sahst', 'sah', 'sahen', 'saht', 'sahen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gesehen','gesehen','sehen','gesehen haben'][tenseSelector],
+              tSelect(['sehe', 'siehst', 'sieht', 'sehen', 'seht', 'sehen'],
+                      ['sah', 'sahst', 'sah', 'sahen', 'saht', 'sahen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }     
+    verbZuHoeren
+    {
+        conjugateVerb(['','','gehört','gehört','hören','gehört haben'][tenseSelector],
+              tSelect(['höre', 'hörst', 'hört', 'hören', 'hört', 'hören'],
+                      ['hörte', 'hörtest', 'hörte', 'hörten', 'hörtet', 'hörten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }   
     verbZuSprechen
     {
-        return tSel(['sprecht', 'sprichst', 'spricht', 'sprechen', 'sprecht', 'sprechen'],
-                    ['sprach', 'sprachst', 'sprach', 'sprachen', 'spracht', 'sprachen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gesprochen','gesprochen','sprechen','gesprochen haben'][tenseSelector],
+              tSelect(['sprecht', 'sprichst', 'spricht', 'sprechen', 'sprecht', 'sprechen'],
+                      ['sprach', 'sprachst', 'sprach', 'sprachen', 'spracht', 'sprachen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     } 
     verbZuBetreten
     {
-        return tSel(['betrete', 'betrittst', 'betritt', 'betreten', 'betretet', 'betreten'],
-                    ['betrat', 'betratst', 'betrat', 'betraten', 'betratet', 'betraten'])
-               [conjugationSelector];
+        conjugateVerb(['','','betreten','betreten','betreten','betreten haben'][tenseSelector],
+              tSelect(['betrete', 'betrittst', 'betritt', 'betreten', 'betretet', 'betreten'],
+                      ['betrat', 'betratst', 'betrat', 'betraten', 'betratet', 'betraten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     } 
     verbZuBemerken
     {
-        return tSel(['bemerke', 'bemerkst', 'bemerkt', 'bemerken', 'bemerkt', 'bemerken'],
-                    ['bemerkte', 'bemerktest', 'bemerkte', 'bemerkten', 'bemerktet', 'bemerkten'])
-               [conjugationSelector];
+        conjugateVerb(['','','bemerkt','bemerkt','bemerken','bemerkt haben'][tenseSelector],
+              tSelect(['bemerke', 'bemerkst', 'bemerkt', 'bemerken', 'bemerkt', 'bemerken'],
+                      ['bemerkte', 'bemerktest', 'bemerkte', 'bemerkten', 'bemerktet', 'bemerkten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }     
     verbZuSagen
     {
-        return tSel(['sage', 'sagst', 'sagt', 'sagen', 'sagt', 'sagen'],
-                    ['sagte', 'sagtest', 'sagte', 'sagten', 'sagtet', 'sagten'])
-               [conjugationSelector];
+        conjugateVerb(['','','gesagt','gesagt','sagen','gesagt haben'][tenseSelector],
+              tSelect(['sage', 'sagst', 'sagt', 'sagen', 'sagt', 'sagen'],
+                      ['sagte', 'sagtest', 'sagte', 'sagten', 'sagtet', 'sagten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }  
-     verbZuAntworten
+    verbZuAntworten
     {
-        return tSel(['antworte', 'antwortest', 'antwortet', 'antworten', 'antwortet', 'antworten'],
-                    ['antwortete', 'antwortetest', 'sagte', 'sagten', 'sagtet', 'sagten'])
-               [conjugationSelector];
+        conjugateVerb(['','','geantwortet','geantwortet','antworten','geantwortet haben'][tenseSelector],
+              tSelect(['antworte', 'antwortest', 'antwortet', 'antworten', 'antwortet', 'antworten'],
+                      ['antwortete', 'antwortetest', 'antwortete', 'antworteten', 'antwortetet', 'antworteten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }  
-     verbZuMuessen
+    verbZuMuessen
     {
-        return tSel(['muss', 'musst', 'muss', 'müssen', 'müsst', 'müssen'],
-                    ['musste', 'musstest', 'musste', 'mussten', 'musstet', 'mussten'])
-               [conjugationSelector];
+        conjugateVerb(['','','müssen','müssen','müssen','gemusst haben'][tenseSelector],
+              tSelect(['muss', 'musst', 'muss', 'müssen', 'müsst', 'müssen'],
+                      ['musste', 'musstest', 'musste', 'mussten', 'musstet', 'mussten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }  
     verbZuRiechen
     {
-        return tSel(['rieche', 'riechst', 'riecht', 'riechen', 'riecht', 'riechen'],
-                    ['roch', 'rochst', 'roch', 'rochen', 'rocht', 'rochen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gerochen','gerochen','riechen','gerochen haben'][tenseSelector],
+              tSelect(['rieche', 'riechst', 'riecht', 'riechen', 'riecht', 'riechen'],
+                      ['roch', 'rochst', 'roch', 'rochen', 'rocht', 'rochen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }     
     verbZuNehmen
     {
-        return tSel(['nehme', 'nimmst', 'nimmt', 'nehmen', 'nehmt', 'nehmen'],
-                    ['nahm', 'nahmst', 'nahm', 'nahmen', 'nahmt', 'nahmen'])
-               [conjugationSelector];
+        conjugateVerb(['','','genommen','genommen','nehmen','genommen haben'][tenseSelector],
+              tSelect(['nehme', 'nimmst', 'nimmt', 'nehmen', 'nehmt', 'nehmen'],
+                      ['nahm', 'nahmst', 'nahm', 'nahmen', 'nahmt', 'nahmen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }        
     verbZuGeben
     {
-        return tSel(['gebe', 'gibst', 'gibt', 'geben', 'gebt', 'geben'],
-                    ['gab', 'gabst', 'gab', 'gaben', 'gabt', 'gaben'])
-               [conjugationSelector];
+        conjugateVerb(['','','gegeben','gegeben','geben','gegeben haben'][tenseSelector],
+              tSelect(['gebe', 'gibst', 'gibt', 'geben', 'gebt', 'geben'],
+                      ['gab', 'gabst', 'gab', 'gaben', 'gabt', 'gaben'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }  
     verbZuFallen
     {
-        return tSel(['falle', 'fällst', 'fällt', 'fallen', 'fallt', 'fallen'],
-                    ['fiel', 'fielst', 'fiel', 'fielen', 'fielt', 'fielen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gefallen','gefallen','fallen','gefallen sein'][tenseSelector],        
+              tSelect(['falle', 'fällst', 'fällt', 'fallen', 'fallt', 'fallen'],
+                      ['fiel', 'fielst', 'fiel', 'fielen', 'fielt', 'fielen'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }     
     verbZuWollen
     {
-        return tSel(['will', 'willst', 'will', 'wollen', 'wollt', 'wollen'],
-                    ['wollte', 'wolltest', 'wollte', 'wollten', 'wolltet', 'wollten'])
-               [conjugationSelector];
+        conjugateVerb(['','','wollen','wollen','wollen','wollen haben'][tenseSelector],
+              tSelect(['will', 'willst', 'will', 'wollen', 'wollt', 'wollen'],
+                      ['wollte', 'wolltest', 'wollte', 'wollten', 'wolltet', 'wollten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }      
     verbZuBefinden
     {
-        return tSel(['befinde', 'befindest', 'befindet', 'befinden', 'befindet', 'befinden'],
-                    ['befand', 'befandest', 'befand', 'befanden', 'befandet', 'befanden'])
-               [conjugationSelector];
+        conjugateVerb(['','','befunden','befunden','befinden','befunden haben'][tenseSelector],
+              tSelect(['befinde', 'befindest', 'befindet', 'befinden', 'befindet', 'befinden'],
+                      ['befand', 'befandest', 'befand', 'befanden', 'befandet', 'befanden'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuZiehen
     {
-        return tSel(['ziehe', 'ziehst', 'zieht', 'ziehen', 'zieht', 'ziehen'],
-                    ['zog', 'zogst', 'zog', 'zogen', 'zogt', 'zogen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gezogen','gezogen','ziehen','gezogen haben'][tenseSelector],
+              tSelect(['ziehe', 'ziehst', 'zieht', 'ziehen', 'zieht', 'ziehen'],
+                      ['zog', 'zogst', 'zog', 'zogen', 'zogt', 'zogen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuDruecken
+    {
+        conjugateVerb(['','','gedrückt','gedrückt','drücken','gedrückt haben'][tenseSelector],
+              tSelect(['drücke', 'drückst', 'drückt', 'drücken', 'drückt', 'drücken'],
+                      ['drückte', 'drücktest', 'drückte', 'drückten', 'drücktet', 'drückten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuBrennen
     {
-        return tSel(['brenne', 'brennst', 'brennt', 'brennen', 'brennt', 'brennen'],
-                    ['brannte', 'branntest', 'brannte', 'brannten', 'branntet', 'brannten'])
-               [conjugationSelector];
+        conjugateVerb(['','','gebrannt','gebrannt','brennen','gebrannt haben'][tenseSelector],
+              tSelect(['brenne', 'brennst', 'brennt', 'brennen', 'brennt', 'brennen'],
+                      ['brannte', 'branntest', 'brannte', 'brannten', 'branntet', 'brannten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuSchliessen
     {
-        return tSel(['schließe', 'schließst', 'schließt', 'schließen', 'schließt', 'schließen'],
-                    ['schloss', 'schlosst', 'schloss', 'schlossen', 'schlosst', 'schlossen'])
-               [conjugationSelector];
+        conjugateVerb(['','','geschlossen','geschlossen','schließen','geschlossen haben'][tenseSelector],
+              tSelect(['schließe', 'schließst', 'schließt', 'schließen', 'schließt', 'schließen'],
+                      ['schloss', 'schlosst', 'schloss', 'schlossen', 'schlosst', 'schlossen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuGehen
     {
-        return tSel(['gehe', 'gehst', 'geht', 'gehen', 'geht', 'gehen'],
-                    ['ging', 'gingst', 'ging', 'gingen', 'gingt', 'gingen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gegangen','gegangen','gehen','gegangen sein'][tenseSelector],        
+              tSelect(['gehe', 'gehst', 'geht', 'gehen', 'geht', 'gehen'],
+                      ['ging', 'gingst', 'ging', 'gingen', 'gingt', 'gingen'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]); 
+    }
+    verbZuVergehen
+    {
+        conjugateVerb(['','','vergangen','vergangen','vergehen','vergangen sein'][tenseSelector],        
+              tSelect(['vergehe', 'vergehst', 'vergeht', 'vergehen', 'vergeht', 'vergehen'],
+                      ['verging', 'vergingst', 'verging', 'vergingen', 'vergingt', 'vergingen'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]); 
+    }
+    verbZuFuehren
+    {
+        conjugateVerb(['','','geführt','geführt','führen','geführt sein'][tenseSelector],        
+              tSelect(['führe', 'führst', 'führt', 'führen', 'führt', 'führen'],
+                      ['führte', 'führtest', 'führte', 'führten', 'führtet', 'führten'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[pluralSelector]); 
     }
     verbZuWissen
     {
-        return tSel(['weiß', 'weißt', 'weiß', 'wissen', 'wisst', 'wissen'],
-                    ['wusste', 'wusstest', 'wusste', 'wussten', 'wusstet', 'wussten'])
-               [conjugationSelector];
+        conjugateVerb(['','','gewusst','gewusst','wissen','gewusst haben'][tenseSelector],
+              tSelect(['weiß', 'weißt', 'weiß', 'wissen', 'wisst', 'wissen'],
+                      ['wusste', 'wusstest', 'wusste', 'wussten', 'wusstet', 'wussten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }    
     verbZuSchreien
     {
-        return tSel(['schreie', 'schreist', 'schreit', 'schreien', 'schreit', 'schreien'],
-                    ['schrie', 'schriest', 'schrie', 'schrien', 'schriet', 'schrien'])
-               [conjugationSelector];
+        conjugateVerb(['','','geschrien','geschrien','schreien','geschrien haben'][tenseSelector],
+              tSelect(['schreie', 'schreist', 'schreit', 'schreien', 'schreit', 'schreien'],
+                      ['schrie', 'schriest', 'schrie', 'schrien', 'schriet', 'schrien'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuSpringen
     {
-        return tSel(['springe', 'springst', 'springt', 'springen', 'springt', 'springen'],
-                    ['sprang', 'sprangst', 'sprang', 'sprangen', 'sprangt', 'sprangen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gesprungen','gesprungen','springen','gesprungen sein'][tenseSelector],        
+              tSelect(['springe', 'springst', 'springt', 'springen', 'springt', 'springen'],
+                      ['sprang', 'sprangst', 'sprang', 'sprangen', 'sprangt', 'sprangen'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]); 
     }
     verbZuSchieben
     {
-        return tSel(['schiebe', 'schiebst', 'schiebt', 'schieben', 'schiebt', 'schieben'],
-                    ['schob', 'schobst', 'schob', 'schoben', 'schobt', 'schoben'])
-               [conjugationSelector];
+        conjugateVerb(['','','geschoben','geschoben','schieben','geschoben haben'][tenseSelector],
+              tSelect(['schiebe', 'schiebst', 'schiebt', 'schieben', 'schiebt', 'schieben'],
+                      ['schob', 'schobst', 'schob', 'schoben', 'schobt', 'schoben'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuPassen
     {
-        return tSel(['passe', 'passt', 'passt', 'passen', 'passt', 'passen'],
-                    ['passte', 'passtest', 'passte', 'passten', 'passtet', 'passten'])
-               [conjugationSelector];
+        conjugateVerb(['','','gepasst','gepasst','passen','gepasst haben'][tenseSelector],
+              tSelect(['passe', 'passt', 'passt', 'passen', 'passt', 'passen'],
+                      ['passte', 'passtest', 'passte', 'passten', 'passtet', 'passten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuStehen
     {
-        return tSel(['stehe', 'stehst', 'steht', 'stehen', 'steht', 'stehen'],
-                    ['stand', 'standst', 'stand', 'standen', 'standet', 'standen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gestanden','gestanden','stehen','gestanden sein'][tenseSelector],
+              tSelect(['stehe', 'stehst', 'steht', 'stehen', 'steht', 'stehen'],
+                      ['stand', 'standst', 'stand', 'standen', 'standet', 'standen'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]); 
     }
     verbZuLiegen
     {
-        return tSel(['liege', 'liegst', 'liegt', 'liegen', 'liegt', 'liegen'],
-                    ['lag', 'lagst', 'lag', 'lagen', 'lagt', 'lagen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gelegen','gelegen','liegen','gelegen sein'][tenseSelector],
+              tSelect(['liege', 'liegst', 'liegt', 'liegen', 'liegt', 'liegen'],
+                      ['lag', 'lagst', 'lag', 'lagen', 'lagt', 'lagen'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuSitzen
     {
-        return tSel(['sitze', 'sitzst', 'sitzt', 'sitzen', 'sitzt', 'sitzen'],
-                    ['saß', 'saßst', 'saß', 'saßen', 'saßt', 'saßen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gesessen','gesessen','sitzen','gesessen sein'][tenseSelector],
+              tSelect(['sitze', 'sitzst', 'sitzt', 'sitzen', 'sitzt', 'sitzen'],
+                      ['saß', 'saßst', 'saß', 'saßen', 'saßt', 'saßen'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuTreffen
     {
-        return tSel(['treffe', 'triffst', 'trifft', 'treffen', 'trefft', 'treffen'],
-                    ['traf', 'trafst', 'traf', 'trafen', 'traft', 'trafen'])
-               [conjugationSelector];
+        conjugateVerb(['','','getroffen','getroffen','treffen','getroffen haben'][tenseSelector],
+              tSelect(['treffe', 'triffst', 'trifft', 'treffen', 'trefft', 'treffen'],
+                      ['traf', 'trafst', 'traf', 'trafen', 'traft', 'trafen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuFangen
     {
-        return tSel(['fange', 'fängst', 'fängt', 'fangen', 'fangt', 'fangen'],
-                    ['fing', 'fingst', 'fing', 'fingen', 'fingt', 'fingen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gefangen','gefangen','fangen','gefangen haben'][tenseSelector],
+              tSelect(['fange', 'fängst', 'fängt', 'fangen', 'fangt', 'fangen'],
+                      ['fing', 'fingst', 'fing', 'fingen', 'fingt', 'fingen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuEnthalten
     {
-        return tSel(['enthalte', 'enthälst', 'enthält', 'enthalten', 'enthaltet', 'enthalten'],
-                    ['enthielt', 'enthielst', 'enthielt', 'enthielten', 'enthielt', 'enthielten'])
-               [conjugationSelector];
+        conjugateVerb(['','','enthalten','enthalten','enthalten','enthalten haben'][tenseSelector],
+              tSelect(['enthalte', 'enthälst', 'enthält', 'enthalten', 'enthaltet', 'enthalten'],
+                      ['enthielt', 'enthielst', 'enthielt', 'enthielten', 'enthielt', 'enthielten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuEntscheiden
     {
-        return tSel(['entscheide', 'entscheidest', 'entscheidet', 'entscheiden', 'entscheidet', 'entscheiden'],
-                    ['entschied', 'entschiedest', 'entschied', 'entschieden', 'entschiedet', 'entschieden'])
-               [conjugationSelector];
+        conjugateVerb(['','','entschieden','entschieden','entscheiden','entschieden haben'][tenseSelector],
+              tSelect(['entscheide', 'entscheidest', 'entscheidet', 'entscheiden', 'entscheidet', 'entscheiden'],
+                      ['entschied', 'entschiedest', 'entschied', 'entschieden', 'entschiedet', 'entschieden'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);  
     }
     verbZuFragen
     {
-        return tSel(['frage', 'fragst', 'fragt', 'fragen', 'fragt', 'fragen'],
-                    ['fragte', 'fragtest', 'fragte', 'fragten', 'fragtet', 'fragten'])
-               [conjugationSelector];
+        conjugateVerb(['','','gefragt','gefragt','fragen','gefragt haben'][tenseSelector],
+              tSelect(['frage', 'fragst', 'fragt', 'fragen', 'fragt', 'fragen'],
+                      ['fragte', 'fragtest', 'fragte', 'fragten', 'fragtet', 'fragten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuVerlassen
     {
-        return tSel(['verlasse', 'verlässt', 'verlässt', 'verlassen', 'verlasst', 'verlassen'],
-                    ['verließ', 'verließt', 'verließ', 'verließen', 'verließt', 'verließen'])
-               [conjugationSelector];
+        conjugateVerb(['','','verlassen','verlassen','verlassen','verlassen haben'][tenseSelector],
+              tSelect(['verlasse', 'verlässt', 'verlässt', 'verlassen', 'verlasst', 'verlassen'],
+                      ['verließ', 'verließt', 'verließ', 'verließen', 'verließt', 'verließen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuKommen
     {
-        return tSel(['komme', 'kommst', 'kommt', 'kommen', 'kommt', 'kommen'],
-                    ['kam', 'kamst', 'kam', 'kamen', 'kamt', 'kamen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gekommen','gekommen','kommen','gekommen sein'][tenseSelector],
+              tSelect(['komme', 'kommst', 'kommt', 'kommen', 'kommt', 'kommen'],
+                      ['kam', 'kamst', 'kam', 'kamen', 'kamt', 'kamen'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuWerden
     {
-        return tSel(['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'],
-                    ['wurde', 'wurdest', 'wurde', 'wurden', 'wurdet', 'wurden'])
-               [conjugationSelector];
+        conjugateVerb(['','','werden','werden','werden','geworden sein'][tenseSelector],
+              tSelect(['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuLassen
     {
-        return tSel(['lasse', 'läßt', 'läßt', 'lassen', 'lasst', 'lassen'],
-                    ['ließ', 'ließst', 'ließ', 'ließen', 'ließt', 'ließen'])
-               [conjugationSelector];
+        conjugateVerb(['','','gelassen','gelassen','lassen','gelassen haben'][tenseSelector],
+              tSelect(['lasse', 'läßt', 'läßt', 'lassen', 'lasst', 'lassen'],
+                      ['ließ', 'ließst', 'ließ', 'ließen', 'ließt', 'ließen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     verbZuKannKon
     {
-        return tSel(['könnte', 'könntest', 'könnte', 'könnten', 'könntet', 'könnten'],
-                    ['konnte', 'konntest', 'konnte', 'konnten', 'konntet', 'konnten'])
-               [conjugationSelector];
+        conjugateVerb(['','','können','können','können','gekonnt haben'][tenseSelector],
+              tSelect(['kann', 'kannst', 'kann', 'können', 'könnt', 'können'],
+                      ['konnte', 'konntest', 'konnte', 'konnten', 'konntet', 'konnten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuWeigern
+    {
+        conjugateVerb(['','','geweigert','geweigert','weigern','geweigert haben'][tenseSelector],
+              tSelect(['weigere', 'weigerst', 'weigert', 'weigern', 'weigert', 'weigern'],
+                      ['weigerte', 'weigertest', 'weigerte', 'weigerten', 'weigertet', 'weigerten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuBringen
+    {
+        conjugateVerb(['','','gebracht','gebracht','bringen','gebracht haben'][tenseSelector],
+              tSelect(['bringe', 'bringst', 'bringt', 'bringen', 'bringt', 'bringen'],
+                      ['brachte', 'brachtest', 'brachte', 'brachten', 'brachtet', 'brachten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuFolgen
+    {
+        conjugateVerb(['','','gefolgt','gefolgt','folgen','gefolgt haben'][tenseSelector],
+              tSelect(['folge', 'folgst', 'folgt', 'folgen', 'folgt', 'folgen'],
+                      ['folgte', 'folgtest', 'folgte', 'folgten', 'folgtet', 'folgten'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuZeigen
+    {
+        conjugateVerb(['','','gezeigt','gezeigt','zeigen','gezeigt haben'][tenseSelector],
+              tSelect(['zeige', 'zeigst', 'zeigt', 'zeigen', 'zeigt', 'zeigen'],
+                      ['zeigte', 'zeigtest', 'zeigte', 'zeigten', 'zeigtet', 'zeigten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuMachen
+    {
+        conjugateVerb(['','','gemacht','gemacht','machen','gemacht haben'][tenseSelector],
+              tSelect(['macht', 'machst', 'macht', 'machen', 'macht', 'machen'],
+                      ['machte', 'machtest', 'machte', 'machten', 'machtet', 'machten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuEssen
+    {
+        conjugateVerb(['','','gegessen','gegessen','essen','gegessen haben'][tenseSelector],
+              tSelect(['esse', 'isst', 'isst', 'essen', 'esst', 'essen'],
+                      ['aß', 'aßt', 'aß', 'aßen', 'aßt', 'aßen'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuSchalten
+    {
+        conjugateVerb(['','','geschaltet','geschaltet','schalten','geschaltet haben'][tenseSelector],
+              tSelect(['schalte', 'schaltest', 'schaltet', 'schalten', 'schaltet', 'schalten'],
+                      ['schaltete', 'schaltetest', 'schaltete', 'schalteten', 'schaltetet', 'schalteten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuPassieren
+    {
+        conjugateVerb(['','','passiert','passiert','passieren','passiert haben'][tenseSelector],
+              tSelect(['passiere', 'passierst', 'passiert', 'passieren', 'passiert', 'passieren'],
+                      ['passierte', 'passiertest', 'passierte', 'passierten', 'passiertet', 'passierten'],
+                      ['bin', 'bist', 'ist', 'sind', 'seid', 'sind'],
+                      ['war', 'warst', 'war', 'waren', 'wart', 'waren'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }    
+    verbZuZuenden
+    {
+        conjugateVerb(['','','gezündet','gezündet','zünden','gezündet haben'][tenseSelector],
+              tSelect(['zünde', 'zündest', 'zündet', 'zünden', 'zündet', 'zünden'],
+                      ['zündete', 'zündetest', 'zündete', 'zündeten', 'zündetet', 'zündeten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }   
+    verbZuLoesen
+    {
+        conjugateVerb(['','','gelöst','gelöst','lösen','gelöst haben'][tenseSelector],
+              tSelect(['löse', 'löst', 'löst', 'lösen', 'löst', 'lösen'],
+                      ['löste', 'löstest', 'löste', 'lösten', 'löstet', 'lösten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }   
+    verbZuBrauchen
+    {
+        conjugateVerb(['','','gebraucht','gebraucht','brauchen','gebraucht haben'][tenseSelector],
+              tSelect(['brauche', 'brauchst', 'braucht', 'brauchen', 'braucht', 'brauchen'],
+                      ['brauchte', 'brauchtest', 'brauchte', 'brauchten', 'brauchtet', 'brauchten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuLegen
+    {
+        conjugateVerb(['','','gelegt','gelegt','legen','gelegt haben'][tenseSelector],
+              tSelect(['lege', 'legst', 'legt', 'legen', 'legt', 'legen'],
+                      ['legte', 'legtest', 'legte', 'legten', 'legtet', 'legten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuHaengen
+    {
+        conjugateVerb(['','','gehängt','gehängt','hängen','gehängt haben'][tenseSelector],
+              tSelect(['hänge', 'hängst', 'hängt', 'hängen', 'hängt', 'hängen'],
+                      ['hängte', 'hängtest', 'hängte', 'hängten', 'hängtet', 'hängten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuProbieren
+    {
+        conjugateVerb(['','','probiert','probiert','probieren','probiert haben'][tenseSelector],
+              tSelect(['probiere', 'probierst', 'probiert', 'probieren', 'probiert', 'probieren'],
+                      ['probierte', 'probiertest', 'probierte', 'probierten', 'probiertet', 'probieren'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuBenoetigen
+    {
+        conjugateVerb(['','','benötigt','benötigt','benötigen','benötigt haben'][tenseSelector],
+              tSelect(['benötige', 'benötigst', 'benötigt', 'benötigen', 'benötigt', 'benötigen'],
+                      ['benötigte', 'benötigtest', 'benötigte', 'benötigten', 'benötigtet', 'benötigten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuOeffnen
+    {
+        conjugateVerb(['','','geöffnet','geöffnet','öffnen','geöffnet haben'][tenseSelector],
+              tSelect(['öffne', 'öffnest', 'öffnet', 'öffnen', 'öffnet', 'öffnen'],
+                      ['öffnete', 'öffnetest', 'öffnete', 'öffneten', 'öffnetet', 'öffneten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuWarten
+    {
+        conjugateVerb(['','','gewartet','gewartet','warten','gewartet haben'][tenseSelector],
+              tSelect(['warte', 'wartest', 'wartet', 'warten', 'wartet', 'warten'],
+                      ['wartete', 'wartetest', 'wartete', 'warteten', 'wartetet', 'warteten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuVersuchen
+    {
+        conjugateVerb(['','','versucht','versucht','versuchen','versucht haben'][tenseSelector],
+              tSelect(['versuche', 'versuchst', 'versucht', 'versuchen', 'versucht', 'versuchen'],
+                      ['versuchte', 'versuchtest', 'versuchte', 'versuchten', 'versuchtet', 'versuchten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuStellen
+    {
+        conjugateVerb(['','','gestellt','gestellt','stellen','gestellt haben'][tenseSelector],
+              tSelect(['stelle', 'stellst', 'stellt', 'stellen', 'stellt', 'stellen'],
+                      ['stellte', 'stelltest', 'stellte', 'stellten', 'stelltet', 'stellten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuLoeschen
+    {
+        conjugateVerb(['','','gelöscht','gelöscht','löschen','gelöscht haben'][tenseSelector],
+              tSelect(['lösche', 'löschst', 'löscht', 'löschen', 'löscht', 'löschen'],
+                      ['löschte', 'löschtest', 'löschte', 'löschten', 'löschtet', 'löschten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuVerbinden
+    {
+        conjugateVerb(['','','verbunden','verbunden','verbinden','verbunden haben'][tenseSelector],
+              tSelect(['verbinde', 'verbindest', 'verbindet', 'verbinden', 'verbindet', 'verbinden'],
+                      ['verband', 'verbandst', 'verband', 'verbanden', 'verbandet', 'verbanden'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuFuehlen
+    {
+        conjugateVerb(['','','gefühlt','gefühlt','fühlen','gefühlt haben'][tenseSelector],
+              tSelect(['fühle', 'fühlst', 'fühlt', 'fühlen', 'fühlt', 'fühlen'],
+                      ['fühlte', 'fühltest', 'fühlte', 'fühlten', 'fühltet', 'fühlten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
+    }
+    verbZuSchmecken
+    {
+        conjugateVerb(['','','geschmeckt','geschmeckt','schmecken','geschmeckt haben'][tenseSelector],
+              tSelect(['schmecke', 'schmeckst', 'schmeckt', 'schmecken', 'schmeckt', 'schmecken'],
+                      ['schmeckte', 'schmecktest', 'schmeckte', 'schmeckten', 'schmecktet', 'schmeckten'],
+                      ['habe', 'hast', 'hat', 'haben', 'habt', 'haben'],
+                      ['hatte', 'hattest', 'hatte', 'hatten', 'hattet', 'hatten'],
+                      ['werde', 'wirst', 'wird', 'werden', 'werdet', 'werden'])[conjugationSelector]);
     }
     
-    /* past tense being verb agreeing with this object as subject */
-    verbWas
-    {
-        return tSel(['was', 'were', 'was', 'were', 'were', 'were']
-                    [conjugationSelector], 'had been');
-    }
-
-    /* 'have' verb agreeing with this object as subject */
-    verbToHave
-    {
-        return tSel(['have', 'have', 'has', 'have', 'have', 'have']
-                    [conjugationSelector], 'had');
-    }
-
-    /*
-     *   verb endings for regular '-s' and '-es' verbs, agreeing with this
-     *   object as the subject
-     */
-    verbEndingS
-    {
-        return ['', '', 's', '', '', ''][conjugationSelector];
-    }
-    verbEndingEs
-    {
-        return tSel(['', '', 'es', '', '', ''][conjugationSelector], 'ed');
-    }
-    verbEndingIes
-    {
-        return tSel(['y', 'y', 'ies', 'y', 'y', 'y'][conjugationSelector],
-                    'ied');
-    }
-
-    verbEndingT
-    {
-        return tSel(['e', 'st', 't', 'en', 't', 'en'][conjugationSelector],
-                    ['te', 'test', 'te', 'ten', 'tet', 'ten'][conjugationSelector]);
-    }
-    verbEndingTT
-    {
-        return tSel(['e', 't', 't', 'en', 't', 'en'][conjugationSelector],
-                    ['te', 'test', 'te', 'ten', 'tet', 'ten'][conjugationSelector]);
-    }
-    verbEndingET
-    {
-        return tSel(['e', 'est', 'et', 'en', 'et', 'en'][conjugationSelector],
-                    ['ete', 'etest', 'ete', 'eten', 'etet', 'eten'][conjugationSelector]);
-    }
-    verbEndingE
-    {
-        return tSel(['e', 'est', 'e', 'en', 'et', 'en'][conjugationSelector],
-                    ['e', 'est', 'e', 'en', 'et', 'en'][conjugationSelector]);
-    }
-    
-    /* "I'm not" doesn't fit the regular "+n't" rule */
-    nameIsnt
-    {
-        return conjugationSelector == 1 && !gameMain.usePastTense
-            ? 'I&rsquo;m not' : inherited;
-    }
-
     /*
      *   Show my name for an arrival/departure message.  If we've been seen
      *   before by the player character, we'll show our definite name,
@@ -4212,91 +5159,37 @@ modify Actor
  *   Give the postures some additional attributes
  */
 
-modify Posture
-
-    /*
-     *   Intransitive and transitive forms of the verb, for use in library
-     *   messages.  Each of these methods simply calls one of the two
-     *   corresponding fixed-tense properties, depending on the current
-     *   tense.
-     */
-    msgVerbI = (tSel(msgVerbIPresent, msgVerbIPast)) //vorher unkommentiert
-    msgVerbT = (tSel(msgVerbTPresent, msgVerbTPast)) //vorher unkommentiert
-
-    msgVerbIPlural = (tSel(msgVerbIPresentPlural, msgVerbIPastPlural)) //vorher unkommentiert
-    msgVerbTPlural = (tSel(msgVerbTPresentPlural, msgVerbTPastPlural)) //vorher unkommentiert
-    
-    
-    /*
-     *   Fixed-tense versions of the above properties, to be defined
-     *   individually by each instance of the Posture class.
-     */
-
-    /* our present-tense intransitive form ("he stands up") */
-    // msgVerbIPresent = 'stand{s} up'
-
-    /* our past-tense intransitive form ("he stood up") */
-    // msgVerbIPast = 'stood up'
-
-    /* our present-tense transitive form ("he stands on the chair") */
-    // msgVerbTPresent = 'stand{s}'
-
-    /* our past-tense transitive form ("he stood on the chair") */
-    // msgVerbTPast = 'stood'
-
-    /* our participle form */
-    // participle = 'standing'
-;
-
 modify standing
-    msgVerbIPresent = '{steht} auf' 
-    msgVerbIPast = '{steht} auf' //vorher msgVerbIPast
-    msgVerbTPresent = '{steht}'
-    msgVerbTPast = '{steht}' //vorher msgVerbTPast
+    msgVerbI = '{steht} auf' 
+    msgVerbT = '{steht}'
     // We build the plural forms explicitly, because multiple objects mentioned
     // require the plural form, independent from the noun itself
-    msgVerbIPresentPlural = 'stehen auf' 
-    msgVerbIPastPlural = 'standen auf' 
-    msgVerbTPresentPlural = 'stehen'
-    msgVerbTPastPlural = 'standen'
+    msgVerbIPlural = '{steht plural} auf'  
+    msgVerbTPlural = '{steht plural}'
     // ***
     participle = 'stehend'
-    // also the pastParticiple (if ever needed ...)
-    pastParticiple = 'gestanden'
 ;
 
 modify sitting
-    msgVerbIPresent = '{sitzt} auf'
-    msgVerbIPast = '{sitzt} auf'
-    msgVerbTPresent = '{sitzt}'
-    msgVerbTPast = '{sitzt}'
+    msgVerbI = '{sitzt} auf'
+    msgVerbT = '{sitzt}'
     // We build the plural forms explicitly, because multiple objects mentioned
     // require the plural form, independent from the noun itself
-    msgVerbIPresentPlural = 'sitzen auf' 
-    msgVerbIPastPlural = 'saßen auf' 
-    msgVerbTPresentPlural = 'sitzen'
-    msgVerbTPastPlural = 'saßen'
+    msgVerbIPlural = '{sitzt plural} auf'  
+    msgVerbTPlural = '{sitzt plural}'
     // ***
     participle = 'sitzend'
-    // also the pastParticiple (if ever needed ...)
-    pastParticiple = 'gesessen'
 ;
 
 modify lying
-    msgVerbIPresent = '{liegt} auf'
-    msgVerbIPast = '{liegt} auf'
-    msgVerbTPresent = '{liegt}'
-    msgVerbTPast = '{liegt}'
+    msgVerbI = '{liegt} auf'
+    msgVerbT = '{liegt}'
     // We build the plural forms explicitly, because multiple objects mentioned
     // require the plural form, independent from the noun itself
-    msgVerbIPresentPlural = 'liegen auf' 
-    msgVerbIPastPlural = 'lagen auf' 
-    msgVerbTPresentPlural = 'liegen'
-    msgVerbTPastPlural = 'lagen'
+    msgVerbIPlural = '{liegt plural} auf'  
+    msgVerbTPlural = '{liegt plural}'
     // ***
     participle = 'liegend'
-    // also the pastParticiple (if ever needed ...)
-    pastParticiple = 'gelegen'
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -5644,13 +6537,15 @@ langMessageBuilder: MessageBuilder
         ['kann', &verbZuKann, nil, nil, true],
         ['hat', &verbZuHaben, nil, nil, true],
         ['scheint', &verbZuScheinen, nil, nil, true],
+        ['erscheint', &verbZuErscheinen, nil, nil, true],
         ['bezweckt', &verbZuBezwecken, nil, nil, true],
         ['gefaellt', &verbZuGefallen, nil, nil, true],
         ['bekommt', &verbZuBekommen, nil, nil, true],
         ['sieht', &verbZuSehen, nil, nil, true],
+        ['hoert', &verbZuHoeren, nil, nil, true],
         ['spricht', &verbZuSprechen, nil, nil, true],
         ['betritt', &verbZuBetreten, nil, nil, true],
-        ['bermerkt', &verbZuBemerken, nil, nil, true],
+        ['bemerkt', &verbZuBemerken, nil, nil, true],
         ['sagt', &verbZuSagen, nil, nil, true],
         ['antwortet', &verbZuAntworten, nil, nil, true],
         ['muss', &verbZuMuessen, nil, nil, true],
@@ -5661,9 +6556,12 @@ langMessageBuilder: MessageBuilder
         ['will', &verbZuWollen, nil, nil, true],
         ['befindet', &verbZuBefinden, nil, nil, true],
         ['zieht', &verbZuZiehen, nil, nil, true],
+        ['drueckt', &verbZuDruecken, nil, nil, true],
         ['brennt', &verbZuBrennen, nil, nil, true],
         ['schliesst', &verbZuSchliessen, nil, nil, true],
         ['geht', &verbZuGehen, nil, nil, true],
+        ['vergeht', &verbZuVergehen, nil, nil, true],
+        ['fuehrt', &verbZuFuehren, nil, nil, true],
         ['weiss', &verbZuWissen, nil, nil, true],
         ['schreit', &verbZuSchreien, nil, nil, true],
         ['springt', &verbZuSpringen, nil, nil, true],
@@ -5681,16 +6579,46 @@ langMessageBuilder: MessageBuilder
         ['kommt', &verbZuKommen, nil, nil, true],
         ['wird', &verbZuWerden, nil, nil, true],
         ['laesst', &verbZuLassen, nil, nil, true],
-        ['koennte', &verbZuKannKon, nil, nil, true],
+        ['koennt', &verbZuKannKon, nil, nil, true],
         ['wuerde-waere', &verbWuerdeWaere, nil, nil, true],
         ['moechte-soll', &verbMoechteSoll, nil, nil, true],
+        ['weigert', &verbZuWeigern, nil, nil, true],
+        ['bringt', &verbZuBringen, nil, nil, true],
+        ['folgt', &verbZuFolgen, nil, nil, true],
+        ['zeigt', &verbZuZeigen, nil, nil, true],
+        ['macht', &verbZuMachen, nil, nil, true],
+        ['isst', &verbZuEssen, nil, nil, true],
+        ['schaltet', &verbZuSchalten, nil, nil, true],
+        ['passiert', &verbZuPassieren, nil, nil, true],
+        ['zuendet', &verbZuZuenden, nil, nil, true],
+        ['loest', &verbZuLoesen, nil, nil, true],
+        ['braucht', &verbZuBrauchen, nil, nil, true],
+        ['legt', &verbZuLegen, nil, nil, true],
+        ['haengt', &verbZuHaengen, nil, nil, true],
+        ['probiert', &verbZuProbieren, nil, nil, true],
+        ['benoetigt', &verbZuBenoetigen, nil, nil, true],
+        ['oeffnet', &verbZuOeffnen, nil, nil, true],
+        ['wartet', &verbZuWarten, nil, nil, true],
+        ['versucht', &verbZuVersuchen, nil, nil, true],
+        ['stellt', &verbZuStellen, nil, nil, true],
+        ['loescht', &verbZuLoeschen, nil, nil, true],
+        ['verbindet', &verbZuVerbinden, nil, nil, true],
+        ['fuehlt', &verbZuFuehlen, nil, nil, true],
+        ['schmeckt', &verbZuSchmecken, nil, nil, true],
         
         ['ein/eine', &einName, nil, nil, true],
         ['einer/er', &itNom, nil, nil, true],
         ['eines/einer', &einesName, nil, nil, nil],
         ['einem/einer', &einemName, nil, nil, nil],
+        ['einem/ihm', &einemName, nil, nil, nil],
         ['einen/eine', &einenName, nil, nil, nil],
+        ['einen/ihn', &einenName, nil, nil, nil],
         ['es/er ist', &esIstContraction, nil, nil, true],
+        
+        ['kein/keine', &keinName, nil, nil, true],
+        ['keines/keiner', &keinesName, nil, nil, nil],
+        ['keinem/keiner', &keinemName, nil, nil, nil],
+        ['keinen/keine', &keinenName, nil, nil, nil],
         
         ['er/es', &itNom, nil, nil, true],
         ['er/sie', &itNom, nil, nil, true],
@@ -5698,13 +6626,11 @@ langMessageBuilder: MessageBuilder
         ['ihm/ihr', &itDat, nil, &itReflexiveDat, nil],
         ['dich/ihn', &itAkk, nil, &itReflexive, nil],
         ['dir/ihm', &itDat, nil, &itReflexiveDat, nil],
-        
+        ['sich', &itReflexiveDatWithoutSelf, nil, &itReflexiveDat, nil],
+        ['dich', &itAkk, nil, &itReflexiveDat, nil],
+        ['dir', &itDat, nil, &itReflexiveDat, nil],
+
         ['du/er', &derName, 'actor', nil, true],
-        
-        ['st/t', &verbEndingT, nil, nil, true],
-        ['t/t', &verbEndingTT, nil, nil, true],
-        ['est/et', &verbEndingET, nil, nil, true],
-        ['e/est', &verbEndingE, nil, nil, true],
         
         ['es/ihn', &itObj, nil, &itReflexive, nil],
         ['welcher/welche', &whichObj, nil, nil, true],
@@ -5714,21 +6640,10 @@ langMessageBuilder: MessageBuilder
         
         ['sichselbst', &itReflexive, nil, nil, nil],
         
-        //['seine/ihre', &itPossAdj, nil, nil, nil],
-        //['seiner/ihrer', &esPossAdj, nil, nil, nil],
-        
-        /*
-         *   ['dein/sein', &yourNomPossAdj, 'actor', nil, nil],
-         *   ['deines/seines', &yourGenPossAdj, 'actor', nil, nil],
-         *   ['deinen/seinen', &yourAkkPossAdj, 'actor', nil, nil],
-         *   ['deinem/seinem', &yourDatPossAdj, 'actor', nil, nil],
-         *
-         *   ['deine/seine/plural', &yourAkkPossPluralAdj, 'actor', nil, nil],
-         *   ['deiner/seiner/plural', &yourGenPossPluralAdj, 'actor', nil, nil],
-         *   ['deine/seine/plural', &yourAkkPossPluralAdj, 'actor', nil, nil],
-         *   ['deinen/seinen/plural', &yourDatPossPluralAdj, 'actor', nil, nil],
-         */
-        
+        ['der', &dArt, nil, nil, nil],
+        ['die', &dArt, nil, nil, nil],
+        ['das', &dArt, nil, nil, nil],
+
         ['dein', &deinPossAdj, nil, nil, nil],
         ['deine', &deinePossAdj, nil, nil, nil],
         ['deiner', &deinerPossAdj, nil, nil, nil],
@@ -5767,7 +6682,11 @@ langMessageBuilder: MessageBuilder
         ['subj', &dummyName, nil, nil, true],
         
         // This is a test for out verbmarker
-        ['*', &dummyVerb, nil, nil, true]
+        ['*', &dummyVerb, nil, nil, nil],
+        ['-*', &dummyPartWithoutBlank, nil, nil, nil],
+        ['!*', &dummyPart, nil, nil, nil],
+        ['+*', &setPartLong, nil, nil, nil],
+        ['**', &printPartLong, nil, nil, nil]
     ]
 
     /*
@@ -6007,6 +6926,7 @@ langMessageBuilder: MessageBuilder
          *   character so that we don't confuse things like "3:00" or
          *   "7.5" to contain sentence-ending punctuation.)
          */
+    
         if (rexSearch(patEndOfSentence, txt) != nil)
         {
             /*
@@ -6016,6 +6936,8 @@ langMessageBuilder: MessageBuilder
              */
             lastSubject_ = nil;
             lastSubjectName_ = nil;
+            // German : additionally we reset our participle
+            verbHelper.lastVerb = 'undefined';
         }
 
         /* return the inherited processing */
@@ -6965,7 +7887,7 @@ cmdTokenizer: Tokenizer
         // -- the author must not(!) define the follwing tokens as a vocabulary word, because
         // -- this would break our replacement mechanism ...
         
-        if (testVocab == nil) { // -- precond: we've found an unknown word ...
+        if (testVocab == nil) { // -- precond: we've found an unknown word ... and if our word can be truncate to its root
             
             local tokTest = tokHelper.checkForValidTokens(w);
             if (tokTest != w && tokTest != 'undefined') {
@@ -6976,7 +7898,6 @@ cmdTokenizer: Tokenizer
         }
               
         // -- German: check whether we have a noun or an adjective or infinitive - then truncate the word to its root
-        
         if (testVocab == nil && len > 3 && cvtFlag == nil)
         {
             // -- German: Genitiv-s as in 'Mariels Gesicht'
@@ -11541,8 +12462,8 @@ modify TAction
         // DAS OBJEKT VOR DEM VERB KOMMT - (erst den apfel nehmen) oder (erst in die Dusche steigen) etc.
 
         // In case of a pronoun, we use in german the same phrase (erst den Apfel nehmen / erst ihn nehmen)
-        
-        ret += spPrefix(vcomp); 
+        if (!inf) 
+            ret += spPrefix(vcomp); 
 
         /* add the direct object preposition */
         ret = spPrefix(dprep) + ' ' + dobjText + ' ' + ret;
@@ -12677,22 +13598,12 @@ modify TopicTAction
 // ***
 
 VerbRule(Nimm)
-    
-    verbNoun('nimm', dobjList)
-    | verbNoun('greif', dobjList)
-    | verbNoun('pack', dobjList)
-    | verbNoun('nehm', dobjList)
-    | verbNounPrep('nimm', dobjList, 'mit') 
-    | verbNounPrep('nehm', dobjList, 'mit')
-    | verbNounPrep('heb', dobjList, 'auf')  
-    | verbNounPrep('lies', dobjList, 'auf') 
-    | verbMiscNoun('pack', 'dir', dobjList)
-    | verbMiscNoun('nimm', 'dir', dobjList)
-    | verbMiscNoun('nehm', 'dir', dobjList) 
-    | verbMiscNounPrep('steck', 'dir', dobjList, 'ein') 
-
+    verb('nimm','nehm','pack','greif') (|'dir') dobjList
+    | verb('lies') dobjList prep('auf') 
+    | verb('steck') 'dir' dobjList prep('ein') 
     : TakeAction
-    verbPhrase = (verb_ == nil ? 'zu nehmen/nehmen (was)' : gVerbPhraseFrom(self))
+    verbPattern('zu nehmen/nehmen', '(was)')
+    //verbPhrase = (verb_ == nil ? 'zu nehmen/nehmen ' : gVerbPhraseFrom(self)) + '(was)'
 ;
 
 // ***
@@ -12701,37 +13612,10 @@ VerbRule(Nimm)
 
 // -- German: we say 'etwas AUS der Kiste nehmen', but 'etwas VON dem Tisch nehmen' ***
 VerbRule(NimmVon)
-
-    verbNounPrepNoun('nimm', dobjList ,'von' , singleIobj)
-    | verbNounPrepNoun('nimm', dobjList ,'aus' , singleIobj)
-    | verbNounPrepNoun('nimm', dobjList ,'in' , singleIobj)
-    | verbMiscNounPrepNoun('nimm', 'dir', dobjList ,'von' , singleIobj)
-    | verbMiscNounPrepNoun('nimm', 'dir', dobjList ,'aus' , singleIobj)
-    | verbMiscNounPrepNoun('nimm', 'dir', dobjList ,'in' , singleIobj)
-    | verbNounPrepNoun('nehm', dobjList ,'von' , singleIobj)
-    | verbNounPrepNoun('nehm', dobjList ,'aus' , singleIobj)
-    | verbNounPrepNoun('nehm', dobjList ,'in' , singleIobj)
-    | verbMiscNounPrepNoun('nehm', 'dir', dobjList ,'von' , singleIobj)
-    | verbMiscNounPrepNoun('nehm', 'dir', dobjList ,'aus' , singleIobj)
-    | verbMiscNounPrepNoun('nehm', 'dir', dobjList ,'in' , singleIobj)
-    | verbNounPrepNoun('pack', dobjList ,'von' , singleIobj)
-    | verbNounPrepNoun('pack', dobjList ,'aus' , singleIobj)
-    | verbNounPrepNoun('pack', dobjList ,'in' , singleIobj)
-    | verbMiscNounPrepNoun('pack', 'dir', dobjList ,'von' , singleIobj)
-    | verbMiscNounPrepNoun('pack', 'dir', dobjList ,'aus' , singleIobj)
-    | verbMiscNounPrepNoun('pack', 'dir', dobjList ,'in' , singleIobj)
-    | verbNounPrepNoun('greif', dobjList ,'von' , singleIobj)
-    | verbNounPrepNoun('greif', dobjList ,'aus' , singleIobj)
-    | verbNounPrepNoun('greif', dobjList ,'in' , singleIobj)
-    | verbMiscNounPrepNoun('greif', 'dir', dobjList ,'von' , singleIobj)
-    | verbMiscNounPrepNoun('greif', 'dir', dobjList ,'aus' , singleIobj)
-    | verbMiscNounPrepNoun('greif', 'dir', dobjList ,'in' , singleIobj)
-    | verbNounPrepNoun('entfern', dobjList ,'von' , singleIobj)
-    | verbNounPrepNoun('entfern', dobjList ,'aus' , singleIobj)
-    | verbNounPrepNoun('entfern', dobjList ,'in' , singleIobj)
-    
+    verb('nimm','nehm','pack','greif','entfern') dobjList prep('von','aus','in') singleIobj
+    | verb('nimm','nehm','pack','greif') 'dir' dobjList prep('von','aus','in') singleIobj
     : TakeFromAction
-    verbPhrase = 'zu nehmen/nehmen (was) (aus|von dativ was)'
+    verbPattern('zu nehmen/nehmen', '(was) (aus|von dativ was)')
 ;
 
 // ***
@@ -12739,11 +13623,10 @@ VerbRule(NimmVon)
 // ***
 
 VerbRule(Entfern)
-    verbNoun('entfern', dobjList) |
-    verbNounPrep('heb', dobjList, 'hinunter') | verbNounPrep('zieh', dobjList, 'hinunter', 'hinaus') 
-    | verbNounPrep('reiß', dobjList, 'hinunter','hinaus') | verbNounPrep('heb', dobjList, 'hinaus')
+    verb('entfern') dobjList |
+    verb('heb','zieh','reiß') dobjList prep('hinunter','hinaus') 
     : RemoveAction
-    verbPhrase = 'zu entfernen/entfernen (was)'
+    verbPattern('zu entfernen/entfernen', '(was)')
 ;
 
 // ***
@@ -12751,14 +13634,10 @@ VerbRule(Entfern)
 // ***
 
 VerbRule(LegAb)
-    verbNounPrep('leg', dobjList, 'ab') | verbNounPrep('lege', dobjList, 'ab')
-    | verbNounPrep('lass', dobjList, 'fallen') 
-    
-//    (('leg'|'lege')  'ab' | 'lass' 'fallen') dobjList
-//    | (('leg'|'lege') | 'lass') dobjList ('fallen' | 'nieder' | 'hier' | 'aus' | 'los')
-//    | (('leg'|'lege') |'stell'|'stelle'|'setz') dobjList ('hin'|'ab'|'weg')   
+    verb('leg','lege','stell') dobjList prep('ab','hin','weg')
+    | verb('lass') dobjList prep('fallen','hier')    
     : DropAction
-    verbPhrase = 'abzulegen/ablegen (was)'
+    verbPattern('abzulegen/ablegen', '(was)')
 ;
 
 // ***
@@ -12766,10 +13645,11 @@ VerbRule(LegAb)
 // ***
 
 VerbRule(Untersuch)
-    ('untersuch' | 'betracht' | 'u' | 'x' | 'schau' | 'schau' 'an' | 'b' ) dobjList  
-    | 'schau' dobjList 'an'->prep_
+    verb('untersuch','betracht','schau') dobjList
+    | verb('schau') dobjList prep('an')
+    | ('u'|'x'|'b') dobjList
     : ExamineAction
-    verbPhrase = 'zu betrachten/betrachten (was)'
+    verbPattern('zu betrachten/betrachten', '(was)')
 ;
 
 // ***
@@ -12777,9 +13657,9 @@ VerbRule(Untersuch)
 // ***
 
 VerbRule(Lies)
-    ('lies'|'les'|'studier'|'entziffer') dobjList
+    verb('lies','les','studier','entziffer') dobjList
     : ReadAction
-    verbPhrase = 'zu lesen/lesen (was)'
+    verbPattern('zu lesen/lesen', '(was)')
 ;
 
 // ***
@@ -12787,24 +13667,24 @@ VerbRule(Lies)
 // ***
 
 VerbRule(SchauIn)
-    'schau' 'in' dobjList (|'hinein')
-    | 'such' 'in' dobjList
+    verb('such') 'in' dobjList
+    | verb('schau') 'in' dobjList (|'hinein') 
     : LookInAction
-    verbPhrase = 'zu schauen/schauen (in was)'
+    verbPattern('zu schauen/schauen', '(in was)')
 ;
 
 // ***
 // -- LookVagueActions
 // ***
 
-// -- in german we have a common use of
+// -- in German we have a common use of
 // -- untersuche schrank .....
 // -- schau hinein (whereas "hinein" refers to the last mentioned object)
 
 DefineIAction(LookInVague)
     execAction() {
         if (gLastObj != nil)
-            replaceAction(LookIn, reminder.getLastObj());
+            replaceAction(LookIn, gLastObj);
         else
             "Ich weiß nicht, worauf sich <q>hinein</q> bezieht. ";
     }    
@@ -12813,7 +13693,7 @@ DefineIAction(LookInVague)
 DefineIAction(LookOutVague)
     execAction() {
         if (gLastObj != nil)
-            replaceAction(LookIn, reminder.getLastObj());
+            replaceAction(LookIn, gLastObj);
         else
             "Ich weiß nicht, worauf sich <q>hinaus</q> bezieht. ";
     }    
@@ -12822,7 +13702,7 @@ DefineIAction(LookOutVague)
 DefineIAction(LookThroughVague)
     execAction() {
         if (gLastObj != nil)
-            replaceAction(LookThrough, reminder.getLastObj());
+            replaceAction(LookThrough, gLastObj);
         else
             "Ich weiß nicht, worauf sich <q>hindurch</q> bezieht. ";
     }    
@@ -12831,7 +13711,7 @@ DefineIAction(LookThroughVague)
 DefineIAction(LookUnderVague)
     execAction() {
         if (gLastObj != nil)
-            replaceAction(LookUnder, reminder.getLastObj());
+            replaceAction(LookUnder, gLastObj);
         else
             "Ich weiß nicht, worauf sich <q>darunter</q> bezieht. ";
     }    
@@ -12840,16 +13720,16 @@ DefineIAction(LookUnderVague)
 DefineIAction(LookBehindVague)
     execAction() {
         if (gLastObj != nil)
-            replaceAction(LookBehind, reminder.getLastObj());
+            replaceAction(LookBehind, gLastObj);
         else
             "Ich weiß nicht, worauf sich <q>dahinter</q> bezieht. ";
     }
 ;
 
 VerbRule(SchauHinein)
-    'schau' 'hinein' 
+    'schau' 'hinein'
     : LookInVagueAction
-    verbPhrase = 'hineinzuschauen/hineinschauen' 
+    verbPhrase = 'hineinzuschauen/hineinschauen'
 ;
 
 VerbRule(SchauHinaus)
@@ -12896,49 +13776,66 @@ modify TAction
     }
 ;
 
+// -- german: our verHelper object stores pariciples of the last verb
+
+verbHelper : object
+    reversed = nil
+    blank = true
+    participle = ''
+    longParticiple = ''
+    lastVerb = 'undefined'
+    setParticiple(txt) {
+        participle = txt;
+    }
+;
+
 // -- german: our infHelper object builds verbphrases from verbrule objects
 
 infHelper : object
     
     tab = [
-        'nimm' -> 'nehm', 
-        'wirf' -> 'werf', 
-        'lies' -> 'les', 
-        'gib' -> 'geb', 
+        'öffn' -> 'öffnen',
+        'nimm' -> 'nehmen', 
+        'wirf' -> 'werfen', 
+        'lies' -> 'lesen', 
+        'gib' -> 'geben', 
+        'iss' -> 'essen',
+        'steige' -> 'steigen',
+        'friss' -> 'fressen',
+        'brich' -> 'brechen',
+        'zerbrich' -> 'zerbrechen',
+        'säuber' -> 'säubern',
+        'entziffer' -> 'entziffern',
+        'schnüffl' -> 'schnüffeln',
+        'schnüffel' -> 'schnüffeln',
+        'schnupper' -> 'schnuppern',
         * -> 'undefined'
     ]
     
     buildVerbPhraseFrom(obj) {
          
-        local inf = obj.inf_;
         local verb = obj.verb_;
         local prep = obj.prep_;
         local misc = (obj.misc_ ? obj.misc_ + ' ' : '');
-        local dprep = obj.dprep_;
-        local iprep = obj.iprep_;
         local verbPhrase = nil;    
-        
-        // we have already an infinitive
-        if (inf) {
-            verbPhrase = misc + 'undefiniert' + '/' + misc + inf + 'en ' + '(was)';
-            return(verbPhrase);
-        }
+
+        // if we end up with 'e', cut it off
+        if (verb.endsWith('e'))
+            verb = verb.substr(1, verb.length() - 1);
         
         // if our verb is in the table with irregular infinitives, replace it
         local irregular = tab[verb];
         if (irregular != 'undefined')
             verb = irregular;
-        
-        // if we end up with 'e', cut it off
-        if (verb.endsWith('e'))
-            verb = verb.substr(1, verb.length() - 1);
-        
+        else
+            verb = verb + 'en';
+               
         // if we have no prep, the form is rather simple
-        if (prep == nil && dprep == nil && iprep == nil)
-            verbPhrase = misc + 'zu ' + verb + 'en' + '/' + misc + verb + 'en ' + '(was)';
+        if (prep == nil)
+            verbPhrase = misc + 'zu ' + verb + '/' + misc + verb + ' ';
         // if we have a prep, use it
         else if (prep)
-            verbPhrase = prep + 'zu' + verb + 'en' + '/' + prep + verb + 'en ' + '(was)';
+            verbPhrase = prep + 'zu' + verb + '/' + prep + verb + ' ';
         
         return(verbPhrase);
     }
@@ -12974,9 +13871,11 @@ tokHelper : object
         'rüber' -> 'hinüber',
         'drüber' -> 'hinüber',
         'herüber' -> 'hinüber',
+        'zum' -> 'zu',
+        'zur' -> 'zu',
         * -> 'undefined'
     ]
-    
+   
     checkForValidTokens(txt) { 
         
         // get keys from token lookuptable
@@ -12986,16 +13885,53 @@ tokHelper : object
         foreach(local val in keys) {
 
             // if we find a matching start value (rüberspringen), replace it
-            // with the value (hunüberspringen)
+            // with the value (hinüberspringen)
+            
+            // We have special rules at the beginning of a sentence:
+            // We don't want to replace "durchs", "ans" because we 
+            // have trouble with verbs like "*durchs*uch" ...
+            // have trouble with verbs like "*rein*ige" ...
+            
             if (txt.startsWith(val)) {
-                txt  = txt.substr(val.length() + 1, txt.length());
-                txt  = token[val] + txt;
-                break;
+                
+                if (txt.length() > val.length()) {
+                    if (!val.endsWith('s')) {
+                        local test = txt.substr(val.length() + 1, txt.length());
+                        if (checkForValidWord(test)) {
+                            txt  = txt.substr(val.length() + 1, txt.length());
+                            txt  = token[val] + txt;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    txt  = txt.substr(val.length() + 1, txt.length());
+                    txt  = token[val] + txt;
+                    break;
+                }
             }
         }
+
         //txt = token[txt];
         // return either new or old value
         return(txt);
+    }
+
+    checkForValidWord(txt) {
+
+        // it could be that we are already defined "as we are"
+        if (cmdDict.isWordDefined(txt))
+            return true;
+        // it could be that we defined "truncated"
+        txt = strangeObj.testEndings(txt);
+        if (cmdDict.isWordDefined(txt))
+            return true;
+        // it could be that we defined as "irregular infinitve"
+        local irregular = infHelper.tab[txt];
+        if (irregular != 'undefined')
+            return true;
+        // we are really unknown :-(
+        return nil;
     }
 ;
 
@@ -13004,11 +13940,11 @@ tokHelper : object
 // ***
 
 VerbRule(Durchsuch)
-    ('durchsuch'|'durchwühl') dobjList
-    | 'wühl' 'in' dobjList
-    | 'schau' 'auf' dobjList (|'drauf'|'darauf')
+    verb('durchsuch','durchkämm','durchwühl') dobjList
+    | verb('wühl') 'in' dobjList
+    | verb('schau') 'auf' dobjList
     : SearchAction
-    verbPhrase = 'zu durchsuchen/durchsuchen (was)'
+    verbPattern('zu durchsuchen/durchsuchen', '(was)')
 ;
 
 // ***
@@ -13016,9 +13952,9 @@ VerbRule(Durchsuch)
 // ***
 
 VerbRule(SchauDurch)
-    'schau' ('durch'|'aus') dobjList (|'hindurch'|'hinaus')
+    verb('blick','blicke','schau') ('durch'|'aus'|'zu') dobjList (|'hinaus')
     : LookThroughAction
-    verbPhrase = 'zu schauen/schauen (durch was)'
+    verbPattern('zu schauen/schauen', '(durch was)')
 ;
 
 // ***
@@ -13026,10 +13962,10 @@ VerbRule(SchauDurch)
 // ***
 
 VerbRule(SchauUnter)
-    'schau' 'unter' dobjList (|'nach'|'drunter')
-    | 'such' 'unter' dobjList
+    verb('blick','blicke','schau','such','wühl') 'unter' dobjList (|'nach')
+    | verb('blick','blicke','schau','such','wühl') 'nach' 'unter' dobjList
     : LookUnderAction
-    verbPhrase = 'zu schauen/schauen (unter was)'
+    verbPattern('zu schauen/schauen', '(unter was)')
 ;
 
 // ***
@@ -13037,10 +13973,10 @@ VerbRule(SchauUnter)
 // ***
 
 VerbRule(SchauHinter)
-    ('schau' 'hinter') dobjList
-    | ('such' 'hinter') dobjList
+    verb('blick','blicke','schau','such','wühl') 'hinter' dobjList (|'nach')
+    | verb('blick','blicke','schau','such','wühl') 'nach' 'hinter' dobjList
     : LookBehindAction
-    verbPhrase = 'zu schauen/schauen (hinter was)'
+    verbPattern('zu schauen/schauen', '(hinter was)')
 ;
 
 // ***
@@ -13048,10 +13984,11 @@ VerbRule(SchauHinter)
 // ***
 
 VerbRule(Fuehl)
-    ('berühr'|'fühl'|'tast'|'betast'|'streif'|'fass' 'an') dobjList
-    | 'fass' dobjList 'an'
+    verb('berühr','fühl','tast','taste','betast','streif') dobjList
+    | verb('fass','fühl') 'an' dobjList
+    | verb('fass','fühl') dobjList 'an'
     : FeelAction
-    verbPhrase = 'zu berühren/berühren (was)'
+    verbPattern('zu berühren/berühren', '(was)')
 ;
 
 // ***
@@ -13059,10 +13996,10 @@ VerbRule(Fuehl)
 // ***
 
 VerbRule(Schmeck)
-    ('schmeck' | 'leck' | 'probier') dobjList
-    | 'leck' 'an' dobjList
+    verb('schmeck','leck','probier') dobjList
+    | verb('leck','schleck') 'an' dobjList
     : TasteAction
-    verbPhrase = 'zu schmecken/schmecken (was)'
+    verbPattern('zu schmecken/schmecken', '(was)')
 ;
 
 // ***
@@ -13070,10 +14007,10 @@ VerbRule(Schmeck)
 // ***
 
 VerbRule(RiechAn)
-    ('riech' | 'schnüffel' | 'schnüffl') 'an' dobjList
-    | ('riech' | 'schnüffel' | 'schnüffl') dobjList
+    verb('riech','schnüffel','schnüffl','schnupper') dobjList
+    | verb('riech','schnüffel','schnüffl','schnupper') 'an' dobjList
     : SmellAction
-    verbPhrase = 'zu riechen/riechen (an was)'
+    verbPattern('zu riechen/riechen', '(an dativ was)')
 
     /*
      *   use the "not aware" version of the no-match message - the object
@@ -13088,7 +14025,7 @@ VerbRule(RiechAn)
 // ***
 
 VerbRule(RiechImplizit)
-    'riech' | 'schnüffel' | 'schnüffl'
+    verb('riech','schnüffel','schnüffl','schnupper')
     : SmellImplicitAction
     verbPhrase = 'zu riechen/riechen'
 ;
@@ -13098,11 +14035,24 @@ VerbRule(RiechImplizit)
 // ***
 
 VerbRule(HoerAn)
-    ('hör' | 'hör' 'zu' | 'hör' 'an' | 'lausch' | 'lausch' 'an' | 'horch' | 'horch' 'an') dobjList
-    | ('hör'|'horch') dobjList 'zu'
+    verb('hör','horch') dobjList 'an'
+    | verb('lausch') 'an' dobjList
+    : ListenToAction
+    verbPattern('zu hören/hören', '(an dativ was)')
+    /*
+     *   use the "not aware" version of the no-match message - the object
+     *   of LISTEN TO is often intangible, so the default "you can't see
+     *   that" message is often incongruous for this verb
+     */
+    noMatch(msgObj, actor, txt) { msgObj.noMatchNotAware(actor, txt); }
+    defaultForRecursion = true
+;
+
+VerbRule(HoerZu)
+    verb('hör') dobjList (|prep('zu'))
+    | verb('horch','lausch') dobjList 
     : ListenToAction
     verbPhrase = 'zuzuhören/zuhören (dativ wem)'
-
     /*
      *   use the "not aware" version of the no-match message - the object
      *   of LISTEN TO is often intangible, so the default "you can't see
@@ -13110,15 +14060,15 @@ VerbRule(HoerAn)
      */
     noMatch(msgObj, actor, txt) { msgObj.noMatchNotAware(actor, txt); }
 ;
-
+    
 // ***
 // -- ListenImlicitAction
 // ***
 
 VerbRule(HoerImplizit)
-    'hör' | 'lausch' | 'horch'
+    verb('hör','lausch','horch')
     : ListenImplicitAction
-    verbPhrase = 'zuzuhören/zuhören'
+    verbPhrase = 'zu hören/hören'
 ;
 
 // ***
@@ -13126,10 +14076,9 @@ VerbRule(HoerImplizit)
 // ***
 
 VerbRule(LegIn)
-    [badness 500]
-    ('leg' | 'lege' | 'platzier' | 'pack' | 'tu' | 'stell' | 'stelle') dobjList 'in' singleIobj (|'hinein')
+    verb('leg','lege','platzier','pack','stell','stelle') dobjList 'in' singleIobj (|'hinein')
     : PutInAction
-    verbPhrase = 'zu legen/legen (was) (in was)'
+    verbPattern('zu legen/legen', '(was) (in was)')
     askIobjResponseProd = inSingleNoun
 ;
 
@@ -13138,9 +14087,9 @@ VerbRule(LegIn)
 // ***
 
 VerbRule(LegAuf)
-    ('leg' | 'lege' | 'platzier' | 'pack' | 'tu' | 'stell' | 'stelle') dobjList 'auf' singleIobj
+    verb('leg','lege','platzier','pack','stell','stelle') dobjList 'auf' singleIobj    
     : PutOnAction
-    verbPhrase = 'zu legen/legen (was) (auf was)'
+    verbPattern('zu legen/legen', '(was) (auf was)')
     askIobjResponseProd = aufSingleNoun
 ;
 
@@ -13149,9 +14098,9 @@ VerbRule(LegAuf)
 // ***
 
 VerbRule(LegUnter)
-    ('leg' | 'lege' | 'platzier' | 'pack' | 'tu' | 'stell' | 'stelle') dobjList 'unter' singleIobj
+    verb('leg','lege','platzier','pack','stell','stelle') dobjList 'unter' singleIobj    
     : PutUnderAction
-    verbPhrase = 'zu legen/legen (was) (unter was)'
+    verbPattern('zu legen/legen', '(was) (unter was)')
     askIobjResponseProd = unterSingleNoun
 ;
 
@@ -13160,9 +14109,9 @@ VerbRule(LegUnter)
 // ***
 
 VerbRule(LegHinter)
-    ('leg' | 'lege' | 'platzier' | 'pack' | 'tu' | 'stell' | 'stelle') dobjList 'hinter' singleIobj
+    verb('leg','lege','platzier','pack','stell','stelle') dobjList 'hinter' singleIobj    
     : PutBehindAction
-    verbPhrase = 'zu legen/legen (was) (hinter was)'
+    verbPattern('zu legen/legen', '(was) (hinter was)')
     askIobjResponseProd = hinterSingleNoun
 ;
 
@@ -13171,9 +14120,10 @@ VerbRule(LegHinter)
 // ***
 
 VerbRule(LegInWas)
-    [badness 500] ('leg' | 'lege' | 'platzier' | 'pack' | 'tu' | 'stell' | 'stelle') dobjList
+    [badness 500] 
+    verb('leg','lege','platzier','pack','stell','stelle') dobjList    
     : PutInAction
-    verbPhrase = 'zu legen/legen (was) (in was)'
+    verbPattern('zu legen/legen', '(was) (in was)')
     construct()
     {
         /* set up the empty indirect object phrase */
@@ -13187,11 +14137,12 @@ VerbRule(LegInWas)
 // ***
 
 VerbRule(ZiehAn)
-    ('trag' | 'zieh' 'an' | ('leg'|'lege') 'an' | 'kleid' 'dich' 'mit' | 'setz' 'auf' ) dobjList
-    | ('zieh'|('leg'|'lege')|'steck'|'steck' 'dir') dobjList 'an'
-    | 'setz' dobjList 'auf'
+    verb('trag') dobjList
+    | verb('leg','lege','zieh') (|'dir') dobjList prep('an')
+    | verb('setz','zieh') (|'dir') dobjList prep('auf')   
+    | verb('steck') 'dir' dobjList prep('an')
     : WearAction
-    verbPhrase = 'anzuziehen/anziehen (was)'
+    verbPattern('anzuziehen/anziehen', '(was)')
 ;
 
 // ***
@@ -13199,30 +14150,29 @@ VerbRule(ZiehAn)
 // ***
 
 VerbRule(ZiehAus)
-    ('zieh' 'aus'|'nimm' 'ab'|'nehm' 'ab'|'zieh' 'ab') dobjList
-    | ('zieh'|'nimm'|'nehm') dobjList 'ab'   
-    | 'zieh' dobjList 'aus'
+    verb('leg','lege','zieh','nimm','nehm','setz') dobjList prep('ab')
+    | verb('zieh') dobjList prep('aus')
     : DoffAction
-    verbPhrase = 'auszuziehen/ausziehen (was)'
+    verbPattern('auszuziehen/ausziehen', '(was)')
 ;
 
 // ***
 // -- KissAction
 // ***
 
-
 VerbRule(Kuess)
-    'küss' singleDobj
+    verb('küss','knutsch') singleDobj
     : KissAction
-    verbPhrase = 'zu küssen/küssen (wen)'
+    verbPattern('zu küssen/küssen', '(wen)')
 ;
 
 // ***
-// -- AslForAction
+// -- AskForAction
 // ***
 
-VerbRule(AskFor)
-    ('bitt' | 'b') singleDobj 'um' singleTopic
+VerbRule(BitteUm)
+    verb('bitt') singleDobj 'um' singleTopic
+    | 'b' singleDobj 'um' singleTopic
     : AskForAction
     verbPhrase = (topicList_ != [] ? 'darum ': '' )+'zu bitten/'+(topicList_ != [] ? 'darum ': '' )+'bitten (wen) (um was)'
     omitIobjInDobjQuery = true
@@ -13230,8 +14180,9 @@ VerbRule(AskFor)
     askIobjResponseProd = umSingleNoun
 ;
 
-VerbRule(AskWhomFor)
-    ('bitt' | 'b') 'um' singleTopic
+VerbRule(BittWenUm)
+    verb('bitt') 'um' singleTopic
+    | 'b' 'um' singleTopic
     : AskForAction
     verbPhrase = (topicList_ != [] ? 'darum ': '' )+'zu bitten/'+(topicList_ != [] ? 'darum ': '' )+'bitten (wen) (um was)'
     omitIobjInDobjQuery = true
@@ -13248,7 +14199,8 @@ VerbRule(AskWhomFor)
 // ***
 
 VerbRule(FragWas)
-    ('befrag' | 'frag' | 'f') singleDobj ('nach'|'über') singleTopic
+    verb('frag','befrag') singleDobj ('nach'|'über') singleTopic
+    | 'f' singleDobj ('nach'|'über') singleTopic 
     : AskAboutAction
     verbPhrase = (topicList_ != [] ? 'danach ': '' )+'zu fragen/'+(topicList_ != [] ? 'danach ': '' )+'fragen (wen) (nach dativ was)'
     omitIobjInDobjQuery = true
@@ -13256,7 +14208,9 @@ VerbRule(FragWas)
 ;
 
 VerbRule(FragImplizit)
-    'f' singleTopic
+    verb('frag') 'nach' singleTopic
+    | 'f' singleTopic
+
     : AskAboutAction
     verbPhrase = (topicList_ != [] ? 'danach ': '' )+'zu fragen/'+(topicList_ != [] ? 'danach ': '' )+'fragen (wen) (nach dativ was)'
     omitIobjInDobjQuery = true
@@ -13269,7 +14223,8 @@ VerbRule(FragImplizit)
 ;
 
 VerbRule(FragNachWas)
-    [badness 500] ('befrag' | 'frag' | 'f') singleDobj
+    [badness 500] 
+    verb('frag','befrag') singleDobj
     : AskAboutAction
     verbPhrase = (topicList_ != [] ? 'danach ': '' )+'zu fragen/'+(topicList_ != [] ? 'danach ': '' )+'fragen (wen) (nach dativ was)'
     askDobjResponseProd = singleNoun
@@ -13287,18 +14242,18 @@ VerbRule(FragNachWas)
 // ***
 
 VerbRule(ErzaehlWas)
-    ('erzähl' | 'e') singleDobj ( 'von'| 'über') singleTopic
+    verb('erzähl','bericht','berichte') singleDobj ('von'|'über') singleTopic
+    | 'e' singleDobj ('von'|'über') singleTopic
     : TellAboutAction
-    //verbPhrase = 'zu erzählen/erzählen (dativ wem) (von was)'
     verbPhrase = (topicList_ != [] ? 'davon ': '' ) + 'zu erzählen/'+(topicList_ != [] ? 'davon ': '' )+'erzählen (dativ wem) (von dativ was)'
     askDobjResponseProd = singleNoun
     omitIobjInDobjQuery = true
 ;
 
 VerbRule(ErzaehlImplizit)
-    'e' singleTopic
+    verb('erzähl','bericht','berichte') 'von' singleTopic
+    | 'e' singleTopic
     : TellAboutAction
-    //verbPhrase = 'zu erzählen/erzählen (dativ wem) (von was)'
     verbPhrase = (topicList_ != [] ? 'davon ': '' ) + 'zu erzählen/'+(topicList_ != [] ? 'davon ': '' )+'erzählen (dativ wem) (von dativ was)'
     omitIobjInDobjQuery = true
     construct()
@@ -13310,7 +14265,8 @@ VerbRule(ErzaehlImplizit)
 ;
 
 VerbRule(ErzaehlVonWas)
-    [badness 500] ('erzähl' | 'e') singleDobj
+    [badness 500] 
+    verb('erzähl','bericht','berichte') singleDobj   
     : TellAboutAction
     verbPhrase = (topicList_ != [] ? 'davon ': '' ) + 'zu erzählen/'+(topicList_ != [] ? 'davon ': '' )+'erzählen (dativ wem) (von dativ was)'
     askDobjResponseProd = singleNoun
@@ -13324,33 +14280,30 @@ VerbRule(ErzaehlVonWas)
 ;
 
 // ***
-// -- AskVagueAction
-// ***
-
-VerbRule(FragVage)
-    [badness 500] ('befrag' | 'frag' | 'f') singleDobj singleTopic
-    : AskVagueAction
-    verbPhrase = 'zu fragen/fragen (wen)'
-;
-
-VerbRule(ErzaehlVage)
-    [badness 500] ('erzähl' | 'e') singleDobj singleTopic
-    : AskVagueAction
-    verbPhrase = 'zu erzählen/erzählen (dativ wem)'
-;
-
-// ***
 // -- TalkToAction
 // ***
 
 VerbRule(RedMit)
-    ('grüß'|'begrüß'| 'sag' 'hallo' 'zu') singleDobj
-    | ('sprich'|'sprech'|'red') 'mit' singleDobj
-    | 'sag' singleDobj 'hallo'
-    | 'sag' 'zu' singleDobj 'hallo'
+    verb('red','sprich','sprech') 'mit' singleDobj 
     : TalkToAction
-    verbPhrase = 'zu reden/reden (mit dativ wem)'
+    verbPattern('zu reden/reden', '(mit dativ wem)')
     askDobjResponseProd = mitSingleNoun
+;
+
+VerbRule(SagHallo)
+    verb('sag') 'hallo' 'zu' singleDobj
+    | verb('sag') singleDobj 'hallo'
+    : TalkToAction
+    verbPattern('zu reden/reden', '(mit dativ wem)')
+    askDobjResponseProd = mitSingleNoun
+;
+
+VerbRule(Gruess)
+    verb('grüß') singleDobj
+    | verb('begrüß') singleDobj
+    : TalkToAction
+    verbPattern('zu grüßen/grüßen', '(wen)')
+    askDobjResponseProd = singleNoun
 ;
 
 VerbRule(RedMitWem)
@@ -13358,7 +14311,6 @@ VerbRule(RedMitWem)
     : TalkToAction
     verbPhrase = 'zu reden/reden (mit dativ wem)'
     askDobjResponseProd = mitSingleNoun
-
     construct()
     {
         /* set up the empty direct object phrase */
@@ -13372,7 +14324,6 @@ VerbRule(Sprich)
     : TalkToAction
     verbPhrase = 'zu sprechen/sprechen (mit dativ wem)'
     askDobjResponseProd = mitSingleNoun
-
     construct()
     {
         /* set up the empty direct object phrase */
@@ -13437,7 +14388,7 @@ VerbRule(Nein)
 // ***
 
 VerbRule(Schrei)
-    'schrei' | 'brüll' | 'ruf' | 'jaul'
+    verb('schrei','brüll','ruf','jaul')
     : YellAction
     verbPhrase = 'zu schreien/schreien'
 ;
@@ -13447,17 +14398,17 @@ VerbRule(Schrei)
 // ***
 
 VerbRule(GibWas)
-    ('gib'|'geb'|'übergeb'|'übergib') dobjList 'an' singleIobj
+    verb('gib','geb','übergeb','übergib') dobjList 'an' singleIobj
     : GiveToAction
-    verbPhrase = 'zu geben/geben (was) (dativ wem)'
+    verbPattern('zu geben/geben', '(was) (dativ wem)')
     askIobjResponseProd = singleNoun
 ;
 
 VerbRule(GibWas2)
-    ('gib'|'geb'|'übergeb'|'übergib'|'biet') singleIobj dobjList
+    verb('gib','geb','übergeb','übergib','biet') singleIobj dobjList
     |'biet' singleIobj dobjList 'an'
     : GiveToAction
-    verbPhrase = 'zu geben/geben (was) (dativ wem)'
+    verbPattern('zu geben/geben', '(was) (dativ wem)')
     askIobjResponseProd = singleNoun
 
     /* this is a non-prepositional phrasing */
@@ -13466,21 +14417,9 @@ VerbRule(GibWas2)
 ;
 
 VerbRule(GibWasWem)
-    ('gib'|'geb') dobjList
+    verb('gib','geb','übergeb','übergib') dobjList
     : GiveToAction
-    verbPhrase = 'zu geben/geben (was) (dativ wem)'
-    construct()
-    {
-        /* set up the empty indirect object phrase */
-        iobjMatch = new ImpliedActorNounPhraseProd();
-        iobjMatch.responseProd = singleNoun;
-    }
-;
-
-VerbRule(UebergibWasWem)
-    ('übergeb'|'übergib') dobjList
-    : GiveToAction
-    verbPhrase = 'zu übergeben/übergeben (was) (dativ wem)'
+    verbPattern('zu geben/geben', '(was) (dativ wem)')
     construct()
     {
         /* set up the empty indirect object phrase */
@@ -13490,10 +14429,9 @@ VerbRule(UebergibWasWem)
 ;
 
 VerbRule(BietWasWem)
-    'biet' dobjList
-    | 'biet' dobjList 'an'
+    verb('biet') dobjList (|prep('an'))
     : GiveToAction
-    verbPhrase = 'anzubieten/anbieten (was) (dativ wem)'
+    verbPattern('anzubieten/anbieten', '(was) (dativ wem)')
     construct()
     {
         /* set up the empty indirect object phrase */
@@ -13507,7 +14445,7 @@ VerbRule(BietWasWem)
 // ***
 
 VerbRule(ZeigWas)
-    'zeig' dobjList singleIobj
+    verb('zeig') dobjList singleIobj
     : ShowToAction
     verbPhrase = 'zu zeigen/zeigen (was) (dativ wem)'
     askIobjResponseProd = singleNoun
@@ -13517,22 +14455,8 @@ VerbRule(ZeigWas)
     preferredIobj = Actor
 ;
 
-// -- German: we need no ShowToType2 because the reverse case
-// -- when Iobj is in the first slot is handled by the 
-// -- TIAction.doActionMain(), see above ...
-
-//VerbRule(ShowToType2)
-//    'zeig' singleIobj dobjList
-//    : ShowToAction
-//    verbPhrase = 'zu zeigen/zeigen (was) (dativ wem)'
-//    askIobjResponseProd = singleNoun
-//
-//    /* this is a non-prepositional phrasing */
-//    isPrepositionalPhrasing = nil
-//;
-
 VerbRule(ZeigWasWem)
-    'zeig' dobjList
+    verb('zeig') dobjList
     : ShowToAction
     verbPhrase = 'zu zeigen/zeigen (was) (dativ wem)'
     construct()
@@ -13548,16 +14472,9 @@ VerbRule(ZeigWasWem)
 // ***
 
 VerbRule(Wirf)
-
-    verbNoun('wirf', dobjList)
-    | verbNoun('werf', dobjList)
-    | verbNoun('schmeiß', dobjList)
-    | verbNounPrep('wirf', dobjList, 'weg', 'fort')
-    | verbNounPrep('werf', dobjList, 'weg', 'fort')
-    | verbNounPrep('schmeiß', dobjList, 'weg', 'fort')
-    
+    verb('wirf','werf','schmeiß') dobjList (|'weg'|'fort')
     : ThrowAction
-    verbPhrase = ((verb_ == nil && inf_ == nil) ? 'zu werfen/werfen (was)' : gVerbPhraseFrom(self))
+    verbPattern('zu werfen/werfen', '(was)')
 ;
 
 // ***
@@ -13565,9 +14482,9 @@ VerbRule(Wirf)
 // ***
 
 VerbRule(WirfAuf)
-    ('werf' | 'wirf' | 'schmeiß') dobjList ('auf'|'in'|'gegen') singleIobj
+    verb('werf','wirf','schmeiß') dobjList ('auf'|'in'|'gegen') singleIobj
     : ThrowAtAction
-    verbPhrase = 'zu werfen/werfen (was) (auf was)'
+    verbPattern('zu werfen/werfen', '(was) (auf was)')
     askIobjResponseProd = aufSingleNoun
 ;
 
@@ -13576,42 +14493,27 @@ VerbRule(WirfAuf)
 // ***
 
 VerbRule(WirfNach)
-    ('werf' | 'wirf' | 'schmeiß') dobjList 'nach' singleIobj
+    verb('werf','wirf','schmeiß') dobjList 'nach' singleIobj
     : ThrowToAction
-    verbPhrase = 'zu werfen/werfen (was) (nach dativ wem)'
+    verbPattern('zu werfen/werfen', '(was) (nach dativ was)')
     askIobjResponseProd = nachSingleNoun
 ;
-
-// ***
-// -- German: we have no throwtotype2
-// ***
-
-//VerbRule(ThrowToType2)
-//    ('werf' | 'wirf' | 'schmeiß') singleIobj dobjList
-//    : ThrowToAction
-//    verbPhrase = 'zu werfen/werfen (was) (nach dativ wem)'
-//    askIobjResponseProd = nachSingleNoun
-//
-//    /* this is a non-prepositional phrasing */
-//    isPrepositionalPhrasing = nil
-//;
 
 // ***
 // -- ThrowDirAction
 // ***
 
 VerbRule(WirfDir)
-    ('werf' | 'wirf' | 'schmeiß') dobjList ('nach' ('dem' | ) | ) singleDir
+    verb('werf','wirf','schmeiß') dobjList ('nach' ('dem' | ) | ) singleDir
     : ThrowDirAction
     verbPhrase = ('zu werfen/werfen (was) nach' + dirMatch.dir.name)
 ;
 
 /* a special rule for THROW DOWN <dobj> */
 VerbRule(WirfDirUnten)
-    ('werf' | 'wirf' |'schmeiß') dobjList ('hinunter')
+    verb('werf','wirf','schmeiß') dobjList ('hinunter')
     : ThrowDirAction
     verbPhrase = ('hinunterzuwerfen/hinunterwerfen (was)')
-
     /* the direction is fixed as 'down' for this phrasing */
     getDirection() { return downDirection; }
 ;
@@ -13621,8 +14523,7 @@ VerbRule(WirfDirUnten)
 // ***
 
 VerbRule(Folg)
-    ('folg'|'verfolg') singleDobj (|'nach')
-    | 'geh' singleDobj ('nach'|'hinterher')
+    verb('folg','verfolg','geh') singleDobj (|'nach'|'hinterher')
     : FollowAction
     verbPhrase = 'zu folgen/folgen (dativ wem)'
     askDobjResponseProd = singleNoun
@@ -13632,41 +14533,13 @@ VerbRule(Folg)
 // -- AttackAction
 // ***
 
-VerbRule(GreifAn)
-    'greif' singleDobj 'an' 
-    : AttackAction
-    verbPhrase = 'anzugreifen/angreifen (wen)'
-    askDobjResponseProd = singleNoun
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
 VerbRule(Attackier)
-    'attackier' singleDobj
+    verb('attackier','schlag','tret','box','hau','bekämpf','töt') singleDobj
+    | verb('schlag','tret','box','hau') ('auf'|'gegen') singleDobj
+    | verb('bring','leg','lege') singleDobj prep('um')
+    | verb('greif') singleDobj prep('an')
     : AttackAction
-    verbPhrase = 'zu attackieren/attackieren (wen)'
-    askDobjResponseProd = singleNoun
-;
-
-VerbRule(Schlag)
-    ('schlag' | 'tret' | 'box' | 'hau') (|'gegen') singleDobj
-    : AttackAction
-    verbPhrase = 'zu schlagen/schlagen (wen)'
-    askDobjResponseProd = singleNoun
-;
-
-VerbRule(BringUm)
-    ('bring' | 'leg' | 'lege') singleDobj 'um'
-    : AttackAction
-    verbPhrase = 'umzubringen/umbringen (wen)'
-    askDobjResponseProd = singleNoun
-;
-
-VerbRule(Bekaempf)
-    ('bekämpf' | 'kämpf' 'mit' ) singleDobj
-    : AttackAction
-    verbPhrase = 'zu bekämpfen/bekämpfen (wen)'
+    verbPattern('anzugreifen/angreifen','(wen)')
     askDobjResponseProd = singleNoun
 ;
 
@@ -13675,12 +14548,12 @@ VerbRule(Bekaempf)
 // ***
 
 VerbRule(AttackWith)
-    ('attackier' | 'schlag' | 'tret' | 'box' | 'töt' | 'hau' 
-     | 'bekämpf'| 'kämpf' 'mit' ) singleDobj 'mit' singleIobj
-    | 'greif' singleDobj 'mit' singleIobj 'an'
-    | ('bring'|'leg'|'lege') singleDobj 'mit' singleIobj 'um'
+    verb('attackier','schlag','tret','box','hau','bekämpf','töt') singleDobj 'mit' singleIobj
+    | verb('schlag','tret','box','hau') ('auf'|'gegen') singleDobj 'mit' singleIobj
+    | verb('bring','leg','lege') singleDobj 'mit' singleIobj prep('um')
+    | verb('greif') singleDobj 'mit' singleIobj prep('an')
     : AttackWithAction
-    verbPhrase = 'anzugreifen/angreifen (wen) (mit dativ was)'
+    verbPattern('anzugreifen/angreifen','(wen) (mit dativ was)')
     askDobjResponseProd = singleNoun
     askIobjResponseProd = mitSingleNoun
 ;
@@ -13963,7 +14836,7 @@ VerbRule(ReplayQuiet)
 // -- VagueTravelAction
 // ***
 
-VerbRule(ReiseZiellos) 'spazier' | 'geh' : VagueTravelAction
+VerbRule(ReiseZiellos) ('spazier'|'geh') (|'umher'|'herum') : VagueTravelAction
     verbPhrase = 'zu gehen/gehen'
 ;
 
@@ -13996,7 +14869,7 @@ class EnTravelVia: TravelViaAction
 // ***
 
 VerbRule(BackBord)
-    'geh' 'nach' ('backbord' | 'bb')
+    ('spazier' | 'geh') 'nach' ('backbord' | 'bb')
     : PortAction
     dirMatch: DirectionProd { dir = portDirection }
     verbPhrase = 'nach Backbord zu gehen/nach Backbord gehen'
@@ -14007,7 +14880,7 @@ VerbRule(BackBord)
 // ***
 
 VerbRule(Steuerbord)
-    'geh' 'nach' ('steuerbord' | 'sb')
+    ('spazier' | 'geh') 'nach' ('steuerbord' | 'sb')
     : StarboardAction
     dirMatch: DirectionProd { dir = starboardDirection }
     verbPhrase = 'nach Steuerbord zu gehen/nach Steuerbord gehen'
@@ -14029,10 +14902,10 @@ VerbRule(Rein)
 // ***
 
 VerbRule(Raus)
-    'hinaus' | 'draußen' 
+    'hinaus' | 'draußen'
     : OutAction
     dirMatch: DirectionProd { dir = outDirection }
-    verbPhrase = 'herauszugehen/herausgehen'
+    verbPhrase = 'hinauszugehen/hinausgehen (aus dativ was)'
 ;
 
 // ***
@@ -14040,10 +14913,9 @@ VerbRule(Raus)
 // ***
 
 VerbRule(GehDurch)
-    ('geh' | 'spazier' | 'spring' | 'kletter' | 'steig') 'durch'
-        singleDobj
+    verb('geh','spazier','spring','kletter','steig','steige') 'durch' singleDobj
     : GoThroughAction
-    verbPhrase = 'zu gehen/gehen (durch was)'
+    verbPattern('zu gehen/gehen','(durch was)')
     askDobjResponseProd = durchSingleNoun
 ;
 
@@ -14052,11 +14924,11 @@ VerbRule(GehDurch)
 // ***
 
 VerbRule(Betret)
-    ('betret' | 'betritt' | ('geh'|'tritt'|'tret') 'in') singleDobj
-    | ('geh'|'tritt'|'tret') 'in' singleDobj 'hinein'
+    verb('betret','betritt') singleDobj
+    | verb('geh','tritt','tret') 'in' singleDobj (|'hinein')
     | 'in' singleDobj ('hinein'|)
     : EnterAction
-    verbPhrase = 'zu betreten/betreten (was)'
+    verbPattern('zu betreten/betreten','(was)')
     askDobjResponseProd = singleNoun
 ;
 
@@ -14087,6 +14959,7 @@ VerbRule(Grab)
 
 VerbRule(GrabMit)
     ('grab' | 'grab' 'in') singleDobj 'mit' singleIobj
+    | 'grab' 'mit' singleIobj 'in' singleDobj 
     : DigWithAction
     verbPhrase = 'zu graben/graben (in dativ was) (mit dativ was)'
     omitIobjInDobjQuery = true
@@ -14109,7 +14982,7 @@ VerbRule(Spring)
 // ***
 
 VerbRule(SpringAb)
-    'spring' ('ab'|'hinunter') 
+    verb('spring') prep('ab','hinunter')
     : JumpOffIAction
     verbPhrase = 'abzuspringen/abspringen'
 ;
@@ -14119,8 +14992,7 @@ VerbRule(SpringAb)
 // ***
 
 VerbRule(SpringVon)
-    'spring' 'von' singleDobj
-    | 'spring' 'von' singleDobj ('ab'|'hinunter')
+    verb('spring') 'von' singleDobj (|'ab'|'hinunter')
     : JumpOffAction
     verbPhrase = 'zu springen/springen (von was)'
     askDobjResponseProd = singleNoun
@@ -14131,7 +15003,7 @@ VerbRule(SpringVon)
 // ***
 
 VerbRule(SpringUeber)
-    ('spring' 'über') singleDobj (|'hinüber')
+    verb('spring') 'über' singleDobj (|'hinüber')
     : JumpOverAction
     verbPhrase = 'zu springen/springen (über was)'
     askDobjResponseProd = ueberSingleNoun
@@ -14142,19 +15014,9 @@ VerbRule(SpringUeber)
 // ***
 
 VerbRule(Schieb)
-    ('drück' | 'schieb' | 'schubs') dobjList
-    | ('schieb' | 'schubs') dobjList 'an'
+    verb('drück','schieb','schubs') dobjList (|prep('an'))
     : PushAction
-    verbPhrase = 'zu schieben/schieben (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(Drueck)
-    'drück' dobjList
-    : PushAction
-    verbPhrase = 'zu drücken/drücken (was)'
+    verbPattern('zu schieben/schieben','(was)')
 ;
 
 // ***
@@ -14162,7 +15024,7 @@ VerbRule(Drueck)
 // ***
 
 VerbRule(Zieh)
-    ('zieh') dobjList
+    verb('zieh') dobjList
     : PullAction
     verbPhrase = 'zu ziehen/ziehen (was)'
 ;
@@ -14172,7 +15034,7 @@ VerbRule(Zieh)
 // ***
 
 VerbRule(Beweg)
-    ('beweg') dobjList
+    verb('beweg') dobjList
     : MoveAction
     verbPhrase = 'zu bewegen/bewegen (was)'
 ;
@@ -14182,9 +15044,9 @@ VerbRule(Beweg)
 // ***
 
 VerbRule(BewegNach)
-    ('schieb' | 'beweg' |'schubs') dobjList ('nach' | 'unter' | 'zu' | 'zum' | 'zur') singleIobj (|'hin')
+    verb('beweg','schieb','schubs') dobjList ('nach'|'unter'|'zu') singleIobj (|'hin')
     : MoveToAction
-    verbPhrase = 'zu bewegen/bewegen (was) (zu dativ was)'
+    verbPattern('zu bewegen/bewegen','(was) (zu dativ was)')
     askIobjResponseProd = zuSingleNoun
     omitIobjInDobjQuery = true
 ;
@@ -14194,9 +15056,9 @@ VerbRule(BewegNach)
 // ***
 
 VerbRule(BewegMit)
-    ('beweg'|'schieb'|'schubs') singleDobj 'mit' singleIobj
+    verb('beweg','schieb','schubs') singleDobj 'mit' singleIobj
     : MoveWithAction
-    verbPhrase = 'zu bewegen/bewegen (was) (mit dativ was)'
+    verbPattern('zu bewegen/bewegen','(was) (mit dativ was)')
     askDobjResponseProd = singleNoun
     askIobjResponseProd = mitSingleNoun
     omitIobjInDobjQuery = true
@@ -14207,9 +15069,9 @@ VerbRule(BewegMit)
 // ***
 
 VerbRule(Dreh)
-    ('dreh' | 'rotier' | 'verdreh') dobjList
-    : TurnAction
-    verbPhrase = 'zu drehen/drehen (was)'
+    verb('dreh','rotier','verdreh') dobjList
+    : TurnAction 
+    verbPattern('zu drehen/drehen','(was)')
 ;
 
 // ***
@@ -14217,9 +15079,9 @@ VerbRule(Dreh)
 // ***
 
 VerbRule(DrehMitWas)
-    ('dreh' | 'rotier' | 'verdreh') singleDobj 'mit' singleIobj
+    verb('dreh','rotier','verdreh') singleDobj 'mit' singleIobj
     : TurnWithAction
-    verbPhrase = 'zu drehen/drehen (was) (mit was)'
+    verbPattern('zu drehen/drehen','(was) (mit dativ was)')
     askDobjResponseProd = singleNoun
     askIobjResponseProd = mitSingleNoun
 ;
@@ -14229,10 +15091,9 @@ VerbRule(DrehMitWas)
 // ***
 
 VerbRule(DrehAufWas)
-    ('dreh' | 'rotier' | 'verdreh') singleDobj
-        'auf' singleLiteral
+    verb('dreh','rotier','verdreh') singleDobj 'auf' singleLiteral
     : TurnToAction
-    verbPhrase = 'zu drehen/drehen (was) (auf was)'
+    verbPattern('zu drehen/drehen','(was) (auf was)')
     askDobjResponseProd = singleNoun
     omitIobjInDobjQuery = true
 ;
@@ -14242,9 +15103,9 @@ VerbRule(DrehAufWas)
 // ***
 
 VerbRule(StellEin)
-    ('stell'|'stelle') dobjList (|'ein')
+    verb('stell','stelle') dobjList (|prep('ein'))
     : SetAction
-    verbPhrase = 'zu stellen/stellen (was)'
+    verbPattern('zu stellen/stellen','(was)')
 ;
 
 // ***
@@ -14252,9 +15113,9 @@ VerbRule(StellEin)
 // ***
 
 VerbRule(StellEinAuf)
-    (('stell'|'stelle')) singleDobj 'auf' singleLiteral (|'ein')
+    verb('stell','stelle') singleDobj 'auf' singleLiteral (|'ein')
     : SetToAction
-    verbPhrase = 'einzustellen/einstellen (was) (auf was)'
+    verbPattern('einzustellen/einstellen','(was) (auf was)')
     askDobjResponseProd = singleNoun
     omitIobjInDobjQuery = true
 ;
@@ -14274,18 +15135,17 @@ VerbRule(TippAuf)
 // ***
 
 VerbRule(TippTextAuf)
-    'tipp' singleLiteral ('auf'|'in') singleDobj
-    | ('gib' | 'geb') singleLiteral 'ein' ('in'|'auf') singleDobj
-    | ('gib' | 'geb') singleLiteral ('in'|'auf') singleDobj 'ein'
+    verb('tipp','gib','geb') singleLiteral ('auf'|'in') singleDobj (|prep('ein'))
+    | verb('tipp','gib','geb') singleLiteral prep('ein') ('auf'|'in') singleDobj
     : TypeLiteralOnAction
-    verbPhrase = 'zu tippen/tippen (was) (auf dativ was)'
+    verbPattern('zu tippen/tippen','(was) (auf dativ was)')
     askDobjResponseProd = aufSingleNoun
 ;
 
 VerbRule(TippTextAufWas)
-    [badness 500] 'tipp' singleLiteral
+    [badness 500] verb('tipp','gib','geb') singleLiteral
     : TypeLiteralOnAction
-    verbPhrase = 'zu tippen/tippen (was) (auf dativ was)'
+    verbPattern('zu tippen/tippen','(was) (auf dativ was)')
     construct()
     {
         // set up the empty direct object phrase 
@@ -14294,103 +15154,18 @@ VerbRule(TippTextAufWas)
     }
 ;
 
-VerbRule(GibTextEinInWas)
-    [badness 500] ('gib' | 'geb') singleLiteral 'ein'
-    : TypeLiteralOnAction
-    verbPhrase = 'einzugeben/eingeben (was) (in was)'
-    construct()
-    {
-        // set up the empty direct object phrase 
-        dobjMatch = new EmptyNounPhraseProd();
-        dobjMatch.responseProd = inSingleNoun;
-    }
-;
-
-//VerbRule(EnterOn)
-//    ('gib' | 'geb') 'ein' singleLiteral
-//        'in' singleDobj
-//    | ('gib' | 'geb') singleLiteral
-//        'in' singleDobj 'ein'
-//    : EnterOnAction
-//    verbPhrase = 'einzugeben/eingeben (was) (in was)'
-//    askDobjResponseProd = singleNoun
-//;
-//// IN GERMAN WE HAVE NO enter on = entering something ...
-//VerbRule(EnterOnWhat)
-//    ('gib' | 'geb') singleLiteral 'ein'
-//    | ('gib' | 'geb') 'ein' singleLiteral 
-//    : EnterOnAction
-//    verbPhrase = 'einzugeben/eingeben (was) (in was)'
-//    construct()
-//    {
-//        /*
-//         *   ENTER <text> is a little special, because it could mean ENTER
-//         *   <text> ON <keypad>, or it could mean GO INTO <object>.  It's
-//         *   hard to tell which based on the grammar alone, so we have to
-//         *   do some semantic analysis to make a good decision about it.
-//         *
-//         *   We'll start by assuming it's the ENTER <text> ON <iobj> form
-//         *   of the command, and we'll look for a suitable default object
-//         *   to serve as the iobj.  If we can't find a suitable default, we
-//         *   won't prompt for the missing object as we usually would.
-//         *   Instead, we'll try re-parsing the command as GO INTO.  To do
-//         *   this, use our custom "asker" - this won't actually prompt for
-//         *   the missing object, but will instead retry the command as a GO
-//         *   INTO command.
-//         */
-//        dobjMatch = new EmptyNounPhraseProd();
-//        dobjMatch.setPrompt(onSingleNoun, enterOnWhatAsker);
-//    }
-//;
-//
-///* our custom "asker" for the missing iobj in an "ENTER <text>" command */
-//enterOnWhatAsker: ResolveAsker
-//    askMissingObject(targetActor, action, which)
-//    {
-//        /*
-//         *   This method is called when the resolver has failed to find a
-//         *   suitable default for the missing indirect object of ENTER
-//         *   <text> ON <iobj>.
-//         *
-//         *   Instead of issuing the prompt that we'd normally issue under
-//         *   these circumstances, assume that we're totally wrong about the
-//         *   way we've been interpreting the command: assume that it's not
-//         *   meant as ENTER <text> ON <iobj> after all, but was actually
-//         *   meant as GO IN <object>.  So, rephrase the command as such and
-//         *   start over with the new phrasing.
-//         */
-//        throw new ReplacementCommandStringException(
-//            'betret ' + action.getLiteral(), gIssuingActor, gActor);
-//    }
-//;
-
 // ***
 // -- ConsultAction
 // ***
 
 VerbRule(SchlagNachIn)
-    'schlag' 'nach' 'in' singleDobj
-    | 'schlag' 'in' singleDobj 'nach'
+    verb('schlag') prep('nach') 'in' singleDobj
+    | verb('schlag') 'in' singleDobj prep('nach')
+    | verb('konsultier') singleDobj
+    | verb('lies','les') (|prep('nach')) 'in' singleDobj
+    | verb('lies','les') 'in' singleDobj (|prep('nach'))
     : ConsultAction
-    verbPhrase = 'nachzuschlagen/nachschlagen (in dativ was)'
-    askDobjResponseProd = singleNoun
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(Konsultier)
-    'konsultier' singleDobj
-    : ConsultAction
-    verbPhrase = 'zu konsultieren/konsultieren (was)'
-    askDobjResponseProd = singleNoun
-;
-
-VerbRule(LiesIn)
-    ('lies'|'les') (|'nach') 'in' singleDobj
-    |('lies'|'les') 'in' singleDobj (|'nach')
-    : ConsultAction
-    verbPhrase = 'zu lesen/lesen (in was)'
+    verbPattern('nachzuschlagen/nachschlagen','(in dativ was)')
     askDobjResponseProd = singleNoun
 ;
 
@@ -14399,52 +15174,16 @@ VerbRule(LiesIn)
 // ***
 
 VerbRule(SchlagNachUeber)
-    'schlag' (|'über') singleTopic 'in' singleDobj 'nach'
-    | 'schlag' 'in' singleDobj (|'über') singleTopic 'nach'
+    verb('schlag','lies','les') (|'über') singleTopic 'in' singleDobj prep('nach')
+    | verb('schlag','lies','les') 'in' singleDobj (|'über') singleTopic prep('nach')
+    | verb('konsultier') singleDobj ('nach'|'über'|'zu') singleTopic
+    | verb('durchsuch','durchforst','durchkämm') singleDobj 'nach' singleTopic
+    | verb('such','schau') 'in' singleDobj (|'nach') singleTopic
+    | verb('such','schau') singleTopic 'in' singleDobj (|'nach') 
     : ConsultAboutAction
-    verbPhrase = 'nachzuschlagen/nachschlagen (in dativ was) (was)'
+    verbPattern('nachzuschlagen/nachschlagen','(in dativ was) (was)')
     omitIobjInDobjQuery = true
     askDobjResponseProd = inSingleNoun
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(KonsultierUeber)
-    'konsultier' singleDobj ('nach' | 'über' | 'zu') singleTopic
-    : ConsultAboutAction
-    verbPhrase = 'zu konsultieren/konsultieren (was) (über was)'
-    omitIobjInDobjQuery = true
-    askDobjResponseProd = singleNoun
-;
-
-VerbRule(LiesInUeber)
-    'lies' 'in' singleDobj ('nach' 'über' | 'über') singleTopic
-    | 'lies' (|'über') singleTopic 'in' singleDobj (|'nach')
-    : ConsultAboutAction
-    verbPhrase = 'nachzulesen/nachlesen (was) (in dativ was)'
-    omitIobjInDobjQuery = true
-    askDobjResponseProd = singleNoun
-;
-
-VerbRule(SucheInUeber)
-    'such' 'in' singleDobj (|'nach') singleTopic
-    | ('durchsuch'|'durchforst') singleDobj 'nach' singleTopic
-    | 'such' (|'nach') singleTopic 'in' singleDobj
-    : ConsultAboutAction
-    verbPhrase = 'zu suchen/suchen (nach was) (in dativ was)'
-    omitIobjInDobjQuery = true
-    askDobjResponseProd = singleNoun
-;
-
-VerbRule(SchauInNach)
-    'schau' 'nach' 'in' singleDobj 'über' singleTopic
-    | 'schau' 'in' singleDobj 'nach' singleTopic
-    | 'schau' singleTopic 'in' singleDobj 'nach'
-    : ConsultAboutAction
-    verbPhrase = 'nachzuschauen/nachschauen (was) (in dativ was)'
-    omitIobjInDobjQuery = true
-    askDobjResponseProd = singleNoun
 ;
 
 // ***
@@ -14452,75 +15191,11 @@ VerbRule(SchauInNach)
 // ***
 
 VerbRule(SchlagNachWorin)
-    'schlag' singleTopic 'nach'
+    verb('schlag','lies','les','schau') singleTopic prep('nach')
+    | verb('lies','les','such','find') (|'etwas') 'über' singleTopic
+    | verb('such') 'nach' singleTopic
     : ConsultAboutAction
-    verbPhrase = 'nachzuschlagen/nachschlagen (was) (in dativ was)'
-    whichMessageTopic = DirectObject
-    construct()
-    {
-        /* set up the empty direct object phrase */
-        dobjMatch = new EmptyNounPhraseProd();
-        dobjMatch.responseProd = inSingleNoun;
-    }
-;
-
-VerbRule(LiesNachWorin)
-    'lies' singleTopic 'nach'
-    : ConsultAboutAction
-    verbPhrase = 'nachzulesen/nachlesen (was) (in dativ was)'
-    whichMessageTopic = DirectObject
-    construct()
-    {
-        /* set up the empty direct object phrase */
-        dobjMatch = new EmptyNounPhraseProd();
-        dobjMatch.responseProd = inSingleNoun;
-    }
-;
-
-VerbRule(LiesUeberWorin)
-    'lies' (|'etwas') 'über' singleTopic (|'nach')
-    : ConsultAboutAction
-    verbPhrase = 'nachzulesen/nachlesen (was) (in dativ was)'
-    whichMessageTopic = DirectObject
-    construct()
-    {
-        /* set up the empty direct object phrase */
-        dobjMatch = new EmptyNounPhraseProd();
-        dobjMatch.responseProd = inSingleNoun;
-    }
-;
-
-VerbRule(SuchWorin)
-    ('find'|'such') (|'etwas' 'über') singleTopic
-    : ConsultAboutAction
-    verbPhrase = 'zu suchen/suchen (was) (in dativ was)'
-    whichMessageTopic = DirectObject
-    construct()
-    {
-        /* set up the empty direct object phrase */
-        dobjMatch = new EmptyNounPhraseProd();
-        dobjMatch.responseProd = inSingleNoun;
-    }
-;
-
-VerbRule(SchauNachWorin)
-    'schau' singleTopic 'nach'
-    | 'schau' 'nach' singleTopic
-    : ConsultAboutAction
-    verbPhrase = 'nachzuschauen/nachschauen (was) (in dativ was)'
-    whichMessageTopic = DirectObject
-    construct()
-    {
-        /* set up the empty direct object phrase */
-        dobjMatch = new EmptyNounPhraseProd();
-        dobjMatch.responseProd = inSingleNoun;
-    }
-;
-
-VerbRule(SuchNachWorin)
-    'such' (|'nach') singleTopic
-    : ConsultAboutAction
-    verbPhrase = 'zu suchen/suchen (was) (in dativ was)'
+    verbPattern('nachzuschlagen/nachschlagen','(in dativ was) (was)')
     whichMessageTopic = DirectObject
     construct()
     {
@@ -14545,18 +15220,13 @@ VerbRule(SchaltUm)
 // ***
 
 VerbRule(DrehUm)
-    'dreh' dobjList 'um'
+    verb('dreh') dobjList prep('um')
+    verb('wend','wende') dobjList (|'um')
     : FlipAction
-    verbPhrase = 'umzudrehen/umdrehen (was)'
+    verbPattern('umzudrehen/umdrehen','(was)')
     // -- we use this flag to mark this rule as the default rule
     // -- for missing obj queries
     defaultForRecursion = true
-;
-
-VerbRule(Wend)
-    'wend' dobjList (|'um')
-    : FlipAction
-    verbPhrase = 'zu wenden/wenden (was)'
 ;
 
 // ***
@@ -14564,19 +15234,11 @@ VerbRule(Wend)
 // ***
 
 VerbRule(SchaltEin)
-    'schalt' dobjList ('an' | 'ein')
-    | ('stell' | 'mach') dobjList 'an'
+    verb('schalt') dobjList prep('an','ein')
+    | verb('stell','stelle','mach') dobjList prep('an')
+    | verb('aktivier') dobjList
     : TurnOnAction
-    verbPhrase = 'einzuschalten/einschalten (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(Aktivier)
-    'aktivier' dobjList
-    : TurnOnAction
-    verbPhrase = 'zu aktivieren/aktivieren (was)'
+    verbPattern('einzuschalten/einschalten','(was)')
 ;
 
 // ***
@@ -14584,19 +15246,10 @@ VerbRule(Aktivier)
 // ***
 
 VerbRule(SchaltAus)
-    'mach' dobjList 'aus'
-    | ('stell'|'stelle'|'schalt') dobjList 'aus'
+    verb('stell','stelle','schalt','mach') dobjList prep('aus')
+    | verb('deaktivier') dobjList
     : TurnOffAction
-    verbPhrase = 'auszuschalten/ausschalten (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(Deaktivier)
-    'deaktivier' dobjList
-    : TurnOffAction
-    verbPhrase = 'zu deaktivieren/deaktivieren (was)'
+    verbPattern('auszuschalten/ausschalten','(was)')
 ;
 
 // ***
@@ -14604,42 +15257,10 @@ VerbRule(Deaktivier)
 // ***
 
 VerbRule(ZuendAn)
-    'zünd' dobjList 'an'
+    verb('zünd') dobjList prep('an')
+    | verb('erhell','erleucht','entzünd','entfach','entflamm') dobjList
     : LightAction
-    verbPhrase = 'anzuzünden/anzünden (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(Erhell)
-    'erhell' dobjList
-    : LightAction
-    verbPhrase = 'zu erhellen/erhellen (was)'
-;
-
-VerbRule(Erleucht)
-    'erleucht' dobjList
-    : LightAction
-    verbPhrase = 'zu erleuchten/erleuchten (was)'
-;
-
-VerbRule(Entzuend)
-    'entzünd' dobjList
-    : LightAction
-    verbPhrase = 'zu entzünden/entzünden (was)'
-;
-
-VerbRule(Entfach)
-    'entfach' dobjList
-    : LightAction
-    verbPhrase = 'zu entfachen/entfachen (was)'
-;
-
-VerbRule(Entflamm)
-    'entflamm' dobjList
-    : LightAction
-    verbPhrase = 'zu entflammen/entflammen (was)'
+    verbPattern('anzuzünden/anzünden','(was)')
 ;
 
 // ***
@@ -14657,32 +15278,24 @@ VerbRule(Verbrenn)
 // ***
 
 VerbRule(ZuendAnMit)
-    ('erhell'|'erleucht'|'entzünd'|'entfach'|'entzünd'|'entflamm') singleDobj
-        'mit' singleIobj
-    | 'zünd' singleDobj 'mit' singleIobj 'an'
+    verb('erhell','erleucht','entzünd','entfach','entflamm','verbrenn') singleDobj 'mit' singleIobj
+    | verb('zünd') singleDobj 'mit' singleIobj prep('an')
     : BurnWithAction
-    verbPhrase = 'anzuzünden/anzünden (was) (mit dativ was)'
+    verbPattern('anzuzünden/anzünden','(was) (mit dativ was)')
     omitIobjInDobjQuery = true
     askDobjResponseProd = singleNoun
     askIobjResponseProd = mitSingleNoun
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
+
 ;
 
-VerbRule(VerbrennMit)
-    'verbrenn' singleDobj 'mit' singleIobj
-    : BurnWithAction
-    verbPhrase = 'zu verbrennen/verbrennen (was) (mit dativ was)'
-    omitIobjInDobjQuery = true
-    askDobjResponseProd = singleNoun
-    askIobjResponseProd = mitSingleNoun
-;
+// ***
+// -- ExtinguishAction
+// ***
 
 VerbRule(LoeschAus)
-    ('blas' | 'lösch') dobjList 'aus'
+    verb('blas','lösch') dobjList prep('aus')
     : ExtinguishAction
-    verbPhrase = 'auszulöschen/auslöschen (was)'
+    verbPattern('auszulöschen/auslöschen','(was)')
 ;
 
 // ***
@@ -14690,36 +15303,10 @@ VerbRule(LoeschAus)
 // ***
 
 VerbRule(Brech)
-    ('brech' | 'brich') dobjList
+    verb('brech','brich','zerbrech','zerbrich','ruinier','zerstör') dobjList
+    | verb('mach') dobjList prep('kaputt')
     : BreakAction
-    verbPhrase = 'zu brechen/brechen (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(Zerbrech)
-    ('zerbrech' | 'zerbrich') dobjList
-    : BreakAction
-    verbPhrase = 'zu zerbrechen/zerbrechen (was)'
-;
-
-VerbRule(Ruinier)
-    'ruinier' dobjList
-    : BreakAction
-    verbPhrase = 'zu ruinieren/ruinieren (was)'
-;
-
-VerbRule(Zerstoer)
-    'zerstör' dobjList
-    : BreakAction
-    verbPhrase = 'zu zerstören/zerstören (was)'
-;
-
-VerbRule(MachKaputt)
-    'mach' dobjList 'kaputt'
-    : BreakAction
-    verbPhrase = 'kaputtzumachen/kaputtmachen (was)'
+    verbPattern('zu brechen/brechen','(was)')
 ;
 
 // ***
@@ -14727,9 +15314,11 @@ VerbRule(MachKaputt)
 // ***
 
 VerbRule(SchneidWomit)
-    [badness 500] ('schneid'|'trenn'|'zerschneid') singleDobj (|'durch'|'ab')
+    [badness 500] 
+    verb('schneid','trenn','zerschneid') singleDobj (|prep('durch')|prep('ab'))
+    | verb('durchtrenn') singleDobj
     : CutWithAction
-    verbPhrase = 'zu schneiden/schneiden (was) (mit dativ was)'
+    verbPattern('zu schneiden/schneiden','(was) (mit dativ was)')
     construct()
     {
         /* set up the empty indirect object phrase */
@@ -14739,9 +15328,10 @@ VerbRule(SchneidWomit)
 ;
 
 VerbRule(SchneidMit)
-    ('schneid'|'trenn'|'zerschneid') singleDobj 'mit' singleIobj (|'durch'|'ab')
+    verb('schneid','trenn','zerschneid') singleDobj 'mit' singleIobj (|prep('durch','ab'))
+    | verb('durchtrenn') singleDobj 'mit' singleIobj
     : CutWithAction
-    verbPhrase = 'zu schneiden/schneiden (was) (mit dativ was)'
+    verbPattern('zu schneiden/schneiden','(was) (mit dativ was)')
     askDobjResponseProd = singleNoun
     askIobjResponseProd = mitSingleNoun
 ;
@@ -14751,24 +15341,10 @@ VerbRule(SchneidMit)
 // ***
 
 VerbRule(Iss)
-    ('iss' | 'ess' | 'friss' | 'fress') dobjList
+    verb('iss','ess','friss','fress','konsumier','verzehr') dobjList
     : EatAction
-    verbPhrase = 'zu essen/essen (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
+    verbPattern('zu essen/essen','(was)')
 
-VerbRule(Konsumier)
-    'konsumier' dobjList
-    : EatAction
-    verbPhrase = 'zu konsumieren/konsumieren (was)'
-;
-
-VerbRule(Verzehr)
-    'verzehr' dobjList
-    : EatAction
-    verbPhrase = 'zu verzehren/verzehren (was)'
 ;
 
 // ***
@@ -14776,18 +15352,10 @@ VerbRule(Verzehr)
 // ***
 
 VerbRule(Trink)
-    'trink' dobjList
+    verb('trink','schluck') dobjList
+    | verb('schluck') dobjList prep('hinunter')
     : DrinkAction
-    verbPhrase = 'zu trinken/trinken (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(Schluck)
-    'schluck' dobjList (|'hinunter')
-    : DrinkAction
-    verbPhrase = 'zu schlucken/schlucken (was)'
+    verbPattern('zu trinken/trinken','(was)')
 ;
 
 // ***
@@ -14795,32 +15363,10 @@ VerbRule(Schluck)
 // ***
 
 VerbRule(Entleer)
-    ('entleer' | 'leer' ) dobjList
-    | 'leer' dobjList 'aus'
+    verb('entleer') dobjList
+    | verb('leer','schütt','schütte','gieß','kipp','kippe') dobjList (|prep('aus','weg'))
     : PourAction
-    verbPhrase = 'zu entleeren/entleeren (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(SchuettAus)
-    ('schütt'|'schütte') dobjList
-    | ('schütt'|'schütte') dobjList ('aus'|'weg')
-    : PourAction
-    verbPhrase = 'auszuschütten/auschütten (was)'
-;
-
-VerbRule(GiessAus)
-    'gieß' dobjList ('aus'|'weg')
-    : PourAction
-    verbPhrase = 'auszugießen/ausgießen (was)'
-;
-
-VerbRule(KippAus)
-    ('kipp'|'kippe') dobjList ('aus'|'weg')
-    : PourAction
-    verbPhrase = 'auszukippen/auskippen (was)'
+    verbPattern('zu entleeren/entleeren','(was)')
 ;
 
 // ***
@@ -14828,50 +15374,20 @@ VerbRule(KippAus)
 // ***
 
 VerbRule(EntleerIn)
-    ('entleer'|'leer'|('schütt'|'schütte')) dobjList 'in' singleIobj (|'hinein')
+    verb('entleer','leer','schütt','schütte','gieß','kipp','kippe') dobjList 'in' singleIobj (|'hinein')
     : PourIntoAction
-    verbPhrase = 'zu entleeren/entleeren (was) (in was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
+    verbPattern('zu entleeren/entleeren','(was) (in was)')
     askIobjResponseProd = inSingleNoun
 ;
 
-VerbRule(GiessIn)
-    'gieß' dobjList 'in' singleIobj (|'hinein')
-    : PourIntoAction
-    verbPhrase = 'zu gießen/gießen (was) (in was)'
-    askIobjResponseProd = inSingleNoun
-;
-
-VerbRule(KippIn)
-    'kipp' dobjList 'in' singleIobj (|'hinein')
-    : PourIntoAction
-    verbPhrase = 'zu kippen/kippen (was) (in was)'
-    askIobjResponseProd = inSingleNoun
-;
+// ***
+// -- PourOntoAction
+// ***
 
 VerbRule(EntleerAuf)
-    ('entleer'|'leer'|('schütt'|'schütte')) dobjList 'auf' singleIobj
+    verb('entleer','leer','schütt','schütte','gieß','kipp','kippe') dobjList 'auf' singleIobj
     : PourOntoAction
-    verbPhrase = 'zu entleeren/entleeren (was) (auf was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-    askIobjResponseProd = aufSingleNoun
-;
-
-VerbRule(GiessAuf)
-    'gieß' dobjList 'auf' singleIobj 
-    : PourIntoAction
-    verbPhrase = 'zu gießen/gießen (was) (auf was)'
-    askIobjResponseProd = aufSingleNoun
-;
-
-VerbRule(KippAuf)
-    'kipp' dobjList 'auf' singleIobj 
-    : PourIntoAction
-    verbPhrase = 'zu kippen/kippen (was) (auf was)'
+    verbPattern('zu entleeren/entleeren','(was) (auf was)')
     askIobjResponseProd = aufSingleNoun
 ;
 
@@ -14882,7 +15398,7 @@ VerbRule(KippAuf)
 VerbRule(KletterAuf)
     'kletter' (|'auf') singleDobj
     : ClimbAction
-    verbPhrase = 'zu klettern/klettern (auf was)'
+    verbPattern('zu klettern/klettern','(auf was)')
     askDobjResponseProd = aufSingleNoun
     // -- we use this flag to mark this rule as the default rule
     // -- for missing obj queries
@@ -14890,17 +15406,9 @@ VerbRule(KletterAuf)
 ;
 
 VerbRule(Erkletter)
-    'erkletter' singleDobj
+    verb('erkletter','erklimm') singleDobj
     : ClimbAction
-    verbPhrase = 'zu erklettern/erklettern (was)'
-    askDobjResponseProd = aufSingleNoun
-;
-
-VerbRule(Erklimm)
-    'erklimm'  singleDobj
-    : ClimbAction
-    verbPhrase = 'zu erklimmen/erklimmen (was)'
-    askDobjResponseProd = aufSingleNoun
+    verbPattern('zu erklettern/erklettern','(was)')
 ;
 
 // ***
@@ -14908,16 +15416,16 @@ VerbRule(Erklimm)
 // ***
 
 VerbRule(KletterHinauf)
-    ('kletter' | ('steig'|'steige') | 'geh' ) (|'an') singleDobj ('hinauf'|'hoch')
+    verb('kletter','steig','steige','geh') (|'an') singleDobj prep('hinauf','hoch')
     : ClimbUpAction
-    verbPhrase = 'hinaufzusteigen/hinaufsteigen (was)'
+    verbPattern('hinaufzusteigen/hinaufsteigen','(was)')
     askDobjResponseProd = singleNoun
 ;
 
 VerbRule(KletterHinaufAnWas)
     [badness 200] 'kletter' ('hinauf'|'hoch')
     : ClimbUpAction
-    verbPhrase = 'hinaufkletter/hinaufklettern (was)'
+    verbPhrase = 'hinaufzuklettern/hinaufklettern (was)'
     askDobjResponseProd = singleNoun
     construct()
     {
@@ -14930,7 +15438,7 @@ VerbRule(KletterHinaufAnWas)
 ;
 
 VerbRule(SteigHinaufWas)
-    [badness 200] 'steig' ('hinauf'|'hoch')
+    [badness 200] ('steig'|'steige') ('hinauf'|'hoch')
     : ClimbUpAction
     verbPhrase = 'hinaufzusteigen/hinaufsteigen (was)'
     askDobjResponseProd = singleNoun
@@ -14946,14 +15454,14 @@ VerbRule(SteigHinaufWas)
 // ***
 
 VerbRule(KletterHinunter)
-    ('kletter' | 'steig' | 'geh' ) (|'an') singleDobj 'hinunter'
+    verb('kletter','steig','steige','geh') (|'an') singleDobj prep('hinunter')
     : ClimbDownAction
     verbPhrase = 'hinunterzusteigen/hinuntersteigen (was)'
     askDobjResponseProd = singleNoun
 ;
 
 VerbRule(SteigHinunterWas)
-    [badness 200] 'steig' 'hinunter'
+    [badness 200] ('steig'|'steige') 'hinunter'
     : ClimbDownAction
     verbPhrase = 'hinunterzusteigen/hinuntersteigen (was)'
     askDobjResponseProd = singleNoun
@@ -14984,36 +15492,10 @@ VerbRule(KletterHinunterWas)
 // ***
 
 VerbRule(Reinig)
-    'reinig' dobjList
+    verb('reinig','kehr','kehre','feg','säuber') dobjList
+    | verb('mach') dobjList prep('sauber')
     : CleanAction
-    verbPhrase = 'zu reinigen/reinigen (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(Kehr)
-    'kehr' dobjList
-    : CleanAction
-    verbPhrase = 'zu kehren/kehren (was)'
-;
-
-VerbRule(Feg)
-    'feg' dobjList
-    : CleanAction
-    verbPhrase = 'zu fegen/fegen (was)'
-;
-
-VerbRule(Saeuber)
-    'säuber' dobjList
-    : CleanAction
-    verbPhrase = 'zu säubern/säubern (was)'
-;
-
-VerbRule(MachSauber)
-    'mach' dobjList 'sauber'
-    : CleanAction
-    verbPhrase = 'sauberzumachen/saubermachen (was)'
+    verbPattern('zu reinigen/reinigen','(was)')
 ;
 
 // ***
@@ -15021,11 +15503,11 @@ VerbRule(MachSauber)
 // ***
 
 VerbRule(ReinigMit)
-    ('reinig'|'kehr'|'feg'|'säuber'|'mach' 'sauber') dobjList 'mit' singleIobj
-    | 'mach' dobjList 'sauber' 'mit' singleIobj
-    | 'mach' dobjList 'mit' singleIobj 'sauber'
+    verb('reinig','kehr','kehre','feg','säuber') dobjList 'mit' singleIobj
+    | verb('mach') dobjList prep('sauber') 'mit' singleIobj 
+    | verb('mach') dobjList 'mit' singleIobj prep('sauber')
     : CleanWithAction
-    verbPhrase = 'zu reinigen/reinigen (was) (mit dativ was)'
+    verbPattern('zu reinigen/reinigen','(was) (mit dativ was)')
     askIobjResponseProd = mitSingleNoun
     omitIobjInDobjQuery = true
 ;
@@ -15035,19 +15517,29 @@ VerbRule(ReinigMit)
 // ***
 
 VerbRule(BefestigAn)
-    'verbind' dobjList 'mit' singleIobj
-    | ('bind' | 'binde' | 'befestig') dobjList 'an' singleIobj
-    | 'mach' dobjList 'an' singleIobj 'fest'
+    verb('verbind') dobjList 'mit' singleIobj
+    | verb('bind','binde','befestig') dobjList prep('an') singleIobj
+    | verb('mach') dobjList 'an' singleIobj prep('fest')
     : AttachToAction
     askIobjResponseProd = anSingleNoun
-    verbPhrase = 'zu befestigen/befestigen (was) (an dativ was)'
+    verbPattern('zu befestigen/befestigen','(was) (an dativ was)')
+    // -- we use this flag to mark this rule as the default rule
+    // -- for missing obj queries
+    defaultForRecursion = true
+;
+
+VerbRule(VerbindeMit)
+    verb('verbind') dobjList 'mit' singleIobj
+    : AttachToAction
+    askIobjResponseProd = mitSingleNoun
+    verbPattern('zu verbinden/verbinden','(was) (mit dativ was)')
 ;
 
 VerbRule(BefestigAnWas)
-    [badness 500] 'befestig' dobjList
-    | 'mach' dobjList 'fest'
+    [badness 500] verb('befestig') dobjList
+    | verb('mach','bind','binde') dobjList (|prep('fest'))
     : AttachToAction
-    verbPhrase = 'zu befestigen/befestigen (was) (an dativ was)'
+    verbPattern('zu befestigen/befestigen','(was) (an dativ was)')
     construct()
     {
         /* set up the empty indirect object phrase */
@@ -15059,11 +15551,10 @@ VerbRule(BefestigAnWas)
     defaultForRecursion = true
 ;
 
-VerbRule(BindAnWas)
-    [badness 500] ('bind' | 'binde') dobjList
-    | ('bind'|'binde') dobjList 'fest'
+VerbRule(VerbindeMitWas)
+    [badness 500] verb('verbind') dobjList
     : AttachToAction
-    verbPhrase = 'zu binden/binden (was) (an was)'
+    verbPattern('zu binden/binden','(was) (mit dativ was)')
     construct()
     {
         /* set up the empty indirect object phrase */
@@ -15073,15 +15564,14 @@ VerbRule(BindAnWas)
 ;
 
 // ***
-// -- DetachFromoAction
+// -- DetachFromAction
 // ***
 
 VerbRule(TrennAb)
-    ('lös' | 'trenn') dobjList 'von' singleIobj (|'ab')
-    | ('bind'|'binde') dobjList  'von' singleIobj (|'ab'|'los')
-    | 'mach' dobjList  'von' singleIobj (|'ab'|'los')
+    verb('lös','trenn','locker') dobjList 'von' singleIobj (|'ab')
+    | verb('mach','bind','binde') dobjList 'von' singleIobj (|prep('ab','los'))
     : DetachFromAction
-    verbPhrase = 'zu trennen/trennen (was) (von dativ was)' 
+    verbPattern('zu trennen/trennen (was)','(von dativ was)') 
     askIobjResponseProd = vonSingleNoun
 ;
 
@@ -15089,37 +15579,11 @@ VerbRule(TrennAb)
 // -- DetachAction
 // ***
 
-VerbRule(Loes)
-    'lös' dobjList (|'ab')
-    : DetachAction
-    verbPhrase = 'zu lösen/lösen (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
 VerbRule(Trenn)
-    'trenn' dobjList (|'ab')
+    verb('lös','trenn','locker') dobjList (|'ab')
+    | verb('mach','bind','binde') dobjList (|prep('ab','los'))
     : DetachAction
-    verbPhrase = 'zu trennen/trennen (was)'
-;
-
-VerbRule(Locker)
-    'locker' dobjList
-    : DetachAction
-    verbPhrase = 'zu lockern/lockern (was)'
-;
-
-VerbRule(BindLos)
-    ('bind'|'binde') dobjList ('ab'|'los')
-    : DetachAction
-    verbPhrase = 'loszubinden/losbinden (was)'
-;
-
-VerbRule(MachLos)
-    'mach' dobjList ('ab'|'los')
-    : DetachAction
-    verbPhrase = 'zu losmachen/losmachen (was)'
+    verbPattern('zu trennen/trennen','(was)')
 ;
 
 // ***
@@ -15127,18 +15591,10 @@ VerbRule(MachLos)
 // ***
 
 VerbRule(Oeffne)
-    'öffn' dobjList
+    verb('öffn') dobjList
+    | verb('mach') dobjList prep('auf')
     : OpenAction
-    verbPhrase = 'zu öffnen/öffnen (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(MachAuf)
-    'mach' dobjList 'auf'
-    : OpenAction
-    verbPhrase = 'aufzumachen/aufmachen (was)'
+    verbPattern('zu öffnen/öffnen','(was)')
 ;
 
 // ***
@@ -15146,61 +15602,21 @@ VerbRule(MachAuf)
 // ***
 
 VerbRule(Schliess)
-    'schließ' dobjList
+    verb('schließ') dobjList
+    | verb('mach') dobjList prep('zu')
     : CloseAction
-    verbPhrase = 'zu schließen/schließen (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(MachZu)
-    'mach' dobjList 'zu'
-    : CloseAction
-    verbPhrase = 'zuzumachen/zumachen (was)'
+    verbPattern('zu schließen/schließen','(was)')
 ;
 
 // ***
 // -- LockAction
 // ***
 
-VerbRule(SperrAb)
-    'sperr' dobjList 'ab' 
-    : LockAction
-    verbPhrase = 'abzusperren/absperren (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
 VerbRule(SperrZu)
-    'sperr' dobjList 'zu' 
+    verb('versperr','verschließ') dobjList
+    | verb('sperr','schließ') dobjList prep('ab','zu') 
     : LockAction
-    verbPhrase = 'zuzusperren/zusperren (was)'
-;
-
-VerbRule(Versperr)
-    'versperr' dobjList
-    : LockAction
-    verbPhrase = 'zu versperren/versperren (was)'
-;
-
-VerbRule(SchliessAb)
-    'schließ' dobjList 'ab' 
-    : LockAction
-    verbPhrase = 'abzuschließen/abschließen (was)'
-;
-
-VerbRule(SchliessZu)
-    'schließ' dobjList 'zu' 
-    : LockAction
-    verbPhrase = 'zuzuschließen/zuschließen (was)'
-;
-
-VerbRule(Verschliess)
-    ('verschließ'|'versperr') dobjList
-    : LockAction
-    verbPhrase = 'zu verschließen/verschließen (was)'
+    verbPattern('abzusperren/absperren','(was)')
 ;
 
 // ***
@@ -15208,19 +15624,9 @@ VerbRule(Verschliess)
 // ***
 
 VerbRule(SperrAuf)
-    'sperr' dobjList 'auf'
+    verb('sperr','schließ') dobjList prep('auf') 
     : UnlockAction
-    verbPhrase = 'aufzusperren/aufsperren (was)'
-    // -- we use this flag to mark this rule as the default rule
-    // -- for missing obj queries
-    defaultForRecursion = true
-;
-
-VerbRule(SchliessAuf)
-    verbNounPrep('schließ', dobjList, 'auf')
-    //ObjektListe('schließ','auf')
-    : UnlockAction
-    verbPhrase = 'aufzusperren/aufsperren (was)'
+    verbPattern('aufzusperren/aufsperren','(was)')
 ;
 
 // ***
@@ -15228,21 +15634,24 @@ VerbRule(SchliessAuf)
 // ***
 
 VerbRule(SperrAbMit)
-    verbNounPrepNounPrep('schließ', singleDobj, 'mit', singleIobj, 'ab', 'zu')
-//    verbNounPrepPrepNoun('schließ', singleDobj, 'ab', 'mit', singleIobj)
-//    ('verschließ'|'versperr') singleDobj 'mit' singleIobj (|'ab'|'zu')
-//    | ('schließ'|'sperr') singleDobj 'mit' singleIobj (|'ab'|'zu')
+    verb('versperr','verschließ') singleDobj 'mit' singleIobj
+    | verb('schließ') singleDobj 'mit' singleIobj prep('ab','zu')
     : LockWithAction
-    verbPhrase = 'abzusperren/absperren (was) (mit dativ was)'
+    verbPattern('abzusperren/absperren','(was) (mit dativ was)')
     omitIobjInDobjQuery = true
     askDobjResponseProd = singleNoun
     askIobjResponseProd = mitSingleNoun
 ;
 
+// ***
+// -- UnlockWithAction
+// ***
+
 VerbRule(SperrAufMit)
-    ('schließ'|'sperr') singleDobj 'mit' singleIobj 'auf'
+    verb('sperr','schließ') singleDobj 'mit' singleIobj prep('auf')
+    | verb('öffn') singleDobj 'mit' singleIobj
     : UnlockWithAction
-    verbPhrase = 'aufzusperren/aufsperren (was) (mit dativ was)'
+    verbPattern('aufzusperren/aufsperren','(was) (mit dativ was)')
     omitIobjInDobjQuery = true
     askDobjResponseProd = singleNoun
     askIobjResponseProd = mitSingleNoun
@@ -15345,14 +15754,10 @@ VerbRule(Verlass)
 
 VerbRule(SteigAus)
     'kletter' 'aus' singleDobj (|'aus'|'hinaus')
-    | 'steig' 'aus' singleDobj (|'aus'|'hinaus')
+    | ('steig'|'steige') 'aus' singleDobj (|'aus'|'hinaus')
     : GetOutOfAction
     verbPhrase = 'zu steigen/steigen (aus dativ was)'
     askDobjResponseProd = singleNoun
-
-    /* use the actorOutOfPrep, if there's a direct object available */
-    //adjustDefaultObjectPrep(prep, obj)
-    //    { return (obj != nil ? obj.actorOutOfPrep + ' ' : prep); }
 ;
 
 // ***
@@ -15361,14 +15766,10 @@ VerbRule(SteigAus)
 
 VerbRule(SteigAb)
     'geh' 'von' singleDobj 'hinunter'
-    | 'steig' 'von' singleDobj (|'ab'|'hinunter')
+    | ('steig'|'steige') 'von' singleDobj (|'ab'|'hinunter')
     : GetOffOfAction
     verbPhrase = 'zu steigen/steigen (von dativ was)'
     askDobjResponseProd = singleNoun
-
-    /* use the actorOutOfPrep, if there's a direct object available */
-    //adjustDefaultObjectPrep(prep, obj)
-    //   { return (obj != nil ? obj.actorOutOfPrep + ' ' : prep); }
 ;
 
 // ***
@@ -15376,11 +15777,9 @@ VerbRule(SteigAb)
 // ***
 
 VerbRule(GehRaus)
-    verb('geh')
-    | verbPrep('geh', 'hinunter', 'hinaus')
-    | 'kletter' ('hinunter' | 'hinaus')
+    verb('komm','kletter') prep('hinunter','hinaus')
     : GetOutAction
-    verbPhrase = 'hinauszugehen/hinausgehen'
+    verbPhrase = 'hinauszukommen/hinauskommen'
 ;
 
 // ***
@@ -15389,7 +15788,7 @@ VerbRule(GehRaus)
 
 VerbRule(SteigIn)
     ('besteig'  
-     | 'steig' ( 'in' | 'ein' 'in' | 'auf')
+     | ('steig'|'steige') ( 'in' | 'ein' 'in' | 'auf')
      | 'geh' 'auf'
      | 'kletter' ('in'|'auf')
      | 'stell' ('dich'|'mich') 'in')
@@ -15400,18 +15799,10 @@ VerbRule(SteigIn)
 ;
 
 VerbRule(Schlaf)
-    verbMisc('schlaf', 'aus', 'ein') 
-    //'schlaf' | 'ruh' | 'ruh' ('dich'|'mich') 'aus'
+    verb('schlaf') prep('aus','ein') 
     : SleepAction
     verbPhrase = 'zu schlafen/schlafen'
 ;
-
-// -- There is no FASTEN [something] in German ...
-
-//VerbRule(Fasten)
-//VerbRule(FastenTo)
-//VerbRule(Unfasten)
-//VerbRule(UnfastenFrom)
 
 // ***
 // -- PlugIntoAction
@@ -15425,9 +15816,9 @@ VerbRule(SteckIn)
 ;
 
 VerbRule(SteckInWas)
-  | [badness 500] 'steck' dobjList 'ein'
+    [badness 500] verb('steck') dobjList prep('ein')
     : PlugIntoAction
-    verbPhrase = 'zu stecken/stecken (was) (in was)'
+    verbPattern('zu stecken/stecken','(was) (in was)')
     construct()
     {
         /* set up the empty indirect object phrase */
@@ -15441,7 +15832,7 @@ VerbRule(SteckInWas)
 // ***
 
 VerbRule(SteckEin)
-    'steck' dobjList 'ein'
+    verb('steck') dobjList (|prep('ein'))
     : PlugInAction
     verbPhrase = 'einzustecken/einstecken (was)'
 ;
@@ -15451,9 +15842,9 @@ VerbRule(SteckEin)
 // ***
 
 VerbRule(SteckAusVon)
-    ('lös'|'trenn') dobjList 'von' singleIobj (|'ab')
+    verb('lös','trenn') dobjList 'von' singleIobj (|prep('ab'))
     : UnplugFromAction
-    verbPhrase = 'zu trennen/trennen (was) (von was)'
+    verbPattern('zu trennen/trennen','(was) (von was)')
     askIobjResponseProd = vonSingleNoun
 ;
 
@@ -15462,7 +15853,7 @@ VerbRule(SteckAusVon)
 // ***
 
 VerbRule(SteckAus)
-    'steck' dobjList 'aus'
+    verb('steck') dobjList prep('aus')
     : UnplugAction
     verbPhrase = 'auszustecken/ausstecken (was)'
 ;
@@ -15472,9 +15863,9 @@ VerbRule(SteckAus)
 // ***
 
 VerbRule(SchraubZu)
-    | ('schraub'|'schraube'|'dreh'|'zieh') dobjList ('fest'|'zu')
+    verb('schraub','schraube','dreh','zieh') dobjList prep('fest','zu')
     : ScrewAction
-    verbPhrase = 'zuzudrehen/zudrehen (was)'
+    verbPattern('zuzudrehen/zudrehen','(was)')
 ;
 
 // ***
@@ -15482,9 +15873,9 @@ VerbRule(SchraubZu)
 // ***
 
 VerbRule(SchraubZuMit)
-    ('schraub'|'schraube'|'dreh'|'zieh') dobjList 'mit' singleIobj ('fest'|'zu')
+    verb('schraub','schraube','dreh','zieh') dobjList 'mit' singleIobj prep('fest','zu')
     : ScrewWithAction
-    verbPhrase = 'zuzudrehen/zudrehen (was) (mit dativ was)'
+    verbPattern('zuzudrehen/zudrehen (was)','(mit dativ was)')
     omitIobjInDobjQuery = true
     askIobjResponseProd = mitSingleNoun
 ;
@@ -15494,9 +15885,9 @@ VerbRule(SchraubZuMit)
 // ***
 
 VerbRule(SchraubAuf)
-    ('schraub'|'schraube'|'dreh') dobjList ('auf'|'locker'|'ab')
+    verb('schraub','schraube','dreh') dobjList prep('auf','locker','ab')
     : UnscrewAction
-    verbPhrase = 'aufzudrehen/aufdrehen (was)'
+    verbPattern('aufzudrehen/aufdrehen','(was)')
 ;
 
 // ***
@@ -15504,10 +15895,10 @@ VerbRule(SchraubAuf)
 // ***
 
 VerbRule(SchraubAufMit)
-    ('schraub'|'schraube'|'dreh') dobjList 'mit' singleIobj ('auf'|'locker'|'ab')
-    | ('locker'|'lös') dobjList 'mit' singleIobj
+    verb('schraub','schraube','dreh') dobjList 'mit' singleIobj prep('auf','locker','ab')
+    | verb('locker','lös') dobjList 'mit' singleIobj
     : UnscrewWithAction
-    verbPhrase = 'aufzudrehen/aufdrehen (was) (mit dativ was)'
+    verbPattern('aufzudrehen/aufdrehen','(was) (mit dativ was)')
     omitIobjInDobjQuery = true
     askIobjResponseProd = mitSingleNoun
 ;
@@ -15517,9 +15908,9 @@ VerbRule(SchraubAufMit)
 // ***
 
 VerbRule(SchiebNachDir)
-    ('schieb' | 'zieh' | 'beweg' | 'stoß' ) singleDobj 'nach' singleDir
+    verb('schieb','zieh','beweg','stoß','schubs') singleDobj 'nach' singleDir
     : PushTravelDirAction
-    verbPhrase = ('zu schieben/schieben (was) nach ' + dirMatch.dir.name)
+    verbPattern('zu schieben/schieben','(was) nach ' + dirMatch.dir.name)
 ;
 
 // ***
@@ -15527,10 +15918,10 @@ VerbRule(SchiebNachDir)
 // ***
 
 VerbRule(SchiebDurch)
-    ('schieb' | 'zieh' | 'beweg' | 'stoß' ) singleDobj
+    verb('schieb','zieh','beweg','stoß','schubs') singleDobj
     'durch' singleIobj (|'hindurch'|'durch')
     : PushTravelThroughAction
-    verbPhrase = 'durchzuziehen/durchziehen (was) (durch was)'
+    verbPattern('durchzuziehen/durchziehen','(was) (durch was)')
 ;
 
 // ***
@@ -15538,10 +15929,10 @@ VerbRule(SchiebDurch)
 // ***
 
 VerbRule(SchiebHinein)
-    ('schieb' | 'zieh' | 'beweg' | 'stoß' ) singleDobj
+    verb('schieb','zieh','beweg','stoß','schubs') singleDobj
     'in' singleIobj (|'hinein')
     : PushTravelEnterAction
-    verbPhrase = 'hineinzuziehen/hineinziehen (was) (in was)'
+    verbPattern('hineinzuziehen/hineinziehen','(was) (in was)')
 ;
 
 // ***
@@ -15549,10 +15940,10 @@ VerbRule(SchiebHinein)
 // ***
 
 VerbRule(SchiebHinaus)
-    ('schieb' | 'zieh' | 'beweg' | 'stoß' ) singleDobj
+    verb('schieb','zieh','beweg','stoß','schubs') singleDobj
     'aus' singleIobj (|'hinaus')
     : PushTravelGetOutOfAction
-    verbPhrase = 'herauszuziehen/herausziehen (was) (aus dativ was)'
+    verbPattern('herauszuziehen/herausziehen','(was) (aus dativ was)')
 ;
 
 // ***
@@ -15560,10 +15951,10 @@ VerbRule(SchiebHinaus)
 // ***
 
 VerbRule(SchiebHinauf)
-    ('schieb' | 'zieh' | 'beweg' | 'stoß' ) singleDobj
+    verb('schieb','zieh','beweg','stoß','schubs') singleDobj
     'auf' singleIobj (|'hinauf'|'hoch')
     : PushTravelClimbUpAction
-    verbPhrase = 'heraufzuziehen/heraufziehen (was) (auf was)'
+    verbPattern('heraufzuziehen/heraufziehen','(was) (auf was)')
     omitIobjInDobjQuery = true
 ;
 
@@ -15572,10 +15963,10 @@ VerbRule(SchiebHinauf)
 // ***
 
 VerbRule(SchiebHinunter)
-    ('schieb' | 'zieh' | 'beweg' | 'stoß' ) singleDobj
+    verb('schieb','zieh','beweg','stoß','schubs') singleDobj
     'von' singleIobj (|'hinunter')
     : PushTravelClimbDownAction
-    verbPhrase = 'herunterzuziehen/herunterziehen (was) (von was)'
+    verbPattern('herunterzuziehen/herunterziehen','(was) (von was)')
 ;
 
 // ***
@@ -15647,7 +16038,7 @@ VerbRule(Debug)
 // ******
 
 VerbRule(decline)
-    ('deklinier') singleDobj
+    'deklinier' singleDobj
     : DeclineAction
     verbPhrase = 'zu deklinieren/deklinieren (was)'
 ;
@@ -15783,10 +16174,10 @@ VerbRule(Pronoun)
 // ******
 
 DefineTAction(Purloin) 
-  cacheScopeList() 
-     {      
-       scope_ = everything.lst();          
-     }   
+    cacheScopeList() 
+    {      
+        scope_ = everything.lst();          
+    }   
 ; 
 
 VerbRule(Purloin) 
@@ -15796,21 +16187,21 @@ VerbRule(Purloin)
 ; 
 
 modify Thing 
-  dobjFor(Purloin) 
-  { 
-   verify() 
-   { 
-            if(isHeldBy(gActor)) illogicalNow('{Du/er} {hat} {den dobj/ihn} bereits in der Hand. ');  
-   } 
-   check() {} 
-   action 
+    dobjFor(Purloin) 
     { 
-        mainReport('{Der dobj/er} {faellt} in {deine} Hände.\n '); 
-        self.moveInto(gActor); 
-        if (!self.discovered)
-                self.discover();
+        verify() 
+        { 
+            if(isHeldBy(gActor)) illogicalNow('{Du/er} {hat} {den dobj/ihn} bereits in der Hand. ');  
+        } 
+        check() {} 
+        action 
+        { 
+            mainReport('{Der dobj/er} {faellt} in {deine} Hände.\n '); 
+            self.moveInto(gActor); 
+            if (!self.discovered)
+                    self.discover();
+        } 
     } 
-  } 
 ; 
 
 modify Fixture 
@@ -15850,23 +16241,466 @@ VerbRule(Gonear)
 ; 
 
 modify Thing 
-  dobjFor(Gonear) 
-  { 
-    verify() {} 
-    check() {} 
-    action() 
+    dobjFor(Gonear) 
     { 
-       local obj = getOutermostRoom(); 
-        
-       if(obj != nil) 
-       { 
-         "{Du/er} {wird} wunderbarer Weise transportiert...</p>"; 
-         replaceAction(TravelVia, obj); 
-       } 
-       else 
+        verify() {} 
+        check() {} 
+        action() 
+        { 
+            local obj = getOutermostRoom(); 
+
+            if(obj != nil) 
+            { 
+                 "{Du/er} {wird} wunderbarer Weise transportiert...</p>"; 
+                 replaceAction(TravelVia, obj); 
+            } 
+            else 
                 "{Du/er} {kann} nicht dorthin gehen. "; 
-    } 
-  } 
+        } 
+    }
+    dobjFor(Message) {
+        verify() {}
+        action() {
+            askForIobj(MessageWith);
+        }
+    }
+    dobjFor(MessageWith) {
+        verify() {}
+    }
+    iobjFor(MessageWith) {
+        verify() {}
+        action() {
+            "Standard Messages mit {dem dobj/ihm} und {dem iobj/ihm}:\n\n
+            cannotDoThatMessage: <q><b><<playerActionMessages.cannotDoThatMsg>></b></q>\n
+            mustBeHoldingMsg(obj): <q><b><<playerActionMessages.mustBeHoldingMsg(gDobj)>></b></q>\n
+            tooDarkMsg: <q><b><<playerActionMessages.tooDarkMsg>></b></q>\n
+            mustBeVisibleMsg(obj): <q><b><<playerActionMessages.mustBeVisibleMsg(gDobj)>></b></q>\n
+            heardButNotSeenMsg(obj): <q><b><<playerActionMessages.heardButNotSeenMsg(gDobj)>></b></q>\n
+            smelledButNotSeenMsg(obj): <q><b><<playerActionMessages.smelledButNotSeenMsg(gDobj)>></b></q>\n
+            cannotHearMsg(obj): <q><b><<playerActionMessages.cannotHearMsg(gDobj)>></b></q>\n
+            cannotSmellMsg(obj): <q><b><<playerActionMessages.cannotSmellMsg(gDobj)>></b></q>\n
+            cannotTasteMsg(obj): <q><b><<playerActionMessages.cannotTasteMsg(gDobj)>></b></q>\n
+            cannotBeWearingMsg(obj): <q><b><<playerActionMessages.cannotBeWearingMsg(gDobj)>></b></q>\n
+            mustBeEmptyMsg(obj): <q><b><<playerActionMessages.mustBeEmptyMsg(gDobj)>></b></q>\n
+            mustBeOpenMsg(obj): <q><b><<playerActionMessages.mustBeOpenMsg(gDobj)>></b></q>\n
+            mustBeClosedMsg(obj): <q><b><<playerActionMessages.mustBeClosedMsg(gDobj)>></b></q>\n
+            mustBeUnlockedMsg(obj): <q><b><<playerActionMessages.mustBeUnlockedMsg(gDobj)>></b></q>\n
+            noKeyNeededMsg: <q><b><<playerActionMessages.noKeyNeededMsg>></b></q>\n
+            mustBeStandingMsg: <q><b><<playerActionMessages.mustBeStandingMsg>></b></q>\n
+            mustSitOnMsg(obj): <q><b><<playerActionMessages.mustSitOnMsg(gDobj)>></b></q>\n
+            mustLieOnMsg(obj): <q><b><<playerActionMessages.mustLieOnMsg(gDobj)>></b></q>\n
+            mustGetOnMsg(obj): <q><b><<playerActionMessages.mustGetOnMsg(gDobj)>></b></q>\n
+            mustBeInMsg(obj, loc): <q><b><<playerActionMessages.mustBeInMsg(gDobj,gIobj)>></b></q>\n
+            mustBeCarryingMsg(obj, actor): <q><b><<playerActionMessages.mustBeCarryingMsg(gDobj,gIobj)>></b></q>\n
+            decorationNotImportantMsg(obj): <q><b><<playerActionMessages.decorationNotImportantMsg(gDobj)>></b></q>\n
+            unthingNotHereMsg(obj): <q><b><<playerActionMessages.unthingNotHereMsg(gDobj)>></b></q>\n
+            tooDistantMsg(obj): <q><b><<playerActionMessages.tooDistantMsg(gDobj)>></b></q>\n
+            notWithIntangibleMsg(obj): <q><b><<playerActionMessages.notWithIntangibleMsg(gDobj)>></b></q>\n
+            notWithVaporousMsg(obj): <q><b><<playerActionMessages.notWithVaporousMsg(gDobj)>></b></q>\n
+            lookInVaporousMsg(obj): <q><b><<playerActionMessages.lookInVaporousMsg(gDobj)>></b></q>\n
+            cannotReachObjectMsg(obj): <q><b><<playerActionMessages.cannotReachObjectMsg(gDobj)>></b></q>\n
+            cannotReachThroughMsg(obj, loc): <q><b><<playerActionMessages.cannotReachThroughMsg(gDobj,gIobj)>></b></q>\n
+            thingDescMsg(obj): <q><b><<playerActionMessages.thingDescMsg(gDobj)>></b></q>\n
+            thingSoundDescMsg(obj): <q><b><<playerActionMessages.thingSoundDescMsg(gDobj)>></b></q>\n
+            thingSmellDescMsg(obj): <q><b><<playerActionMessages.thingSmellDescMsg(gDobj)>></b></q>\n
+            npcDescMsg(obj): <q><b><<playerActionMessages.npcDescMsg(gDobj)>></b></q>\n
+            nothingInsideMsg: <q><b><<playerActionMessages.nothingInsideMsg>></b></q>\n
+            nothingUnderMsg: <q><b><<playerActionMessages.nothingUnderMsg>></b></q>\n
+            nothingBehindMsg: <q><b><<playerActionMessages.nothingBehindMsg>></b></q>\n
+            nothingThroughMsg: <q><b><<playerActionMessages.nothingThroughMsg>></b></q>\n
+            cannotLookBehindMsg: <q><b><<playerActionMessages.cannotLookBehindMsg>></b></q>\n
+            cannotLookUnderMsg: <q><b><<playerActionMessages.cannotLookUnderMsg>></b></q>\n
+            cannotLookThroughMsg: <q><b><<playerActionMessages.cannotLookThroughMsg>></b></q>\n
+            nothingThroughPassageMsg: <q><b><<playerActionMessages.nothingThroughPassageMsg>></b></q>\n
+            nothingBeyondDoorMsg: <q><b><<playerActionMessages.nothingBeyondDoorMsg>></b></q>\n
+            nothingToSmellMsg: <q><b><<playerActionMessages.nothingToSmellMsg>></b></q>\n
+            nothingToHearMsg: <q><b><<playerActionMessages.nothingToHearMsg>></b></q>\n
+            noiseSourceMsg(obj): <q><b><<playerActionMessages.noiseSourceMsg(gDobj)>></b></q>\n
+            odorSourceMsg(obj): <q><b><<playerActionMessages.odorSourceMsg(gDobj)>></b></q>\n
+            notWearableMsg: <q><b><<playerActionMessages.notWearableMsg>></b></q>\n
+            notDoffableMsg: <q><b><<playerActionMessages.notDoffableMsg>></b></q>\n
+            alreadyWearingMsg: <q><b><<playerActionMessages.alreadyWearingMsg>></b></q>\n
+            okayWearMsg: <q><b><<playerActionMessages.okayWearMsg>></b></q>\n
+            okayDoffMsg: <q><b><<playerActionMessages.okayDoffMsg>></b></q>\n
+            okayOpenMsg: <q><b><<playerActionMessages.okayOpenMsg>></b></q>\n
+            okayCloseMsg: <q><b><<playerActionMessages.okayCloseMsg>></b></q>\n
+            okayLockMsg: <q><b><<playerActionMessages.okayLockMsg>></b></q>\n
+            okayUnlockMsg: <q><b><<playerActionMessages.okayUnlockMsg>></b></q>\n
+            cannotDigMsg: <q><b><<playerActionMessages.cannotDigMsg>></b></q>\n
+            cannotDigWithMsg: <q><b><<playerActionMessages.cannotDigWithMsg>></b></q>\n
+            alreadyHoldingMsg: <q><b><<playerActionMessages.alreadyHoldingMsg>></b></q>\n
+            takingSelfMsg: <q><b><<playerActionMessages.takingSelfMsg>></b></q>\n
+            notCarryingMsg: <q><b><<playerActionMessages.notCarryingMsg>></b></q>\n
+            droppingSelfMsg: <q><b><<playerActionMessages.droppingSelfMsg>></b></q>\n
+            puttingSelfMsg: <q><b><<playerActionMessages.puttingSelfMsg>></b></q>\n
+            throwingSelfMsg: <q><b><<playerActionMessages.throwingSelfMsg>></b></q>\n
+            alreadyPutInMsg: <q><b><<playerActionMessages.alreadyPutInMsg>></b></q>\n
+            alreadyPutOnMsg: <q><b><<playerActionMessages.alreadyPutOnMsg>></b></q>\n
+            alreadyPutUnderMsg: <q><b><<playerActionMessages.alreadyPutUnderMsg>></b></q>\n
+            alreadyPutBehindMsg: <q><b><<playerActionMessages.alreadyPutBehindMsg>></b></q>\n
+            cannotMoveFixtureMsg: <q><b><<playerActionMessages.cannotMoveFixtureMsg>></b></q>\n
+            cannotTakeFixtureMsg: <q><b><<playerActionMessages.cannotTakeFixtureMsg>></b></q>\n
+            cannotPutFixtureMsg: <q><b><<playerActionMessages.cannotPutFixtureMsg>></b></q>\n
+            cannotTakeImmovableMsg: <q><b><<playerActionMessages.cannotTakeImmovableMsg>></b></q>\n
+            cannotMoveImmovableMsg: <q><b><<playerActionMessages.cannotMoveImmovableMsg>></b></q>\n
+            cannotPutImmovableMsg: <q><b><<playerActionMessages.cannotPutImmovableMsg>></b></q>\n
+            cannotTakeHeavyMsg: <q><b><<playerActionMessages.cannotTakeHeavyMsg>></b></q>\n
+            cannotMoveHeavyMsg: <q><b><<playerActionMessages.cannotMoveHeavyMsg>></b></q>\n
+            cannotPutHeavyMsg: <q><b><<playerActionMessages.cannotPutHeavyMsg>></b></q>\n
+            cannotMoveComponentMsg(loc): <q><b><<playerActionMessages.cannotMoveComponentMsg(gDobj)>></b></q>\n
+            cannotTakeComponentMsg(loc): <q><b><<playerActionMessages.cannotTakeComponentMsg(gDobj)>></b></q>\n
+            cannotPutComponentMsg(loc): <q><b><<playerActionMessages.cannotPutComponentMsg(gDobj)>></b></q>\n
+            cannotTakePushableMsg: <q><b><<playerActionMessages.cannotTakePushableMsg>></b></q>\n
+            cannotMovePushableMsg: <q><b><<playerActionMessages.cannotMovePushableMsg>></b></q>\n
+            cannotPutPushableMsg: <q><b><<playerActionMessages.cannotPutPushableMsg>></b></q>\n
+            cannotTakeLocationMsg: <q><b><<playerActionMessages.cannotTakeLocationMsg>></b></q>\n
+            cannotRemoveHeldMsg: <q><b><<playerActionMessages.cannotRemoveHeldMsg>></b></q>\n
+            okayTakeMsg: <q><b><<playerActionMessages.okayTakeMsg>></b></q>\n     
+            okayDropMsg: <q><b><<playerActionMessages.okayDropMsg>></b></q>\n
+            droppingObjMsg(dropobj): <q><b><<playerActionMessages.droppingObjMsg(gDobj)>></b></q>\n
+            floorlessDropMsg(dropobj): <q><b><<playerActionMessages.floorlessDropMsg(gDobj)>></b></q>\n          
+            okayPutInMsg: <q><b><<playerActionMessages.okayPutInMsg>></b></q>\n
+            okayPutOnMsg: <q><b><<playerActionMessages.okayPutOnMsg>></b></q>\n
+            okayPutUnderMsg: <q><b><<playerActionMessages.okayPutUnderMsg>></b></q>\n
+            okayPutBehindMsg: <q><b><<playerActionMessages.okayPutBehindMsg>></b></q>\n
+            cannotTakeActorMsg: <q><b><<playerActionMessages.cannotTakeActorMsg>></b></q>\n
+            cannotMoveActorMsg: <q><b><<playerActionMessages.cannotMoveActorMsg>></b></q>\n
+            cannotPutActorMsg: <q><b><<playerActionMessages.cannotPutActorMsg>></b></q>\n
+            cannotTasteActorMsg: <q><b><<playerActionMessages.cannotTasteActorMsg>></b></q>\n
+            cannotTakePersonMsg: <q><b><<playerActionMessages.cannotTakePersonMsg>></b></q>\n
+            cannotMovePersonMsg: <q><b><<playerActionMessages.cannotMovePersonMsg>></b></q>\n
+            cannotPutPersonMsg: <q><b><<playerActionMessages.cannotPutPersonMsg>></b></q>\n
+            cannotTastePersonMsg: <q><b><<playerActionMessages.cannotTastePersonMsg>></b></q>\n
+            cannotMoveThroughMsg(obj,obs): <q><b><<playerActionMessages.cannotMoveThroughMsg(gDobj,gIobj)>></b></q>\n
+            cannotMoveThroughContainerMsg(obj,cont): <q><b><<playerActionMessages.cannotMoveThroughContainerMsg(gDobj,gIobj)>></b></q>\n
+            cannotMoveThroughClosedMsg(obj,cont): <q><b><<playerActionMessages.cannotMoveThroughClosedMsg(gDobj,gIobj)>></b></q>\n
+            cannotFitIntoOpeningMsg(obj,cont): <q><b><<playerActionMessages.cannotFitIntoOpeningMsg(gDobj,gIobj)>></b></q>\n
+            cannotFitOutOfOpeningMsg(obj,cont): <q><b><<playerActionMessages.cannotFitOutOfOpeningMsg(gDobj,gIobj)>></b></q>\n
+            cannotTouchThroughContainerMsg(obj,cont): <q><b><<playerActionMessages.cannotTouchThroughContainerMsg(gDobj,gIobj)>></b></q>\n
+            cannotTouchThroughClosedMsg(obj,cont): <q><b><<playerActionMessages.cannotTouchThroughClosedMsg(gDobj,gIobj)>></b></q>\n        
+            cannotReachIntoOpeningMsg(obj,cont): <q><b><<playerActionMessages.cannotReachIntoOpeningMsg(gDobj,gIobj)>></b></q>\n
+            cannotReachOutOfOpeningMsg(obj,cont): <q><b><<playerActionMessages.cannotReachOutOfOpeningMsg(gDobj,gIobj)>></b></q>\n
+            tooLargeForActorMsg(obj): <q><b><<playerActionMessages.tooLargeForActorMsg(gDobj)>></b></q>\n
+            handsTooFullForMsg(obj): <q><b><<playerActionMessages.handsTooFullForMsg(gDobj)>></b></q>\n
+            becomingTooLargeForActorMsg(obj): <q><b><<playerActionMessages.becomingTooLargeForActorMsg(gDobj)>></b></q>\n
+            handsBecomingTooFullForMsg(obj): <q><b><<playerActionMessages.handsBecomingTooFullForMsg(gDobj)>></b></q>\n
+            tooHeavyForActorMsg(obj): <q><b><<playerActionMessages.tooHeavyForActorMsg(gDobj)>></b></q>\n
+            totalTooHeavyForMsg(obj): <q><b><<playerActionMessages.totalTooHeavyForMsg(gDobj)>></b></q>\n
+            tooLargeForContainerMsg(obj,cont): <q><b><<playerActionMessages.tooLargeForContainerMsg(gDobj,gIobj)>></b></q>\n
+            tooLargeForUndersideMsg(obj,cont): <q><b><<playerActionMessages.tooLargeForUndersideMsg(gDobj,gIobj)>></b></q>\n
+            tooLargeForRearMsg(obj,cont): <q><b><<playerActionMessages.tooLargeForRearMsg(gDobj,gIobj)>></b></q>\n
+            containerTooFullMsg(obj,cont): <q><b><<playerActionMessages.containerTooFullMsg(gDobj,gIobj)>></b></q>\n
+            surfaceTooFullMsg(obj,cont): <q><b><<playerActionMessages.surfaceTooFullMsg(gDobj,gIobj)>></b></q>\n
+            undersideTooFullMsg(obj,cont): <q><b><<playerActionMessages.undersideTooFullMsg(gDobj,gIobj)>></b></q>\n
+            rearTooFullMsg(obj,cont): <q><b><<playerActionMessages.rearTooFullMsg(gDobj,gIobj)>></b></q>\n
+            becomingTooLargeForContainerMsg(obj,cont): <q><b><<playerActionMessages.becomingTooLargeForContainerMsg(gDobj,gIobj)>></b></q>\n
+            containerBecomingTooFullMsg(obj,cont): <q><b><<playerActionMessages.containerBecomingTooFullMsg(gDobj,gIobj)>></b></q>\n
+            notAContainerMsg: <q><b><<playerActionMessages.notAContainerMsg>></b></q>\n
+            notASurfaceMsg: <q><b><<playerActionMessages.notASurfaceMsg>></b></q>\n
+            cannotPutUnderMsg: <q><b><<playerActionMessages.cannotPutUnderMsg>></b></q>\n            
+            cannotPutBehindMsg: <q><b><<playerActionMessages.cannotPutBehindMsg>></b></q>\n
+            cannotPutInSelfMsg: <q><b><<playerActionMessages.cannotPutInSelfMsg>></b></q>\n
+            cannotPutOnSelfMsg: <q><b><<playerActionMessages.cannotPutOnSelfMsg>></b></q>\n
+            cannotPutUnderSelfMsg: <q><b><<playerActionMessages.cannotPutUnderSelfMsg>></b></q>\n
+            cannotPutBehindSelfMsg: <q><b><<playerActionMessages.cannotPutBehindSelfMsg>></b></q>\n
+            cannotPutInRestrictedMsg: <q><b><<playerActionMessages.cannotPutInRestrictedMsg>></b></q>\n
+            cannotPutOnRestrictedMsg: <q><b><<playerActionMessages.cannotPutOnRestrictedMsg>></b></q>\n
+            cannotPutUnderRestrictedMsg: <q><b><<playerActionMessages.cannotPutUnderRestrictedMsg>></b></q>\n
+            cannotPutBehindRestrictedMsg: <q><b><<playerActionMessages.cannotPutBehindRestrictedMsg>></b></q>\n
+            cannotReturnToDispenserMsg: <q><b><<playerActionMessages.cannotReturnToDispenserMsg>></b></q>\n
+            cannotPutInDispenserMsg: <q><b><<playerActionMessages.cannotPutInDispenserMsg>></b></q>\n
+            objNotForKeyringMsg: <q><b><<playerActionMessages.objNotForKeyringMsg>></b></q>\n
+            keyNotOnKeyringMsg: <q><b><<playerActionMessages.keyNotOnKeyringMsg>></b></q>\n
+            keyNotDetachableMsg: <q><b><<playerActionMessages.keyNotDetachableMsg>></b></q>\n
+            takenAndMovedToKeyringMsg(keyring): <q><b><<playerActionMessages.takenAndMovedToKeyringMsg(gDobj)>></b></q>\n
+            movedKeyToKeyringMsg(keyring): <q><b><<playerActionMessages.movedKeyToKeyringMsg(gDobj)>></b></q>\n
+            movedKeysToKeyringMsg(keyring,keys): <q><b><<playerActionMessages.movedKeysToKeyringMsg(gDobj,gIobj)>></b></q>\n
+            circularlyInMsg(x,y): <q><b><<playerActionMessages.circularlyInMsg(gDobj,gIobj)>></b></q>\n
+            circularlyOnMsg(x,y): <q><b><<playerActionMessages.circularlyOnMsg(gDobj,gIobj)>></b></q>\n
+            circularlyUnderMsg(x,y): <q><b><<playerActionMessages.circularlyUnderMsg(gDobj,gIobj)>></b></q>\n
+            circularlyBehindMsg(x,y): <q><b><<playerActionMessages.circularlyBehindMsg(gDobj,gIobj)>></b></q>\n
+            takeFromNotInMsg: <q><b><<playerActionMessages.takeFromNotInMsg>></b></q>\n
+            takeFromNotOnMsg: <q><b><<playerActionMessages.takeFromNotOnMsg>></b></q>\n
+            takeFromNotUnderMsg: <q><b><<playerActionMessages.takeFromNotUnderMsg>></b></q>\n
+            takeFromNotBehindMsg: <q><b><<playerActionMessages.takeFromNotBehindMsg>></b></q>\n
+            takeFromNotInActorMsg: <q><b><<playerActionMessages.takeFromNotInActorMsg>></b></q>\n
+            willNotLetGoMsg(holder,obj): <q><b><<playerActionMessages.willNotLetGoMsg(gDobj,gIobj)>></b></q>\n
+            whereToGoMsg: <q><b><<playerActionMessages.whereToGoMsg>></b></q>\n
+            cannotGoThatWayMsg: <q><b><<playerActionMessages.cannotGoThatWayMsg>></b></q>\n
+            cannotGoThatWayInDarkMsg: <q><b><<playerActionMessages.cannotGoThatWayInDarkMsg>></b></q>\n
+            cannotGoBackMsg: <q><b><<playerActionMessages.cannotGoBackMsg>></b></q>\n
+            cannotDoFromHereMsg: <q><b><<playerActionMessages.cannotDoFromHereMsg>></b></q>\n
+            cannotGoThroughClosedDoorMsg(door): <q><b><<playerActionMessages.cannotGoThroughClosedDoorMsg(gDobj)>></b></q>\n
+            invalidStagingContainerMsg(cont,dest): <q><b><<playerActionMessages.invalidStagingContainerMsg(gDobj,gIobj)>></b></q>\n
+            invalidStagingContainerActorMsg(cont,dest): <q><b><<playerActionMessages.invalidStagingContainerActorMsg(gDobj,gIobj)>></b></q>\n
+            invalidStagingLocationMsg(dest): <q><b><<playerActionMessages.invalidStagingLocationMsg(gDobj)>></b></q>\n
+            nestedRoomTooHighMsg(obj): <q><b><<playerActionMessages.nestedRoomTooHighMsg(gDobj)>></b></q>\n
+            nestedRoomTooHighToExitMsg(obj): <q><b><<playerActionMessages.nestedRoomTooHighToExitMsg(gDobj)>></b></q>\n
+            cannotDoFromMsg(obj): <q><b><<playerActionMessages.cannotDoFromMsg(gDobj)>></b></q>\n
+            vehicleCannotDoFromMsg(obj): <q><b><<playerActionMessages.vehicleCannotDoFromMsg(gDobj)>></b></q>\n
+            cannotGoThatWayInVehicleMsg(traveler): <q><b><<playerActionMessages.cannotGoThatWayInVehicleMsg(gDobj)>></b></q>\n
+            cannotPushObjectThatWayMsg(obj): <q><b><<playerActionMessages.cannotPushObjectThatWayMsg(gDobj)>></b></q>\n
+            cannotPushObjectNestedMsg(obj): <q><b><<playerActionMessages.cannotPushObjectNestedMsg(gDobj)>></b></q>\n
+            cannotEnterExitOnlyMsg(obj): <q><b><<playerActionMessages.cannotEnterExitOnlyMsg(gDobj)>></b></q>\n
+            mustOpenDoorMsg(obj): <q><b><<playerActionMessages.mustOpenDoorMsg(gDobj)>></b></q>\n
+            doorClosesBehindMsg(obj): <q><b><<playerActionMessages.doorClosesBehindMsg(gDobj)>></b></q>\n
+            stairwayNotUpMsg: <q><b><<playerActionMessages.stairwayNotUpMsg>></b></q>\n
+            stairwayNotDownMsg: <q><b><<playerActionMessages.stairwayNotDownMsg>></b></q>\n
+            sayHelloMsg: <q><b><<playerActionMessages.sayHelloMsg>></b></q>\n
+            sayGoodbyeMsg: <q><b><<playerActionMessages.sayGoodbyeMsg>></b></q>\n
+            sayYesMsg: <q><b><<playerActionMessages.sayYesMsg>></b></q>\n
+            sayNoMsg: <q><b><<playerActionMessages.sayNoMsg>></b></q>\n
+            addressingNoOneMsg: <q><b><<playerActionMessages.addressingNoOneMsg>></b></q>\n
+            okayYellMsg: <q><b><<playerActionMessages.okayYellMsg>></b></q>\n
+            okayJumpMsg: <q><b><<playerActionMessages.okayJumpMsg>></b></q>\n
+            cannotJumpOverMsg: <q><b><<playerActionMessages.cannotJumpOverMsg>></b></q>\n
+            cannotJumpOffMsg: <q><b><<playerActionMessages.cannotJumpOffMsg>></b></q>\n
+            cannotJumpOffHereMsg: <q><b><<playerActionMessages.cannotJumpOffHereMsg>></b></q>\n
+            cannotFindTopicMsg: <q><b><<playerActionMessages.cannotFindTopicMsg>></b></q>\n
+            refuseCommand(targetActor,issuingActor): <q><b><<playerActionMessages.refuseCommand(gDobj,gIobj)>></b></q>\n
+            notAddressableMsg(obj): <q><b><<playerActionMessages.notAddressableMsg(gDobj)>></b></q>\n
+            noResponseFromMsg(other): <q><b><<playerActionMessages.noResponseFromMsg(gDobj)>></b></q>\n
+            giveAlreadyHasMsg: <q><b><<playerActionMessages.giveAlreadyHasMsg>></b></q>\n
+            cannotTalkToSelfMsg: <q><b><<playerActionMessages.cannotTalkToSelfMsg>></b></q>\n
+            cannotAskSelfMsg: <q><b><<playerActionMessages.cannotAskSelfMsg>></b></q>\n
+            cannotAskSelfForMsg: <q><b><<playerActionMessages.cannotAskSelfForMsg>></b></q>\n
+            cannotTellSelfMsg: <q><b><<playerActionMessages.cannotTellSelfMsg>></b></q>\n
+            cannotGiveToSelfMsg: <q><b><<playerActionMessages.cannotGiveToSelfMsg>></b></q>\n
+            cannotGiveToItselfMsg: <q><b><<playerActionMessages.cannotGiveToItselfMsg>></b></q>\n
+            cannotShowToSelfMsg: <q><b><<playerActionMessages.cannotShowToSelfMsg>></b></q>\n
+            cannotShowToItselfMsg: <q><b><<playerActionMessages.cannotShowToItselfMsg>></b></q>\n
+            cannotGiveToMsg: <q><b><<playerActionMessages.cannotGiveToMsg>></b></q>\n
+            cannotShowToMsg: <q><b><<playerActionMessages.cannotShowToMsg>></b></q>\n
+            notInterestedMsg(actor): <q><b><<playerActionMessages.notInterestedMsg(gDobj)>></b></q>\n 
+            askVagueMsg: <q><b><<playerActionMessages.askVagueMsg>></b></q>\n
+            tellVagueMsg: <q><b><<playerActionMessages.tellVagueMsg>></b></q>\n
+            objCannotHearActorMsg(obj): <q><b><<playerActionMessages.objCannotHearActorMsg(gDobj)>></b></q>\n
+            actorCannotSeeMsg(actor,obj): <q><b><<playerActionMessages.actorCannotSeeMsg(gDobj,gIobj)>></b></q>\n
+            notFollowableMsg: <q><b><<playerActionMessages.notFollowableMsg>></b></q>\n
+            cannotFollowSelfMsg: <q><b><<playerActionMessages.cannotFollowSelfMsg>></b></q>\n
+            followAlreadyHereMsg: <q><b><<playerActionMessages.followAlreadyHereMsg>></b></q>\n
+            followAlreadyHereInDarkMsg: <q><b><<playerActionMessages.followAlreadyHereInDarkMsg>></b></q>\n
+            followUnknownMsg: <q><b><<playerActionMessages.followUnknownMsg>></b></q>\n
+            cannotFollowFromHereMsg(srcLoc): <q><b><<playerActionMessages.cannotFollowFromHereMsg(gDobj)>></b></q>\n
+            okayFollowInSightMsg(loc): <q><b><<playerActionMessages.okayFollowInSightMsg(gDobj)>></b></q>\n     
+            notAWeaponMsg: <q><b><<playerActionMessages.notAWeaponMsg>></b></q>\n
+            uselessToAttackMsg: <q><b><<playerActionMessages.uselessToAttackMsg>></b></q>\n
+            pushNoEffectMsg: <q><b><<playerActionMessages.pushNoEffectMsg>></b></q>\n
+            okayPushButtonMsg: <q><b><<playerActionMessages.okayPushButtonMsg>></b></q>\n
+            alreadyPushedMsg: <q><b><<playerActionMessages.alreadyPushedMsg>></b></q>\n
+            okayPushLeverMsg: <q><b><<playerActionMessages.okayPushLeverMsg>></b></q>\n
+            pullNoEffectMsg: <q><b><<playerActionMessages.pullNoEffectMsg>></b></q>\n
+            alreadyPulledMsg: <q><b><<playerActionMessages.alreadyPulledMsg>></b></q>\n
+            okayPullLeverMsg: <q><b><<playerActionMessages.okayPullLeverMsg>></b></q>\n
+            okayPullSpringLeverMsg: <q><b><<playerActionMessages.okayPullSpringLeverMsg>></b></q>\n
+            moveNoEffectMsg: <q><b><<playerActionMessages.moveNoEffectMsg>></b></q>\n
+            moveToNoEffectMsg: <q><b><<playerActionMessages.moveToNoEffectMsg>></b></q>\n
+            cannotPushTravelMsg: <q><b><<playerActionMessages.cannotPushTravelMsg>></b></q>\n
+            okayPushTravelMsg(obj): <q><b><<playerActionMessages.okayPushTravelMsg(gDobj)>></b></q>\n
+            cannotMoveWithMsg: <q><b><<playerActionMessages.cannotMoveWithMsg>></b></q>\n
+            cannotSetToMsg: <q><b><<playerActionMessages.cannotSetToMsg>></b></q>\n
+            setToInvalidMsg: <q><b><<playerActionMessages.setToInvalidMsg>></b></q>\n
+            okaySetToMsg(val): <q><b><<playerActionMessages.okaySetToMsg('Test')>></b></q>\n
+            cannotTurnMsg: <q><b><<playerActionMessages.cannotTurnMsg>></b></q>\n
+            mustSpecifyTurnToMsg: <q><b><<playerActionMessages.mustSpecifyTurnToMsg>></b></q>\n
+            cannotTurnWithMsg: <q><b><<playerActionMessages.cannotTurnWithMsg>></b></q>\n
+            turnToInvalidMsg: <q><b><<playerActionMessages.turnToInvalidMsg>></b></q>\n
+            okayTurnToMsg(val): <q><b><<playerActionMessages.okayTurnToMsg('Test')>></b></q>\n
+            alreadySwitchedOnMsg: <q><b><<playerActionMessages.alreadySwitchedOnMsg>></b></q>\n
+            alreadySwitchedOffMsg: <q><b><<playerActionMessages.alreadySwitchedOffMsg>></b></q>\n
+            okayTurnOnMsg: <q><b><<playerActionMessages.okayTurnOnMsg>></b></q>\n
+            okayTurnOffMsg: <q><b><<playerActionMessages.okayTurnOffMsg>></b></q>\n
+            flashlightOnButDarkMsg: <q><b><<playerActionMessages.flashlightOnButDarkMsg>></b></q>\n
+            okayEatMsg: <q><b><<playerActionMessages.okayEatMsg>></b></q>\n
+            mustBeBurningMsg(obj): <q><b><<playerActionMessages.mustBeBurningMsg(gDobj)>></b></q>\n
+            matchNotLitMsg: <q><b><<playerActionMessages.matchNotLitMsg>></b></q>\n
+            okayBurnMatchMsg: <q><b><<playerActionMessages.okayBurnMatchMsg>></b></q>\n
+            okayExtinguishMatchMsg: <q><b><<playerActionMessages.okayExtinguishMatchMsg>></b></q>\n
+            candleOutOfFuelMsg: <q><b><<playerActionMessages.candleOutOfFuelMsg>></b></q>\n
+            okayBurnCandleMsg: <q><b><<playerActionMessages.okayBurnCandleMsg>></b></q>\n
+            candleNotLitMsg: <q><b><<playerActionMessages.candleNotLitMsg>></b></q>\n
+            okayExtinguishCandleMsg: <q><b><<playerActionMessages.okayExtinguishCandleMsg>></b></q>\n
+            cannotConsultMsg: <q><b><<playerActionMessages.cannotConsultMsg>></b></q>\n
+            cannotTypeOnMsg: <q><b><<playerActionMessages.cannotTypeOnMsg>></b></q>\n
+            cannotEnterOnMsg: <q><b><<playerActionMessages.cannotEnterOnMsg>></b></q>\n
+            cannotSwitchMsg: <q><b><<playerActionMessages.cannotSwitchMsg>></b></q>\n
+            cannotFlipMsg: <q><b><<playerActionMessages.cannotFlipMsg>></b></q>\n
+            cannotTurnOnMsg: <q><b><<playerActionMessages.cannotTurnOnMsg>></b></q>\n
+            cannotTurnOffMsg: <q><b><<playerActionMessages.cannotTurnOffMsg>></b></q>\n
+            cannotLightMsg: <q><b><<playerActionMessages.cannotLightMsg>></b></q>\n
+            cannotBurnMsg: <q><b><<playerActionMessages.cannotBurnMsg>></b></q>\n
+            cannotBurnWithMsg: <q><b><<playerActionMessages.cannotBurnWithMsg>></b></q>\n
+            cannotBurnDobjWithMsg: <q><b><<playerActionMessages.cannotBurnDobjWithMsg>></b></q>\n
+            alreadyBurningMsg: <q><b><<playerActionMessages.alreadyBurningMsg>></b></q>\n
+            cannotExtinguishMsg: <q><b><<playerActionMessages.cannotExtinguishMsg>></b></q>\n
+            cannotPourMsg: <q><b><<playerActionMessages.cannotPourMsg>></b></q>\n
+            cannotPourIntoMsg: <q><b><<playerActionMessages.cannotPourIntoMsg>></b></q>\n
+            cannotPourOntoMsg: <q><b><<playerActionMessages.cannotPourOntoMsg>></b></q>\n
+            cannotAttachMsg: <q><b><<playerActionMessages.cannotAttachMsg>></b></q>\n
+            cannotAttachToMsg: <q><b><<playerActionMessages.cannotAttachToMsg>></b></q>\n
+            cannotAttachToSelfMsg: <q><b><<playerActionMessages.cannotAttachToSelfMsg>></b></q>\n
+            alreadyAttachedMsg: <q><b><<playerActionMessages.alreadyAttachedMsg>></b></q>\n
+            wrongAttachmentMsg: <q><b><<playerActionMessages.wrongAttachmentMsg>></b></q>\n
+            wrongDetachmentMsg: <q><b><<playerActionMessages.wrongDetachmentMsg>></b></q>\n
+            mustDetachMsg(obj): <q><b><<playerActionMessages.mustDetachMsg(gDobj)>></b></q>\n
+            okayAttachToMsg: <q><b><<playerActionMessages.okayAttachToMsg>></b></q>\n
+            okayDetachFromMsg: <q><b><<playerActionMessages.okayDetachFromMsg>></b></q>\n
+            cannotDetachMsg: <q><b><<playerActionMessages.cannotDetachMsg>></b></q>\n
+            cannotDetachFromMsg: <q><b><<playerActionMessages.cannotDetachFromMsg>></b></q>\n
+            cannotDetachPermanentMsg: <q><b><<playerActionMessages.cannotDetachPermanentMsg>></b></q>\n
+            notAttachedToMsg: <q><b><<playerActionMessages.notAttachedToMsg>></b></q>\n
+            shouldNotBreakMsg: <q><b><<playerActionMessages.shouldNotBreakMsg>></b></q>\n
+            cutNoEffectMsg: <q><b><<playerActionMessages.cutNoEffectMsg>></b></q>\n
+            cannotCutWithMsg: <q><b><<playerActionMessages.cannotCutWithMsg>></b></q>\n
+            cannotClimbMsg: <q><b><<playerActionMessages.cannotClimbMsg>></b></q>\n
+            cannotOpenMsg: <q><b><<playerActionMessages.cannotOpenMsg>></b></q>\n
+            cannotCloseMsg: <q><b><<playerActionMessages.cannotCloseMsg>></b></q>\n
+            alreadyOpenMsg: <q><b><<playerActionMessages.alreadyOpenMsg>></b></q>\n
+            alreadyClosedMsg: <q><b><<playerActionMessages.alreadyClosedMsg>></b></q>\n
+            alreadyLockedMsg: <q><b><<playerActionMessages.alreadyLockedMsg>></b></q>\n
+            alreadyUnlockedMsg: <q><b><<playerActionMessages.alreadyUnlockedMsg>></b></q>\n
+            cannotLookInClosedMsg: <q><b><<playerActionMessages.cannotLookInClosedMsg>></b></q>\n
+            cannotLockMsg: <q><b><<playerActionMessages.cannotLockMsg>></b></q>\n
+            cannotUnlockMsg: <q><b><<playerActionMessages.cannotUnlockMsg>></b></q>\n
+            cannotOpenLockedMsg: <q><b><<playerActionMessages.cannotOpenLockedMsg>></b></q>\n
+            unlockRequiresKeyMsg: <q><b><<playerActionMessages.unlockRequiresKeyMsg>></b></q>\n
+            cannotLockWithMsg: <q><b><<playerActionMessages.cannotLockWithMsg>></b></q>\n
+            cannotUnlockWithMsg: <q><b><<playerActionMessages.cannotUnlockWithMsg>></b></q>\n
+            unknownHowToLockMsg: <q><b><<playerActionMessages.unknownHowToLockMsg>></b></q>\n
+            unknownHowToUnlockMsg: <q><b><<playerActionMessages.unknownHowToUnlockMsg>></b></q>\n
+            keyDoesNotFitLockMsg: <q><b><<playerActionMessages.keyDoesNotFitLockMsg>></b></q>\n
+            foundKeyOnKeyringMsg(ring,key): <q><b><<playerActionMessages.circularlyInMsg(gDobj,gIobj)>></b></q>\n
+            foundNoKeyOnKeyringMsg(ring): <q><b><<playerActionMessages.foundNoKeyOnKeyringMsg(gDobj)>></b></q>\n
+            cannotEatMsg: <q><b><<playerActionMessages.cannotEatMsg>></b></q>\n
+            cannotDrinkMsg: <q><b><<playerActionMessages.cannotDrinkMsg>></b></q>\n
+            cannotCleanMsg: <q><b><<playerActionMessages.cannotCleanMsg>></b></q>\n
+            cannotCleanWithMsg: <q><b><<playerActionMessages.cannotCleanWithMsg>></b></q>\n
+            cannotAttachKeyToMsg: <q><b><<playerActionMessages.cannotAttachKeyToMsg>></b></q>\n
+            cannotSleepMsg: <q><b><<playerActionMessages.cannotSleepMsg>></b></q>\n
+            cannotSitOnMsg: <q><b><<playerActionMessages.cannotSitOnMsg>></b></q>\n
+            cannotLieOnMsg: <q><b><<playerActionMessages.cannotLieOnMsg>></b></q>\n
+            cannotStandOnMsg: <q><b><<playerActionMessages.cannotStandOnMsg>></b></q>\n
+            cannotBoardMsg: <q><b><<playerActionMessages.cannotBoardMsg>></b></q>\n
+            cannotUnboardMsg: <q><b><<playerActionMessages.cannotUnboardMsg>></b></q>\n
+            cannotGetOffOfMsg: <q><b><<playerActionMessages.cannotGetOffOfMsg>></b></q>\n
+            cannotStandOnPathMsg: <q><b><<playerActionMessages.cannotStandOnPathMsg>></b></q>\n
+            cannotEnterHeldMsg: <q><b><<playerActionMessages.cannotEnterHeldMsg>></b></q>\n
+            cannotGetOutMsg: <q><b><<playerActionMessages.cannotGetOutMsg>></b></q>\n
+            alreadyInLocMsg: <q><b><<playerActionMessages.alreadyInLocMsg>></b></q>\n
+            alreadyStandingMsg: <q><b><<playerActionMessages.alreadyStandingMsg>></b></q>\n
+            alreadyStandingOnMsg: <q><b><<playerActionMessages.alreadyStandingOnMsg>></b></q>\n
+            alreadySittingMsg: <q><b><<playerActionMessages.alreadySittingMsg>></b></q>\n
+            alreadySittingOnMsg: <q><b><<playerActionMessages.alreadySittingOnMsg>></b></q>\n
+            alreadyLyingMsg: <q><b><<playerActionMessages.alreadyLyingMsg>></b></q>\n
+            alreadyLyingOnMsg: <q><b><<playerActionMessages.alreadyLyingOnMsg>></b></q>\n
+            notOnPlatformMsg: <q><b><<playerActionMessages.notOnPlatformMsg>></b></q>\n
+            noRoomToStandMsg: <q><b><<playerActionMessages.noRoomToStandMsg>></b></q>\n
+            noRoomToSitMsg: <q><b><<playerActionMessages.noRoomToSitMsg>></b></q>\n
+            noRoomToLieMsg: <q><b><<playerActionMessages.noRoomToLieMsg>></b></q>\n
+            okayPostureChangeMsg(posture): <q><b><<playerActionMessages.okayPostureChangeMsg(sitting)>></b></q>\n
+            roomOkayPostureChangeMsg(posture,obj): <q><b><<playerActionMessages.roomOkayPostureChangeMsg(sitting,gDobj)>></b></q>\n
+            okayNotStandingOnMsg: <q><b><<playerActionMessages.okayNotStandingOnMsg>></b></q>\n
+            cannotPlugInMsg: <q><b><<playerActionMessages.cannotPlugInMsg>></b></q>\n
+            cannotPlugInToMsg: <q><b><<playerActionMessages.cannotPlugInToMsg>></b></q>\n
+            cannotUnplugMsg: <q><b><<playerActionMessages.cannotUnplugMsg>></b></q>\n
+            cannotUnplugFromMsg: <q><b><<playerActionMessages.cannotUnplugFromMsg>></b></q>\n
+            cannotScrewMsg: <q><b><<playerActionMessages.cannotScrewMsg>></b></q>\n
+            cannotScrewWithMsg: <q><b><<playerActionMessages.cannotScrewWithMsg>></b></q>\n
+            cannotUnscrewMsg: <q><b><<playerActionMessages.cannotUnscrewMsg>></b></q>\n
+            cannotUnscrewWithMsg: <q><b><<playerActionMessages.cannotUnscrewWithMsg>></b></q>\n
+            cannotEnterMsg: <q><b><<playerActionMessages.cannotEnterMsg>></b></q>\n
+            cannotGoThroughMsg: <q><b><<playerActionMessages.cannotGoThroughMsg>></b></q>\n
+            cannotThrowAtSelfMsg: <q><b><<playerActionMessages.cannotThrowAtSelfMsg>></b></q>\n
+            cannotThrowAtContentsMsg: <q><b><<playerActionMessages.cannotThrowAtContentsMsg>></b></q>\n
+            shouldNotThrowAtFloorMsg: <q><b><<playerActionMessages.shouldNotThrowAtFloorMsg>></b></q>\n
+            dontThrowDirMsg: <q><b><<playerActionMessages.dontThrowDirMsg>></b></q>\n
+            throwHitMsg(projectile,target): <q><b><<playerActionMessages.throwHitMsg(gDobj,gIobj)>></b></q>\n
+            throwFallMsg(projectile,target): <q><b><<playerActionMessages.throwFallMsg(gDobj,gIobj)>></b></q>\n
+            throwHitFallMsg(projectile,target,dest): <q><b><<playerActionMessages.throwHitFallMsg(gDobj,gIobj,dummyRoom)>></b></q>\n
+            throwShortMsg(projectile,target): <q><b><<playerActionMessages.throwShortMsg(gDobj,gIobj)>></b></q>\n
+            throwFallShortMsg(projectile,target,dest): <q><b><<playerActionMessages.throwFallShortMsg(gDobj,gIobj,dummyRoom)>></b></q>\n
+            throwCatchMsg(obj,target): <q><b><<playerActionMessages.throwCatchMsg(gDobj,gIobj)>></b></q>\n
+            cannotThrowToMsg: <q><b><<playerActionMessages.cannotThrowToMsg>></b></q>\n
+            willNotCatchMsg(catcher): <q><b><<playerActionMessages.willNotCatchMsg(gDobj)>></b></q>\n
+            cannotKissMsg: <q><b><<playerActionMessages.cannotKissMsg>></b></q>\n
+            cannotKissActorMsg: <q><b><<playerActionMessages.cannotKissActorMsg>></b></q>\n
+            cannotKissSelfMsg: <q><b><<playerActionMessages.cannotKissSelfMsg>></b></q>\n
+            newlyDarkMsg: <q><b><<playerActionMessages.newlyDarkMsg>></b></q>\n
+            ";
+        }
+    }
+    dobjFor(NPCMessage) {
+        verify() {}
+        action() {
+            askForIobj(NPCMessageWith);
+        }
+    }
+    dobjFor(NPCMessageWith) {
+        verify() {}
+    }
+    iobjFor(NPCMessageWith) {
+        verify() {}
+        action() {
+            gActor = dummyNPC;
+            "
+            timePassesMsg: <q><b><<npcActionMessages.timePassesMsg>></b></q>\n
+            cannotMoveFixtureMsg: <q><b><<npcActionMessages.cannotMoveFixtureMsg>></b></q>\n
+            cannotMoveImmovableMsg: <q><b><<npcActionMessages.cannotMoveImmovableMsg>></b></q>\n
+            cannotTakeHeavyMsg: <q><b><<npcActionMessages.cannotTakeHeavyMsg>></b></q>\n
+            cannotMoveHeavyMsg: <q><b><<npcActionMessages.cannotMoveHeavyMsg>></b></q>\n
+            cannotPutHeavyMsg: <q><b><<npcActionMessages.cannotPutHeavyMsg>></b></q>\n
+            cannotMoveComponentMsg(loc): <q><b><<npcActionMessages.cannotMoveComponentMsg(gDobj)>></b></q>\n
+            okayTakeMsg: <q><b><<npcActionMessages.okayTakeMsg>></b></q>\n
+            okayDropMsg: <q><b><<npcActionMessages.okayDropMsg>></b></q>\n
+            okayPutInMsg: <q><b><<npcActionMessages.okayPutInMsg>></b></q>\n
+            okayPutOnMsg: <q><b><<npcActionMessages.okayPutOnMsg>></b></q>\n
+            okayPutUnderMsg: <q><b><<npcActionMessages.okayPutUnderMsg>></b></q>\n
+            okayPutBehindMsg: <q><b><<npcActionMessages.okayPutBehindMsg>></b></q>\n
+            okayWearMsg: <q><b><<npcActionMessages.okayWearMsg>></b></q>\n
+            okayDoffMsg: <q><b><<npcActionMessages.okayDoffMsg>></b></q>\n     
+            okayOpenMsg: <q><b><<npcActionMessages.okayOpenMsg>></b></q>\n
+            okayCloseMsg: <q><b><<npcActionMessages.okayCloseMsg>></b></q>\n
+            okayLockMsg: <q><b><<npcActionMessages.okayLockMsg>></b></q>\n
+            okayUnlockMsg: <q><b><<npcActionMessages.okayUnlockMsg>></b></q>\n
+            pushNoEffectMsg: <q><b><<npcActionMessages.pushNoEffectMsg>></b></q>\n
+            pullNoEffectMsg: <q><b><<npcActionMessages.pullNoEffectMsg>></b></q>\n
+            moveNoEffectMsg: <q><b><<npcActionMessages.moveNoEffectMsg>></b></q>\n
+            moveToNoEffectMsg: <q><b><<npcActionMessages.moveToNoEffectMsg>></b></q>\n
+            whereToGoMsg: <q><b><<npcActionMessages.whereToGoMsg>></b></q>\n
+            tooLargeForContainerMsg(obj,cont): <q><b><<npcActionMessages.tooLargeForContainerMsg(gDobj,gIobj)>></b></q>\n
+            tooLargeForUndersideMsg(obj,cont): <q><b><<npcActionMessages.tooLargeForUndersideMsg(gDobj,gIobj)>></b></q>\n
+            tooLargeForRearMsg(obj,cont): <q><b><<npcActionMessages.tooLargeForRearMsg(gDobj,gIobj)>></b></q>\n
+            containerTooFullMsg(obj,cont): <q><b><<npcActionMessages.containerTooFullMsg(gDobj,gIobj)>></b></q>\n
+            surfaceTooFullMsg(obj,cont): <q><b><<npcActionMessages.surfaceTooFullMsg(gDobj,gIobj)>></b></q>\n
+            objNotForKeyringMsg: <q><b><<npcActionMessages.objNotForKeyringMsg>></b></q>\n
+            takeFromNotInMsg: <q><b><<npcActionMessages.takeFromNotInMsg>></b></q>\n
+            takeFromNotOnMsg: <q><b><<npcActionMessages.takeFromNotOnMsg>></b></q>\n
+            takeFromNotUnderMsg: <q><b><<npcActionMessages.takeFromNotUnderMsg>></b></q>\n
+            takeFromNotBehindMsg: <q><b><<npcActionMessages.takeFromNotBehindMsg>></b></q>\n
+            cannotJumpOffHereMsg: <q><b><<npcActionMessages.cannotJumpOffHereMsg>></b></q>\n
+            shouldNotBreakMsg: <q><b><<npcActionMessages.shouldNotBreakMsg>></b></q>\n
+            okayPostureChangeMsg(posture): <q><b><<npcActionMessages.okayPostureChangeMsg(sitting)>></b></q>\n
+            roomOkayPostureChangeMsg(posture,obj): <q><b><<npcActionMessages.roomOkayPostureChangeMsg(sitting,gDobj)>></b></q>\n
+            okayNotStandingOnMsg: <q><b><<npcActionMessages.okayNotStandingOnMsg>></b></q>\n
+            okayTurnToMsg(val): <q><b><<npcActionMessages.okayTurnToMsg('Test')>></b></q>\n
+            okayPushButtonMsg: <q><b><<npcActionMessages.okayPushButtonMsg>></b></q>\n
+            okayTurnOnMsg: <q><b><<npcActionMessages.okayTurnOnMsg>></b></q>\n
+            okayTurnOffMsg: <q><b><<npcActionMessages.okayTurnOffMsg>></b></q>\n
+            keyDoesNotFitLockMsg: <q><b><<npcActionMessages.keyDoesNotFitLockMsg>></b></q>\n
+            okayFollowModeMsg: <q><b><<npcActionMessages.okayFollowModeMsg>></b></q>\n
+            alreadyFollowModeMsg: <q><b><<npcActionMessages.alreadyFollowModeMsg>></b></q>\n
+            okayExtinguishCandleMsg: <q><b><<npcActionMessages.okayExtinguishCandleMsg>></b></q>\n
+            okayAttachToMsg: <q><b><<npcActionMessages.okayAttachToMsg>></b></q>\n
+            okayDetachFromMsg: <q><b><<npcActionMessages.okayDetachFromMsg>></b></q>\n
+            cannotTalkToSelfMsg: <q><b><<npcActionMessages.cannotTalkToSelfMsg>></b></q>\n
+            cannotAskSelfMsg: <q><b><<npcActionMessages.cannotAskSelfMsg>></b></q>\n
+            cannotAskSelfForMsg: <q><b><<npcActionMessages.cannotAskSelfForMsg>></b></q>\n
+            cannotTellSelfMsg: <q><b><<npcActionMessages.cannotTellSelfMsg>></b></q>\n
+            cannotGiveToSelfMsg: <q><b><<npcActionMessages.cannotGiveToSelfMsg>></b></q>\n
+            cannotShowToSelfMsg: <q><b><<npcActionMessages.cannotShowToSelfMsg>></b></q>\n
+            ";         
+        }
+    }
 ; 
 
 modify Decoration 
@@ -16095,6 +16929,10 @@ VerbRule(Token)
     verbPhrase = 'die Token anzuzeigen/anzeigen' 
 ; 
 
+// ******
+// -- German: debug verbs -- FINAL
+// ******
+
 DefineIAction(Final)
     execAction()
     {       
@@ -16155,6 +16993,125 @@ VerbRule(Final)
     :FinalAction 
     verbPhrase = 'den Finalcheck anzuzeigen/anzeigen' 
 ; 
+
+// ******
+// -- German: debug verbs -- MESSAGES
+// ******
+
+DefineTAction(Message)
+;
+
+VerbRule(Nachrichten)
+    'zeig' 'pcnachricht' 'mit' singleDobj
+    | 'pcnachricht' 'mit' singleDobj
+    : MessageAction
+    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben (mit dativ was)'
+;
+
+DefineTIAction(MessageWith)
+;
+
+VerbRule(NachrichtenMit)
+    'zeig' 'pcnachricht' 'mit' singleDobj 'und' singleIobj
+    | 'pcnachricht' 'mit' singleDobj 'und' singleIobj
+    : MessageWithAction
+    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben (mit dativ was) (mit noch dativ was)'
+;
+
+DefineTAction(NPCMessage)
+;
+
+VerbRule(NPCNachrichten)
+    'zeig' 'npcnachricht' 'mit' singleDobj
+    | 'npcnachricht' 'mit' singleDobj
+    : NPCMessageAction
+    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben (mit dativ was)'
+;
+
+DefineTIAction(NPCMessageWith)
+;
+
+VerbRule(NPCNachrichtenMit)
+    'zeig' 'npcnachricht' 'mit' singleDobj 'und' singleIobj
+    | 'npcnachricht' 'mit' singleDobj 'und' singleIobj
+    : NPCMessageWithAction
+    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben (mit dativ was) (mit noch dativ was)'
+;
+
+DefineIAction(NPCdeferred)
+    execAction() {
+        gActor = dummyNPC;
+        "
+        commandNotUnderstood(actor): <q><b><<npcDeferredMessagesDirect.commandNotUnderstood(gActor)>></b></q>\n
+        noMatchCannotSee(actor,txt): <q><b><<npcDeferredMessagesDirect.noMatchCannotSee(gActor, 'mantel')>></b></q>\n
+        noMatchNotAware(actor,txt): <q><b><<npcDeferredMessagesDirect.noMatchNotAware(gActor, 'mantel')>></b></q>\n
+        noMatchForAll(actor): <q><b><<npcDeferredMessagesDirect.noMatchForAll(gActor)>></b></q>\n
+        noMatchForAllBut(actor): <q><b><<npcDeferredMessagesDirect.noMatchForAllBut(gActor)>></b></q>\n
+        emptyNounPhrase(actor): <q><b><<npcDeferredMessagesDirect.emptyNounPhrase(gActor)>></b></q>\n
+        zeroQuantity(actor,txt): <q><b><<npcDeferredMessagesDirect.zeroQuantity(gActor, 'mantel')>></b></q>\n
+        insufficientQuantity(actor,txt,matchList,requiredNum): <q><b><<npcDeferredMessagesDirect.insufficientQuantity(gActor, 'mantel', [dummyCoat], 5)>></b></q>\n
+        uniqueObjectRequired(actor,txt,matchList): <q><b><<npcDeferredMessagesDirect.uniqueObjectRequired(gActor,'mantel',[dummyCoat])>></b></q>\n
+        singleObjectRequired(actor,txt): <q><b><<npcDeferredMessagesDirect.singleObjectRequired(gActor, 'mantel')>></b></q>\n
+        ambiguousNounPhrase(actor,originalText,matchList,fullMatchList): <q><b><<npcDeferredMessagesDirect.ambiguousNounPhrase(gActor, 'Ding', [], [])>></b></q>\n
+        askMissingObject(actor,action,which): fehlt\n
+        wordIsUnknown(actor,txt): <q><b><<npcDeferredMessagesDirect.wordIsUnknown(gActor, 'mantel')>></b></q>\n 
+        ";
+    }
+;
+
+VerbRule(NPCdefNachricht)
+    'npcdeferred'
+    : NPCdeferredAction
+    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben'
+;
+
+DefineIAction(NPCdirect)
+    execAction() {
+        gActor = dummyNPC;
+        "
+        noMatchCannotSee(actor,txt): <q><b><<npcMessagesDirect.noMatchCannotSee(gActor,'mantel')>></b></q>\n
+        noMatchNotAware(actor,txt): <q><b><<npcMessagesDirect.noMatchNotAware(gActor,'mantel')>></b></q>\n
+        noMatchForAll(actor): <q><b><<npcMessagesDirect.noMatchForAll(gActor)>></b></q>\n
+        noMatchForAllBut(actor): <q><b><<npcMessagesDirect.noMatchForAllBut(gActor)>></b></q>\n
+        zeroQuantity(actor,txt): <q><b><<npcMessagesDirect.zeroQuantity(gActor,'Test')>></b></q>\n
+        insufficientQuantity(actor,txt,matchList,requiredNum): <q><b><<npcMessagesDirect.insufficientQuantity(gActor, 'mantel', [dummyCoat], 5)>></b></q>\n
+        uniqueObjectRequired(actor,txt,matchList): <q><b><<npcMessagesDirect.uniqueObjectRequired(gActor,'mantel',[dummyCoat])>></b></q>\n
+        singleObjectRequired(actor,txt): <q><b><<npcMessagesDirect.singleObjectRequired(gActor,'mantel')>></b></q>\n
+        noMatchDisambig(actor,origPhrase,disambigResponse): <q><b><<npcMessagesDirect.noMatchDisambig(gActor,'mantel',[dummyCoat])>></b></q>\n
+        disambigOrdinalOutOfRange(actor,ordinalWord,originalText): <q><b><<npcMessagesDirect.disambigOrdinalOutOfRange(gActor,'zehn','mantel')>></b></q>\n
+        askDisambig(actor,originalText,matchList,fullMatchList,requiredNum,askingAgain,dist): fehlt
+        ambiguousNounPhrase(actor,originalText,matchList,fullMatchList): fehlt
+        askMissingObject(actor,action,which): fehlt
+        missingObject(actor,action,which): fehlt
+        missingLiteral(actor,action,which): fehlt
+        askUnknownWord(actor,txt): <q><b><<npcMessagesDirect.askUnknownWord(gActor,'mantel')>></b></q>\n
+        wordIsUnknown(actor,txt): <q><b><<npcMessagesDirect.wordIsUnknown(gActor,'mantel')>></b></q>\n
+        ";
+    }
+;
+
+VerbRule(NPCdirNachricht)
+    'npcdirekt'
+    : NPCdirectAction
+    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben'
+;
+
+dummyRoom : Room 'Testraum' 'Testraum[-s]'
+    isHim = true
+;
+
+dummyNPC : Person '' 'Testperson'
+    isHer = true
+;
+
+dummyCoat : Thing 'mantel*mäntel' 'Mantel[-s]'
+    isHim = true
+    pluralName = 'Mäntel'
+;
+
+dummyChest : Thing '' 'Truhe'
+    isHer = true
+;
 
 #endif /* __DEBUG */
 
@@ -16601,7 +17558,6 @@ modify Actor
 ;
 
 // -- Our object which generates the correct output for keinen(txt) viele(txt) welche(txt)
-
 strangeObj : Thing '' ''
     
     isNo = true
@@ -16737,8 +17693,7 @@ strangeObj : Thing '' ''
         else
             return txt;
     
-    }
-    
+    } 
 ;
 
 // -- we need a new definiton of destInfo objects, because we have
@@ -16789,6 +17744,23 @@ replace DestInfo: object
     others_ = []
 ;
 
+// -- We provide a SpecialNounphraseProd together with a macro (see de_de.h)
+// -- for an easier way to define special grammar with multiple tokens like 
+// -- 'Neu' 'Delhi', 'Mann' 'mit' 'Hut', 'Kranky' 'der' 'Clown' and so on ...
+
+class SpecialNounPhraseProd: NounPhraseWithVocab
+    /* get the list of objects matching our special phrase */
+    getMatchList = []
+
+    /* resolve the objects */
+    getVocabMatchList(resolver, results, flags)
+    {
+        /* return all of the in-scope matches */
+        return getMatchList().subset({x: resolver.objInScope(x)})
+            .mapAll({x: new ResolveInfo(x, flags)});
+    }
+;
+
 // -- Huh! We modify gameMainDef for a little flag called useNoTxt
 // -- this flag does nothing exept when set to nil: then it
 // -- simplifies keinen(txt) / viele(txt) / welchen(txt) to a
@@ -16797,6 +17769,7 @@ replace DestInfo: object
 modify GameMainDef
     useNoTxt = true
     useCapitalizedAdress = nil
+    usePastPerfect = true
 ;
 
 // -- German: a non-prepositional phrasing with we have no way to
@@ -16987,3 +17960,21 @@ modify TIAction
         }
     }
 ;
+
+modify Actor
+    pcReferralTense = Present
+;
+
+// we define one object for singular plural parameter strings 
+// in the thirdPerson
+
+dummyHim : Thing
+    isHim = true
+    globalParamName = 'singular'
+;
+
+dummyThem : Thing
+    isPlural = true
+    globalParamName = 'plural'
+;
+
