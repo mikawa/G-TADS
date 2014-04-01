@@ -166,27 +166,33 @@ ThingState template 'listName_' +listingOrder?;
 #define singleDir      directionName->dirMatch
 
 // and a few verb conveniences
+// gPart is a reference to the participle of our sentence structures
+
+#define gPart(pat)    verbHelper.setParticiple(pat)
 
 #define gVerbPhraseFrom(obj)    infHelper.buildVerbPhraseFrom(obj)
 #define addInfinitive(val, key)      infHelper.tab[val] = key
 
 #define verb(verb...)    (verb#foreach: verb->verb_ :|:)
-#define verbMisc(verb, misc...)    ((misc#foreach: verb->verb_ misc->misc_ :|:) | (misc#foreach: misc##verb->inf_ :|:) )
-#define verbPrep(verb, prep...)    ((prep#foreach: verb->verb_ prep->prep_ :|:) | (prep#foreach: prep##verb->inf_ :|:) )
-#define verbNoun(verb, noun)    (verb->verb_ noun | noun verb->verb_)
-#define verbNounPrep(verb, noun, prep...)    ((prep#foreach: verb->verb_ prep->prep_ noun :|:) | (prep#foreach: verb->verb_ noun prep->prep_ :|:) | noun (prep#foreach: prep##verb->inf_ :|:))
-#define verbMiscNoun(verb, misc, noun)    (verb->verb_ misc->misc_ noun | misc->misc_ noun verb->verb_)
-#define verbMiscNounPrep(verb, misc, noun, prep...) ((prep#foreach: verb->verb_ misc->misc_ noun prep->prep_ :|:) | misc noun (prep#foreach: prep##verb->inf_ :|:))
-#define verbNounPrepNoun(verb, noun1, prep, noun2) (verb->verb_ (noun1 prep->prep_ noun2 | prep->prep_ noun2 noun1) | (noun1 prep->prep_ noun2 | prep->prep_ noun2 noun1) verb->inf_)
-#define verbMiscNounPrepNoun(verb, prep1, noun1, prep2, noun2) (verb prep1 noun1 prep2 noun2 | prep1 noun1 prep2 noun2 verb)
-#define verbNounPrepPrepNoun(verb, noun1, prep1, prep2, noun2) (verb (noun1 prep1 prep2 noun2 | noun1 prep2 noun2 prep1) | (prep2 noun2 noun1 | noun1 prep2 noun2) prep1##verb)
-#define verbNounPrepNounPrep(verb, noun1, prep2, noun2, prep1...) (verb (noun1 (prep1#foreach: prep1 :|:) prep2 noun2 | noun1 prep2 noun2 (prep1#foreach: prep1 :|:)) | (prep2 noun2 noun1 | noun1 prep2 noun2) (prep1#foreach: prep1##verb :|:))
+#define prep(prep...)    (prep#foreach: prep->prep_ :|:)
+#define misc(misc...)    (misc#foreach: misc->misc_ :|:)
+
+#define verbPattern(inf, frag)  verbPhrase = (verb_ == nil ? inf + ' ' : gVerbPhraseFrom(self)) + frag
 
 // we have all 6 Persons in German
 
 #define FourthPerson   4
 #define FifthPerson    5
 #define SixthPerson    6 
+
+// we have all 6 Tenses in German
+
+#define Present   1
+#define Perfect   3
+#define Imperfect 2
+#define Pluperfect 4
+#define Future1    5
+#define Future2    6
 
 // we have several new macros for last objects ...
 
@@ -203,16 +209,16 @@ ThingState template 'listName_' +listingOrder?;
 // ... and for the listcases
 
 #define gListCase (curlistcase)
-#define withListCaseNominative (curlistcase.setcaseNom())
-#define withListCaseGenitive (curlistcase.setcaseGen())
-#define withListCaseDative (curlistcase.setcaseDat())
-#define withListCaseAccusative (curlistcase.setcaseAkk())
+#define withListCaseNominative (curlistcase.setlistcaseNom())
+#define withListCaseGenitive (curlistcase.setlistcaseGen())
+#define withListCaseDative (curlistcase.setlistcaseDat())
+#define withListCaseAccusative (curlistcase.setlistcaseAkk())
 
 // ... and for the list article
 
 #define gListArticle (curlistart)
-#define withListArtDefinitve (curlistart.setlistartDef())
-#define withListArtIndefinitve (curlistart.setlistartIndef())
+#define withListArtDefinite (curlistart.setlistartDef())
+#define withListArtIndefinite (curlistart.setlistartIndef())
 
 /* ------------------------------------------------------------------------ */
 /*
@@ -225,10 +231,45 @@ ThingState template 'listName_' +listingOrder?;
  */
 #define setPastTense(val) (gameMain.usePastTense = (val))
 
+// I felt setting the narrative tense should be a matter of the PC, because we might have
+// one PC in the game who tells the story in present tense beside another PC who
+// tells his adventure in the past ... so we can use this macro to set the tense
+
+#define setTense(val)  (gPlayerChar.pcReferralTense = val)
+#define tenseSelector  (gPlayerChar.pcReferralTense)
+#define pluralSelector (self.isPlural ? 2 : 1)
+#define pReversed   (verbHelper.reversed)
+
 /*
  *   Shorthand macro for selecting one of two values depending on the
  *   current narrative tense.
  */
+
+#define conjugateVerb(part,tunwort) \
+    if (!pReversed) { \
+        gPart(part); \
+        if (verbHelper.lastVerb != tunwort) { \
+            verbHelper.lastVerb = tunwort; \
+            return (tunwort); \
+        }\
+        else { \
+            verbHelper.lastVerb = 'undefined'; \
+            return ''; \
+        }\
+    } \
+    else { \
+        pReversed = nil;\
+        gPart(tunwort); \
+        return (' ' + part + ' ' + tunwort); \
+    }
+
+#define tSelect(presVal, imperfVal, perfVal, pluperfVal, futVal) \
+    (tenseSelector == Present ? (presVal) \
+    : tenseSelector == Imperfect ? (imperfVal) \
+    : tenseSelector == Perfect ? (perfVal) \
+    : tenseSelector == Pluperfect ? (pluperfVal) \
+    : (futVal))
+
 #define tSel(presVal, pastVal) \
     (gameMain.usePastTense ? (pastVal) : (presVal))
 
