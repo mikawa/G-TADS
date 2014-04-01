@@ -1,0 +1,662 @@
+1. Willkommen
+=============
+
+Mit dieser Erweiterung kann man deutschsprachige Textadventures in TADS 3 schreiben. Soweit mir bekannt ist, ist dies die erste Übersetzung des Systems, 
+die bislang erschienen ist. Ein großes Dankeschön geht an Michael J. Roberts, den Autor von TADS.
+
+Ursprünglich wurde TADS 1 von High Energy Software als "shareware" in den späten achtziger Jahren des 20. Jahrhunderts veröffentlicht. In den frühen neunziger 
+Jahren folgte TADS 2. Die Syntax basierte auf C, mit Pascal-artigen Einschlägen. 1996 erklärte Michael J. Roberts TADS zur "freeware".
+
+2006 wurde TADS und auch die TADS engine grundlegend überarbeitet, nur der plattformspezifische code blieb erhalten, um die Portierung zu vereinfachen. TADS 3 
+vereint die Vorteile der Programmiersprachen C++ und Java. Es bietet dynamische Objekte, ein dynamisches Wörterbuch und native UTF-8 strings, sowie eine Vielzahl 
+von nützlichen Klassen. Und es ist optimiert für das Schreiben von Textadventures, der Code ist einfach gehalten und gut lesbar. Damit ist sichergestellt, dass man 
+auch nach vielen Jahren noch Wartungsarbeiten durchführen kann, ohne dass man sich komplett neu in die Spielmechanik einarbeiten muss. 
+
+Der TADS 3 Compiler ist auf Windows, Macintosh und Unix Plattformen verfügbar.
+
+2. Erste Schritte
+=================
+
+2.1 Einbinden der deutschen Bibliothek
+--------------------------------------
+
+Die deutsche Library für TADS ist auf www.michaelbaltes.com unter "downloads" erhältich. Nach dem Herunterladen sind die Dateien in einen Ordner namens "de_de" zu 
+entpacken. Dieser Ordner enthält die relevanten Bibliotheksdateien für die deutsche Ausgabesprache.
+
+*WINDOWS*
+
+Für Windows Anwender gibt es die "Windows Workbench". Sie ist auf der TADS Hauptseite unter www.tads.org erhältlich. Hier wird die deutsche Library wie folgt 
+eingebunden: In dem TADS 3 Verzeichnis, das im Installationspfad angelegt wird, befindet sich ein Unterordner namens "Lib", mit einem Unterordner "Adv3". Dorthin #
+muss der "de_de" Ordner kopiert werden.
+
+Wenn ein neues Projekt angelegt wird, ist die dazugehörende Quelltextdatei "[projektname].t" unter den Projektdateien zu finden. Nach einem Rechtsklick darauf im 
+Kontextmenü "build settings" auswählen, dann unter "compiler - defines" den Wert `LANGUAGE=en_us` ändern auf `LANGUAGE=de_de`. Schon sind unter der TADS 3 
+Adventure Library die TADS 3 German Language Definitions zu finden. Die erste Zeile des Projekts gibt den verwendeten Zeichensatz an. Hier muss noch der 
+Standard-Eintrag in #charset "iso-8859-1" oder "iso-Latin1" geändert werden.
+
+*LINUX UND OSX*
+
+Für Linux gibt es "Frobtads" von Nikos Chantziaras, das zugleich Interpreter und Compiler beinhaltet. Frobtads muss aus dem Quellcode compiliert werden, dazu werden 
+folgende Komponenten benötigt:
+
+> - ein C und C++ Compiler
+> - eine Version der Curses/Ncurses Biblitothek
+> - eine Version der Libcurl-Dev Bibliothek
+
+Nach dem erfolgreichen Kompilieren liegen die Compiler-relevanten Dateien im Regelfall unter usr/local/share/frobtads/tads3/lib/adv3. Dorthin muss der "de_de" Ordner 
+kopiert werden.
+
+Für OSX gibt es einen komfortablen Installer. Nach der Installation kann das Verzeichnis wie in Linux auch unter usr/local/share/frobtads/tads3/lib/adv3 gefunden 
+werden, das geht Mithilfe des Finders, der im Menu auch mit der "Gehe zu" Funktion und Eingabe von "/usr" zu der gesuchten Verzeichnisstruktur führt.
+
+Anders als in Windows muss der Autor hier die Sprachdefinitionen direkt in der "[projektname].t3m" Datei ändern:
+`-D LANGUAGE=de_de`
+
+2.2 Allgemeines
+---------------
+
+Die deutsche Übersetzung hält sich eng an die englische Urversion. Da TADS 3 relativ umfangreich ist, kann sich der Autor somit aller verfügbaren Beispielcodes, 
+Tutorials und Handbücher der englischen Version bedienen.
+
+Diese Kurzdokumentation setzt bereits Grundkenntnisse in TADS 3 voraus. Hier sind die umfangreichen Kompendien von Eric Eve "Getting started" und "Learning TADS3" 
+zu empfehlen. Daneben gibt es das "G-TADS Kochbuch", das eine Vielzahl an nützlichen Codeschnipseln beinhaltet.
+
+3. Standardeinstellungen
+========================
+
+3.1 Erzählform
+--------------
+
+Die Erzählform ist standardmäßig zweite Person, Gegenwart. Sie kann jederzeit auf eine beliebige Person geändert werden. Dazu wird einfach beim jeweiligen Spielerobjekt definiert:
+	 
+	+ Heinz : Actor 'heinz' 'Heinz'
+		pcReferralPerson = ThirdPerson
+	;
+	
+
+Gültig sind derzeit die sechs Formen: 
+	
+	pcReferralPerson = FirstPerson
+	pcReferralPerson = SecondPerson
+	pcReferralPerson = ThirdPerson
+	pcReferralPerson = FourthPerson
+	pcReferralPerson = FifthPerson
+	pcReferralPerson = SixthPerson
+
+3.2 Erzählzeit
+--------------
+
+Die Erzählzeit regelt die englische Adv3 Bibliothek über die Flagge `usePastTense` im `gamemain` Objekt. G-TADS geht hier einen eigenen neuen Weg. Die Zeit wird wie auch die 
+Erzählform im Spielercharakter festgelegt. Somit kann man in einer abschnittsweisen Erzählung z.B. Gegenwart und Vergangenheit mit zwei Erzählern kombinieren, z.B. kann man
+einen Charakter in der zweiten Person Präsens erzählen lassen, einen anderen aber in der dritten Person im Imperfekt. Die Zeit regelt `pcReferralTense`.
+
+Gültig sind hier sechs Zeitformen:
+
+	pcReferralTense = Present
+	pcReferralTense = Imperfect
+	pcReferralTense = Perfect
+	pcReferralTense = Pluperfect
+	pcReferralTense = Future1
+	pcReferralTense = Future2
+
+3.3 Höfliche Anrede
+-------------------
+
+Auf Wunsch kann jeglich Spieleranrede in Großschreibung erfolgen. Dazu setzt man die Flagge `useCapitalizedAdress` im `gamemain` Objekt auf `true`.
+
+	gameMain: GameMainDef
+		useCapitalizedAdress = true
+	;
+
+3.4 Unbekannte Objekte
+----------------------
+
+G-TADS führt das im Englischen begonnene Konzept der Parsernachfragen weiter. So wird ein dem Spiel unbekannter String in seine Bestandteile zerlegt (z.B.: 
+wenn bei Eingabe von ">untersuche gelbes Kleid" momentan kein gelbes Kleid sichtbar ist). Wenn der Autor das Vokabular korrekt angelegt hat (und demnach
+tatsächlich das Adjektiv "gelb" und das Substantiv "Kleid" existiert), wird G-TADS ausgeben: "Du siehst hier kein gelbes Kleid."
+
+Falls nun der Autor nicht will, dass dem Spieler, der diese Eingabe vielleicht ins Blaue hinein vorgenommen hat, verraten wird, dass im Spiel ein Kleid 
+existiert, setzt er im `gameMain` Objekt die Flagge `useNoTxt` auf `nil`. 
+	
+	gameMain: GameMainDef
+		useNoTxt = nil
+	;
+
+
+4. Vokabular
+============
+
+4.1 Umlaute und ß
+-----------------
+
+Bei der Definition des Vokalbulars müssen gezielt Umlaute sowie das 'ß' verwendet werden. In einigen Fällen verwendet der Parser 
+nämlich Textschnipsel aus der Eingabe des Spielers wieder, daher müssen die Nomen und Adjektive korrekt ins Wörterbuch geschrieben
+werden. Der Parser übernimmt dann ggf. die Umwandlung des 'ss' in 'ß' sowie von 'ue' in den korrekten Umlaut 'ü'. 
+
+4.2 Objekte im Spiel
+--------------------
+
+Ein kurzes Beispiel für eine Objektdeklaration sieht folgendermaßen aus:
+
+	+ armchair: Chair, Immovable 'neutral grau lehnsessel/sessel*möbel' 'Lehnsessel[-s]'
+		"Der Sessel hat eine neutrale graue Farbe, schaut aber bequem aus. "
+		isHim = true
+	;
+
+4.3 Genus
+---------
+
+Im Deutschen muss bei einem Objekt zusätzlich der Genus mit maskulin, feminin oder neutrum oder als Pluralwort deklariert werden:
+Dies geschieht, indem eine der vier Eigenschaften als `true` deklariert wird. Wenn kein Attribut gesetzt wird, gilt das Objekt
+als Neutrum:
+
+	isIt = true
+	isHim = true
+	isHer = true
+	isPlural = true
+
+Ändert sich ein Genus im Lauf des Spiels, also sieht der Spieler zunächst eine Person mit Katzenmaske und stellt sich dann
+heraus, dass sich ein Mann darunter verbirgt, gibt es folgende Funktionen, die im betreffenden Objekt aufgerufen, den Genus
+nachträglich ändern:
+
+	changeIt()  
+	changeHim() 
+	changeHer()    
+	changePlural()
+
+4.4 Wechselnder Genus
+---------------------
+
+Außerdem tritt im Deutschen ein trickreiches Phänomen auf, das zu einiger Verwirrung führen kann, der *wechselnde Genus* bei Synonymen. So kann eine
+Jacke schnell maskulin werden, wenn der Spieler stattdessen Anorak eintippt. Wenn sich der Spieler dann mit "zieh ihn an" auf den Anorak bezieht, muss
+der Parser wissen, dass ein abweichender Genus verwendet wurde. Daher teilt G-TADS alle Nomen in vier Kategorien ein:
+
+	neuterSyn
+	maleSyn
+	femaleSyn
+	pluralSyn
+
+Somit kann der Parser vor "Einloggen" des aktuellen Objekts prüfen, ob der Genus nicht abweichend vom Ursprungsobjekt gesetzt werden muss. Mitgeteilt
+wird das dem Wörterbuch beim Anlegen des Vokabulars durch Nachstellen von 
+
+	[n] für neutrum
+	[m] für maskulin
+	[f] für feminin
+	[p] für Pluralwort
+
+Eine typische Deklaration einer Jacke sieht dann folgendermaßen aus:
+
+	+ jacket: Wearable 'wetterfest blau jacke/anorak[m]' 'Jacke'
+		"Die Jacke ist blau und sieht wetterfest aus. "
+		isHer = true
+	;
+
+4.5 Sonderendungen der Nomen
+----------------------------
+
+Bei der Deklinition von Objekten gibt es Sonderfälle, die über spezielle Endungen angepasst werden müssen: `[-s]`, `[-es]`, `[-n]`
+und `[-en]`. Beispiele sind Sessel[-s], Löwe[-n], Haus[-es], Männer[-n].
+
+	+ armchair: Chair, Immovable 'neutral grau lehnsessel/sessel*möbel' 'Lehnsessel[-s]'
+		"Er hat eine neutrale graue Farbe, schaut aber bequem aus. "
+		isHim = true
+	;
+
+4.6 Sonderfall der [-n] Endung bei Vokabeln
+-------------------------------------------
+
+Auch bei Vokabeln spielt die Sonderendung auf [-n] eine Rolle, und zwar wenn der Autor die in Punkt 3.4 erwähnte Ersetzungsroutine bei unbekannten
+Objekten verwendet. Um die korrekte Ausgabe "Du siehst hier keinen Affen" zu ermöglichen (vorausgesetzt ein Affe ist implementiert, aber an dem
+Aufenthaltsort des Spieler nicht sichtbar oder erreichbar), muss TADs wissen, dass die Vokabel `Affe` in diesem Fall ergänzt werden muss. Das
+passiert auch mittels nachgestelltem [-n], was aber *nach* einer eventuellen abweichenden Genuszuweisung erfolgen muss.
+
+Ein Tier, das sich bei näherem Hinsehen als blöder Affe entpuppt:
+
+	+ ape: UntakeableActor 'blöd affe[m][-n]/tier' 'Tier[-es]'
+		"Du schaust dir das Tier näher an und siehst, dass es ein blöder Affe ist. "
+		specialDesc = "Ein Tier streunt hier im Gebüsch herum. "
+		useSpecialDesc = true
+	;
+
+4.7 Adjektive mit flexiblen Endungen
+------------------------------------
+
+Adjektive im Namen eines Objekts haben je nach Kasus entsprechende Endungen. Damit TADS weiß, dass ein Adjektiv Teil eines Namens ist, muss das Symbol
+`[^]` nachgestellt werden. Das geht auch bei Ausgabe substantivierter Adjektive wie "Du siehst hier einen Betrunkenen"
+
+Beispiele:
+
+	'golden[^] Kugel'
+	'weiß[^] Kleid[-es]'
+	'Betrunken[^]'
+	'nutzlos[^] Gerümpel[-s]'
+
+Bei zusammengesetzten Namen wie "Ludwig der Erste" kann mit Textersetzung des direkten Artikels (mehr dazu später) und den Sonderendungen [-s] und [-n]
+gearbeitet werden, um eine korrekte Deklination zu ermöglichen:
+
+	'Ludwig[-s] {der} Erst[-n]'
+	'Karl[-s] {der} Große[-n]'
+
+
+4.8 Komplexe Nomen
+------------------
+
+Für komplexe Nomen, deren Vokabular nicht in die übliche Schablone "(weak) adj adj noun/noun/noun*plural" passt, muss eine spezielle Deklaration über `SpecialNounPhraseProd`
+erfolgen. Da das durchaus häufiger vorkommt, z.B. bei "Ludwig van Beethoven" oder "Rickys Imperium" ist eine entsprechende Klasse bereits vordefiniert:
+
+	ludwig: Person 'ludwig/beethoven' 'Ludwig[-s] van Beethoven[-s]'
+		isHim = true
+		isProperName = true
+	;
+
+	grammar nounWord(Ludwig) :
+    		'ludwig' (|'van') 'beethoven'  //gilt für "ludwig beethoven" und "ludwig van beethoven"
+    		: SpecialNounPhraseProd
+    		getMatchList = [ludwig]
+    		getAdjustedTokens =
+      		['ludwig', &noun, 'van', &miscWord, 'beethoven', &noun]
+	;
+
+oder:
+
+	rickys: Room 'Rickys Imperium' 'Rickys Imperium[-s]'
+    		vocabWords = 'laden[m]/rickys'
+	;
+
+	grammar nounWord(Rickys) :
+    		'rickys' ('laden'|'geschäft'|'imperium') 
+    		: SpecialNounPhraseProd
+    		getMatchList = [rickys]
+    		getAdjustedTokens =
+      		['rickys', &noun, 'imperium', &noun]
+	;
+
+Wichtig ist, dass explizit über `getMatchList` festgelegt werden muss, auf welche Objekte diese Schablone zutrifft, und auch die Token, die zurückgegeben werden
+eine korrigierte Zuweisung erhalten: `&adjective`, `&noun` oder `&miscWord`.
+
+4.9 Pluralwort vs. Pluralname
+-----------------------------
+
+Im Regelfall wird ein einzelnes Objekt meist als Pluralwort verwendet, so sind z.B. Passanten vermutlich ein Objekt mit Attribut `isPlural` und Vokabular 
+'passanten' als &noun bzw. &pluralSyn im Wörterbuch abgelegt. Wird aber ein Objekt verwendet, das es mehrfach gibt, muss dies so definiert werden:
+
+	class Torch : LightSource 'fackel*fackeln' 'Fackel'
+    		isEquivalent = true
+   		isHer = true
+    		pluralName = 'Fackeln'
+	;
+
+	+ Torch;
+	+ Torch;
+
+	+ Torch
+    		isLit = nil
+	;
+
+Der Code erzeugt drei Fackeln, die mit dem Attribut `isEquivalent = true` ausgezeichnet sind. Daher wird TADS diese Objekte zusammen nennen, falls mehrere 
+im Raum vorhanden sind, zwei davon leuchten und eine ist erloschen. "Du siehst hier drei Fackeln(zwei Licht spendend)". Parsernachfragen gibt es nicht, wenn
+alle Objekte den gleichen Zustand besitzen, denn dann geht TADS davon aus, dass alle gleichwertig sind und wählt automatisch eine davon aus. In unserem Fall
+disambiguert TADS nach den Zustand, fragt also, ob man eine der leuchtenden Fackeln oder die erloschene meint. Wichtig ist, dass das Pluralvokabular gesetzt
+ist (mittels *) und dass der Pluralname definiert ist.
+
+5. Verben
+=========
+
+5.1 Ein normales Verb
+---------------------
+
+Verben werden ohne "e" deklariert, also genügt es "nehm", "geb", "zieh" und "schieb" zu definieren, das angehängte "e" bei "ziehe" wird vom Parser automatisch
+abgeschnitten. Wenn es meherere Schablonen für eine Aktion gibt, sollte immer eine davon mit `defaultForRecursion = true` als Standardschablone markiert 
+werden. Diese wird für  implizite Aktionen (in Klammern ausgegeben) verwendet, wie z.B. (erst an der Tür läuten).
+
+	DefineTAction(Ring)
+	;
+
+	VerbRule(LaeutAn)
+    		'läut' (|'an') dobjList
+    		: RingAction
+    		verbPhrase = 'zu läuten/läuten (was)'
+	;
+
+5.2 Verben mit und ohne angehängtem "e"
+---------------------------------------
+
+Wichtig dabei ist, dass die Verben, die mit Nomen kollidieren (also beispielsweise die "stelle die Vase auf den Tisch" und die "verbrannte Stelle" auf dem
+Fußboden, in der Verbschablone ausnahmsweise auch die Variante mit dem angehängten "e" zusätzlich definiert wird ('stell'|'stelle'). Falls das nicht gemacht
+wird, kürzt TADS den durch die Nomendefinition bekannten string "stelle" nicht auf "stell" zurück, und erkennt daher das Verb nicht.
+
+5.3 Verbschablonen mit Dativ
+----------------------------
+
+Steht eines der beiden (oder beide Objekte) im Dativ, ist vor nach der Präposition und vor dem Fragewort das Schlüsselwort "dativ" einzufügen:
+
+	VerbRule(KlingelAn)
+    		('klingl' | 'klingel') 'an' dobjList
+    		: RingAction
+    		verbPhrase = 'zu klingeln/klingeln (an dativ was)'
+	;
+
+5.4 Token
+---------
+
+Zu beachten sind hierbei spezielle "Token" im Deutschen, die vom Parser automatisch umgewandelt werden, Mehrfachdeklarationen sind überflüssig.
+So ist "hinüber" gleichbedeutend mit "rüber", "herüber" oder "drüber", usw. Damit diese Formen in den Verbschablonen nicht alle immer definiert werden 
+müssen, gibt es eine Ersetzungsroutine, die aber nur funktioniert, solange der Autor keinen Wörterbucheintrag davon anfertigt. Also darf "rüber"
+beispielsweise in keiner Schablone auftauchen, sonst funktionert die Ersetzung nicht mehr. In der folgenden Tabelle sieht die Token und die Wörter,
+die dazu gewandelt werden in Klammern.
+
+> Eintrag in Schablone, (wird ersetzt):
+> um (ums)
+> durch (durchs)
+> an (ans)
+> auf (aufs)
+> von (vom)
+> über (übers)
+> in (ins)
+> unter (unterm, unters)
+> hinter (hinterm, hinters)
+> hinunter (herunter, runter, hinab, herab)
+> hinauf (herauf, rauf)
+> hinaus (heraus, raus)
+> hinein (herein, rein)
+> hinüber (herüber, drüber, rüber)
+
+5.5 Unregelmäßige Infinitive (neu ab V2.0)
+------------------------------------------
+
+Ab Version 2.0 der Library gibt es sogenannte "convenience macros" für die Verbdefiniton, die bei Parsernachfragen das verwendete Verb zurückgeben, statt des
+allgemein gehaltenen `verbPhrase` Attributs. Das bedeutet konkret, dass der Parser bei "streichle" mit "Was willst du streicheln?" anstatt mit "Was willst du berühren?"
+antwortet. Das ist Geschmackssache, aber es klingt vielleicht etwas besser, wenn das eingetippte Verb bei der Nachfrage verwendet wird. Das ist kein Muss, in der 
+englischen Bibliothek ist dies nicht vorgesehen. Dazu sei aber auch kurz angemerkt, dass im Englischen wesentlich weniger Verbsynonyme als im Deutschen existieren.
+  
+Die Voraussetzung für das Nachfragen mit eingetipptem Verb ist, dass TADS erkennt, wo in der Eingabe denn das Verb ist. Außerdem müssen unregelmäßige Infinitive 
+gemeldet werden (sonst wird aus streichle: "Was willst du streichlen?"). G-TADS verwaltet die unregelmäßigen Infinitive in einer `lookuptable`, daher muss für neue 
+Verben ein Eintrag mit der Funktion `addInfinitive('irregular', 'regular')` erfolgen. Das kann irgendwo passieren, muss aber vor Spielbeginn erfolgen. Ein guter Platz
+wäre die `showIntro` Funktion im `gameMain` Objekt, beispielsweise für das Verb "streicheln":
+	
+	gameMain: GameMainDef
+  		showIntro() {
+    			addInfinitive('streichl', 'streicheln');
+  		}
+	;
+
+Zurück zur eigentlichen Verbschablone. Hier wird ein Verb auf das Attribut `_verb` abgebildet. Nachdem das aber sehr mühsam wäre, allen Verben 'nimm'->_verb nachzustellen,
+kann man das verb('...','...','...') Makro mit beliebig vielen Aufzählungen in der Klammer verwenden, wie auch das prep(...) Makro.
+
+Zuletzt muss die `verbPhrase` bei erkanntem Verb ersetzt werden. Das macht das verbPattern('...','(...)') Makro. Ein Beispiel, mit der "konventionellen" Definition
+der VerbRule (wohlgemerkt dies ist immer noch eine gültige Variante):
+
+	VerbRule(SchraubAufMit)
+    		('schraub'|'schraube'|'dreh') dobjList 'mit' singleIobj ('auf'|'locker'|'ab')
+    		| ('locker'|'lös') dobjList 'mit' singleIobj
+    		: UnscrewWithAction
+    		verbPhrase = 'aufzudrehen/aufdrehen (was) (mit dativ was)'
+	;
+
+Und die "neue" Definition mit den oben genannten Makros:
+
+	VerbRule(SchraubAufMit)
+    		verb('schraub','schraube','dreh') dobjList 'mit' singleIobj prep('auf','locker','ab')
+    		| verb('locker','lös') dobjList 'mit' singleIobj
+    		: UnscrewWithAction
+    		verbPattern('aufzudrehen/aufdrehen','(was) (mit dativ was)')
+	;
+
+Die neue Methode stellt für den Autoren keinen großen Mehraufwand dar, dafür ersetzt TADS die Standardschablone mit den
+erkannten Verb-, Präpositions- und Mischwortschnipseln:  
+`Wo(FrageWort) willst du den Deckel (Präposition)(Verb)en?`  
+wird also ohne Klammern:  
+`Womit willst du den Deckel aufschrauben?`  
+`Womit willst du den Deckel lockerdrehen?`  
+`Womit willst du den Deckel abschrauben?`  
+
+5.6 Die askDobjResponseProd Eigenschaft
+---------------------------------------
+
+Beim Anlegen neuer Verben ist auf die korrekte Verwendung der "askDobjResponseProd" Eigenschaft zu achten, das TADS diese für Parsernachfragen verwendet.
+Ein Beispiel:
+
+	VerbRule(JumpOver)
+    		('spring' 'über') singleDobj (|'hinüber')
+    		: JumpOverAction
+    		verbPhrase = 'zu springen/springen (über was)'
+    		askDobjResponseProd = ueberSingleNoun
+	;
+
+Die letzte Zeile sagt dem Parser, er soll beim Nachfragen:
+
+>spring über
+Worüber willst du springen?
+>über die Hürde
+
+Die obige Antwort mit der Präposition "über" zulassen. Gültige Präposition sind:
+
+	grammar inSingleNoun(main):
+	grammar umSingleNoun(main):
+	grammar nachSingleNoun(main):
+	grammar zuSingleNoun(main):
+	grammar ueberSingleNoun(main):
+	grammar durchSingleNoun(main):
+	grammar vonSingleNoun(main):
+	grammar aufSingleNoun(main):
+	grammar unterSingleNoun(main):
+	grammar hinterSingleNoun(main):
+	grammar ausSingleNoun(main):
+	grammar mitSingleNoun(main):
+	grammar anSingleNoun(main):
+
+Diese können natürlich nach Bedarf beliebig erweitert werden, die Syntax folgt der obigen Deklaration, zu finden in de_de.t.
+
+5.7 Das bevorzugte indirekte Objekt
+-----------------------------------
+
+Eine weitere neue Eigenschaft ist für alle TIActions eingeführt worden. Falls eine Phrase ohne jegliche Präposition (wie z.B. "zeig dem Mann den Hut") 
+verwendet wird, kann der Parser das "dobj" von dem "iobj" nicht mehr unterscheiden. Daher sagt
+
+	preferredIobj = Actor
+
+dem Parser hier, dass das "iobj" sehr wahrscheinlich vom Typ "Actor" ist. Fall das nicht der Fall ist und das "dobj" ein "Actor" ist, vertauscht der 
+Parser die beiden Objekte. Somit sind die Eingaben:  
+  
+>zeig mann hut  
+  
+und  
+  
+>zeig hut mann  
+  
+gleichwertig und über eine einzige Verbschablone definiert.
+
+6. Listen
+=========
+
+Die Funktionen für die Listenausgabe sind in der sprachunabhängigen Datei "lister.t" implementiert. Die deutsche Bibliothek muss in diesen Prozess eingreifen,
+um eine sprachabhängige Ausgabe nach Kasus (Nominativ, Genitiv, Dativ, Akkusativ) und Artikel (unbestimmt, bestimmt) zu ermöglichen. Die Ausgabe bestimmt die 
+Variable listName, die auf die gesetzten Flaggen entsprechend reagiert.
+
+6.1 Eine einfache Liste
+-----------------------
+
+Folgende Makros bestimmen die Ausgabgsparameter:
+
+	withListCaseNominative	// -- Nominativ
+	withListCaseGenitive	// -- Genitiv
+	withListCaseDative	// -- Dativ
+	withListCaseAccusative	// -- Akkusativ (Standard)
+
+	withListArtDefinite	// -- bestimmter Artikel 
+	withListArtIndefinite	// -- unbestimmter Artikel (Standard)
+
+Ein Beispiel für eine einfache Liste, die das Inventar des Spielers erst in "lst" packt und dann im Nominativ mit bestimmtem Artikel auflistet:
+
+	local lst = [];
+	foreach(local obj in gPlayerChar.contents) {
+		lst += obj;
+	}
+	withListCaseNominative;
+	withListArtDefinite;
+	objectLister.showSimpleList(lst);
+
+Das gleiche geht natürlich aus mit einer "Inline" Anweisung in einer Ausgabefunktion:
+
+	local lst = [];
+	foreach(local obj in gPlayerChar.contents) {
+		lst += obj;
+	}
+	"<<withNominative>><<artDefinite>><<objectLister.showSimpleList(lst)>>";
+
+6.2 Eine zusammengefasste Liste mit spellInt
+--------------------------------------------
+
+Nachstehender Lister gruppiert Gegenstände, die zusammengehören und gibt sie als getrennte Liste (in Klammern) aus, falls mehrere Gegenstände
+die als "writing Material" gelistet werden sollen, auftauchen. `spellInt(int)` schreibt gibt dabei ein beliebige Zahl in gschriebener Form aus: 
+
+	writingMaterials: ListGroupParen    
+    		compareGroupItems (a, b)
+    		{
+        		if(a.listOrder > b.listOrder)
+            		return 1;
+        
+        		if(a.listOrder < b.listOrder)
+            		return -1;
+        
+        		/* Return 0 if the two items are at the same sorting order */
+        		return 0;
+    		}  
+    		showGroupCountName(lst)
+    		{
+        		"<<spellInt(lst.length)>> Schreibmaterialien ";
+    		}
+    
+	;
+
+	feather: Thing 'feder' 'Feder[-s]' @startRoom
+    		listWith = [writingMaterials]
+    		listOrder = 20
+    		isHer = true
+	;
+
+	ink: Thing 'tuschefass/fass' 'Tuschefass[-es]' @startRoom
+    		listWith = [writingMaterials]
+    		listOrder = 30
+	;
+
+	pencil: Thing 'bleistift' 'Bleistift[-s]' @startRoom
+    		listWith = [writingMaterials]
+    		listOrder = 50
+    		isHim = true
+	;
+
+7. Ersetzungsstrings
+====================
+
+Ersetzungsstrings sind Platzhalter, die bei der Ausgabe durch eine spezifische Funktion ersetzt werden. Zu erkennen sind sie an den geschweiften
+Klammern, z.B. `{den iobj/ihn}`
+
+7.1 Namen mit Kasus
+-------------------
+
+Dies spielt bei der Namensausgabe eine Rolle, daher sind alle Namensausgaben mit dem entsprechenden Fall versehen:
+
+	{der actor/er}		{ein actor/einer}
+	{des actor/dessen}	{eines actor/einer}
+	{den actor/ihn}		{einem actor/einer}
+	{dem actor(ihm}		{einen actor/eine}
+
+Der Bezug zum entsprechenden Objekt wird durch die Schlüsselwörter actor (->gActor), dobj (->gDobj) und iobj (->gIobj) hergestellt, bei Verwendung
+im Nominativ wird das Objekt als Satzsubjekt gesetzt, so dass sich die nachfolgenden Verbersetzungen darauf beziehen. Man kann jedes beliebige Objekt
+mit der Funktion `gMessageParams(obj)` referenzierbar machen:
+
+	gMessageParams(obj); 
+    	return '{Der obj/er} {ist} aber zu groß dazu. '; 
+
+Außerdem kann man spezifischen Objekten mit der `globalParamName` Eigenschaft einen allgemeingültigen Parameternamen geben, dazu schreibt man:
+
+	sarah : Person 'attraktiv jung frau/brünette' 'jung[^] Frau' 
+  		globalParamName = 'sarah'
+
+und kann sie dann mit `{die sarah/sie}` jederzeit referenzieren.
+
+7.2 Verben mit Subjektbezug
+---------------------------
+
+Mit {ist} haben wir oben bereits das Verb "sein" mit dem vorher gesetzten Subjekt (der Spieler) verknüpft. Es sind eine ganze Reihe der Standardverben,
+die von der Bibliothek verwendet werden, vordefiniert, z.B. {ist} {hat} {sitzt} {liegt} {schiebt} {schreit} {passt} usw. Beispiel einer Standardmeldung:
+
+	objNotForKeyringMsg = '{Der dobj/er} {passt} nicht an {den iobj/ihn}{*}. '
+
+In selteneren Fällen kommt das Subjekt nach dem Verb, dann kann man das Subjekt auch durch Nachstellen mit einem Verb verknüpfen:
+
+	notWearableMsg = '{Den dobj/ihn} {koennt actor} {du/er} nicht anziehen{*}. '
+
+7.3 Partizipkonstruktion mit {*}
+--------------------------------
+
+Obige Meldungen enden immer mit einem {*}. Das kommt daher, weil G-TADS ab Version 2.0 alle sechs Zeitformen abbilden kann und daher wissen muss, wo das
+Partizip steht. Die `notWearableMsg` kann also folgendes ausgeben:
+  
+*Den Gobelin kannst du nicht anziehen*  
+*Den Gobelin konntest du nicht anziehen*  
+*Den Gobelin hast du nicht anziehen können*  
+*Den Gobelin hattest du nicht anziehen können*  
+*Den Gobelin wirst du nicht anziehen können*  
+*Den Gobelin wirst du nicht anziehen gekonnt haben*  
+  
+In der Praxis wird man dies vermutlich selten verwenden. Nötig ist der Einsatz der Partizip- und flexiblen Verbdefinition nur, wenn der Spielercharakter
+verschiedene Zeitformen oder Personen umfasst, also wenn bspw. ein Charakter in der zweiten Person Präsens, ein anderer aber aus der dritten Person Perfekt
+erzählt und der Spieler zwischen beiden wechseln kann, oder aber wenn der Spieler die Zeitform und Person frei wählen kann, wie z.B. in "Shelter from the
+Storm" von Eric Eve.
+
+7.4 Übergeordnetes Partizip bei Listen
+--------------------------------------
+
+In selteneren Fällen haben wir verschachtelte Sätze auszugeben, z.B. bei Listen, die mit Klammern arbeiten. Hier darf das Partizip nicht gelöscht werden,
+sondern muss bis zum Listenende gespeichert werden. {+*} speichert das Partizip übergeordnet und {**} gibt es schließlich am Ende der Liste aus.
+
+	roomLister: Lister
+    		showListPrefixWide(itemCount, pov, parent) { "{Du/er} {sieht}{+*} hier <<withListCaseAccusative>><<withListArtIndefinite>>"; }
+    		showListSuffixWide(itemCount, pov, parent) { "{**}. "; }
+	;
+
+8. Debug Verben
+===============
+
+8.1 Parse-Debug
+---------------
+
+Das Verb "parse-debug" ist ziemlich versteckt und schwer zu finden, daher wird es hier kurz erwähnt. Es gibt alle Grammar Phrases aus, die die Eingabe des 
+Spielers triggert, bis hin zum "Winner", also der vollständig erkannten und gültigen Phrase.
+
+8.2 Gonear und Purloin
+----------------------
+
+Der Code für die beiden Aktionen ist von Eric Eve geschrieben. Das Kommando "gonear [something]" teleportiert den Spieler zu dem angegebenen Objekt, während
+"purloin [something]" das angegebene Objekt in das Inventar des Spielers fallen lässt.
+
+8.3 Pronomen
+------------
+
+"pronomen" zeigt kurz an, welche Pronomen auf welches Objekt abzielen.
+
+8.4 Deklinier
+-------------
+
+"deklinier [something]" dekliniert ein Objekt, mit bestimmtem und unbestimmtem Artikel.
+
+8.5 Vocab
+---------
+
+"vocab" schaut das gesamte Vokabular des Spiels durch und listet nach Genus getrennt alle Einträge auf. Diese Funktion ist für das Korrekturlesen vor
+Veröffentlichung gedacht, um etwaige falsche Genuszuweisungen effektiv ausmerzen zu können.
+
+8.6 Token
+---------
+
+"token" schaut das gesamte Vokabular des Spiels durch und listet ungültige Einträge auf, die dann nicht mehr korrekt ersetzt werden, z.B. wenn 'ums' irgendwo
+definiert ist.
+
+8.7 Final
+---------
+
+"final" listet alle Objekte des Spiels der Reihe nach auf und es wird der Genus, die Deklination und der Ort ausgegeben. Diese Option ist ebenfalls für
+die finale Korrektur vor Veröffentlichung gedacht.
+

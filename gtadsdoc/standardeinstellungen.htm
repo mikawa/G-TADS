@@ -1,0 +1,77 @@
+<html><head><meta name="generator" content="G-TADS Kurzdokumentation"><title>Willkommen</title><meta name="keywords" content="Einstieg,Ausgangspunkt"></meta>
+
+<link rel="stylesheet" href="main.css" type="text/css"></link></head>
+<body>
+<div class="topbar"><a href="index.html"><img src="topbar.jpg" border=0></a></div>
+
+<div class="main">
+<P><FONT SIZE=-1><a href="index.html">[Index]</a><BR>
+<I><a href="ersteschritte.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="vokabular.htm">[Weiter] </a></I></FONT></P>
+
+<h1>3. Standardeinstellungen</h1>
+
+<h2>3.1 Erzählform</h2>
+
+<p>Die Erzählform ist standardmäßig zweite Person, Gegenwart. Sie kann jederzeit auf eine beliebige Person geändert werden. Dazu wird einfach beim jeweiligen Spielerobjekt definiert:</p>
+
+<pre><code>+ Heinz : Actor 'heinz' 'Heinz'
+    pcReferralPerson = ThirdPerson
+;
+</code></pre>
+
+<p>Gültig sind derzeit die sechs Formen: </p>
+
+<pre><code>pcReferralPerson = FirstPerson
+pcReferralPerson = SecondPerson
+pcReferralPerson = ThirdPerson
+pcReferralPerson = FourthPerson
+pcReferralPerson = FifthPerson
+pcReferralPerson = SixthPerson
+</code></pre>
+
+<h2>3.2 Erzählzeit</h2>
+
+<p>Die Erzählzeit regelt die englische Adv3 Bibliothek über die Flagge <code>usePastTense</code> im <code>gamemain</code> Objekt. G-TADS geht hier einen eigenen neuen Weg. Die Zeit wird wie auch die 
+Erzählform im Spielercharakter festgelegt. Somit kann man in einer abschnittsweisen Erzählung z.B. Gegenwart und Vergangenheit mit zwei Erzählern kombinieren, z.B. kann man
+einen Charakter in der zweiten Person Präsens erzählen lassen, einen anderen aber in der dritten Person im Imperfekt. Die Zeit regelt <code>pcReferralTense</code>.</p>
+
+<p>Gültig sind hier sechs Zeitformen:</p>
+
+<pre><code>pcReferralTense = Present
+pcReferralTense = Imperfect
+pcReferralTense = Perfect
+pcReferralTense = Pluperfect
+pcReferralTense = Future1
+pcReferralTense = Future2
+</code></pre>
+
+<h2>3.3 Höfliche Anrede</h2>
+
+<p>Auf Wunsch kann jeglich Spieleranrede in Großschreibung erfolgen. Dazu setzt man die Flagge <code>useCapitalizedAdress</code> im <code>gamemain</code> Objekt auf <code>true</code>.</p>
+
+<pre><code>gameMain: GameMainDef
+    useCapitalizedAdress = true
+;
+</code></pre>
+
+<h2>3.4 Unbekannte Objekte</h2>
+
+<p>G-TADS führt das im Englischen begonnene Konzept der Parsernachfragen weiter. So wird ein dem Spiel unbekannter String in seine Bestandteile zerlegt (z.B.: 
+wenn bei Eingabe von ">untersuche gelbes Kleid" momentan kein gelbes Kleid sichtbar ist). Wenn der Autor das Vokabular korrekt angelegt hat (und demnach
+tatsächlich das Adjektiv "gelb" und das Substantiv "Kleid" existiert), wird G-TADS ausgeben: "Du siehst hier kein gelbes Kleid."</p>
+
+<p>Falls nun der Autor nicht will, dass dem Spieler, der diese Eingabe vielleicht ins Blaue hinein vorgenommen hat, verraten wird, dass im Spiel ein Kleid 
+existiert, setzt er im <code>gameMain</code> Objekt die Flagge <code>useNoTxt</code> auf <code>nil</code>. </p>
+
+<pre><code>gameMain: GameMainDef
+    useNoTxt = nil
+;
+</code></pre>
+
+
+
+<HR>
+<P><FONT SIZE=-1><I>G-TADS Kurzdokumentation</I><BR>
+<a href="index.html">[Index]</a><BR>
+<I><a href="ersteschritte.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="vokabular.htm">[Weiter] </a></I></FONT></P>
+</body></html>

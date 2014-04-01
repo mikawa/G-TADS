@@ -1,0 +1,195 @@
+<html><head><meta name="generator" content="G-TADS Kurzdokumentation"><title>Willkommen</title><meta name="keywords" content="Einstieg,Ausgangspunkt"></meta>
+
+<link rel="stylesheet" href="main.css" type="text/css"></link></head>
+<body>
+<div class="topbar"><a href="index.html"><img src="topbar.jpg" border=0></a></div>
+
+<div class="main">
+<P><FONT SIZE=-1><a href="index.html">[Index]</a><BR>
+<I><a href="standardeinstellungen.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="verben.htm">[Weiter] </a></I></FONT></P>
+
+<h1>4. Vokabular</h1>
+
+<h2>4.1 Umlaute und ß</h2>
+
+<p>Bei der Definition des Vokalbulars müssen gezielt Umlaute sowie das 'ß' verwendet werden. In einigen Fällen verwendet der Parser 
+nämlich Textschnipsel aus der Eingabe des Spielers wieder, daher müssen die Nomen und Adjektive korrekt ins Wörterbuch geschrieben
+werden. Der Parser übernimmt dann ggf. die Umwandlung des 'ss' in 'ß' sowie von 'ue' in den korrekten Umlaut 'ü'. </p>
+
+<h2>4.2 Objekte im Spiel</h2>
+
+<p>Ein kurzes Beispiel für eine Objektdeklaration sieht folgendermaßen aus:</p>
+
+<pre><code>+ armchair: Chair, Immovable 'neutral grau lehnsessel/sessel*möbel' 'Lehnsessel[-s]'
+    "Der Sessel hat eine neutrale graue Farbe, schaut aber bequem aus. "
+    isHim = true
+;
+</code></pre>
+
+<h2>4.3 Genus</h2>
+
+<p>Im Deutschen muss bei einem Objekt zusätzlich der Genus mit maskulin, feminin oder neutrum oder als Pluralwort deklariert werden:
+Dies geschieht, indem eine der vier Eigenschaften als <code>true</code> deklariert wird. Wenn kein Attribut gesetzt wird, gilt das Objekt
+als Neutrum:</p>
+
+<pre><code>isIt = true
+isHim = true
+isHer = true
+isPlural = true
+</code></pre>
+
+<p>Ändert sich ein Genus im Lauf des Spiels, also sieht der Spieler zunächst eine Person mit Katzenmaske und stellt sich dann
+heraus, dass sich ein Mann darunter verbirgt, gibt es folgende Funktionen, die im betreffenden Objekt aufgerufen, den Genus
+nachträglich ändern:</p>
+
+<pre><code>changeIt()  
+changeHim() 
+changeHer()    
+changePlural()
+</code></pre>
+
+<h2>4.4 Wechselnder Genus</h2>
+
+<p>Außerdem tritt im Deutschen ein trickreiches Phänomen auf, das zu einiger Verwirrung führen kann, der <em>wechselnde Genus</em> bei Synonymen. So kann eine
+Jacke schnell maskulin werden, wenn der Spieler stattdessen Anorak eintippt. Wenn sich der Spieler dann mit "zieh ihn an" auf den Anorak bezieht, muss
+der Parser wissen, dass ein abweichender Genus verwendet wurde. Daher teilt G-TADS alle Nomen in vier Kategorien ein:</p>
+
+<pre><code>neuterSyn
+maleSyn
+femaleSyn
+pluralSyn
+</code></pre>
+
+<p>Somit kann der Parser vor "Einloggen" des aktuellen Objekts prüfen, ob der Genus nicht abweichend vom Ursprungsobjekt gesetzt werden muss. Mitgeteilt
+wird das dem Wörterbuch beim Anlegen des Vokabulars durch Nachstellen von </p>
+
+<pre><code>[n] für neutrum
+[m] für maskulin
+[f] für feminin
+[p] für Pluralwort
+</code></pre>
+
+<p>Eine typische Deklaration einer Jacke sieht dann folgendermaßen aus:</p>
+
+<pre><code>+ jacket: Wearable 'wetterfest blau jacke/anorak[m]' 'Jacke'
+    "Die Jacke ist blau und sieht wetterfest aus. "
+    isHer = true
+;
+</code></pre>
+
+<h2>4.5 Sonderendungen der Nomen</h2>
+
+<p>Bei der Deklinition von Objekten gibt es Sonderfälle, die über spezielle Endungen angepasst werden müssen: <code>[-s]</code>, <code>[-es]</code>, <code>[-n]</code>
+und <code>[-en]</code>. Beispiele sind Sessel[-s], Löwe[-n], Haus[-es], Männer[-n].</p>
+
+<pre><code>+ armchair: Chair, Immovable 'neutral grau lehnsessel/sessel*möbel' 'Lehnsessel[-s]'
+    "Er hat eine neutrale graue Farbe, schaut aber bequem aus. "
+    isHim = true
+;
+</code></pre>
+
+<h2>4.6 Sonderfall der [-n] Endung bei Vokabeln</h2>
+
+<p>Auch bei Vokabeln spielt die Sonderendung auf [-n] eine Rolle, und zwar wenn der Autor die in Punkt 3.4 erwähnte Ersetzungsroutine bei unbekannten
+Objekten verwendet. Um die korrekte Ausgabe "Du siehst hier keinen Affen" zu ermöglichen (vorausgesetzt ein Affe ist implementiert, aber an dem
+Aufenthaltsort des Spieler nicht sichtbar oder erreichbar), muss TADs wissen, dass die Vokabel <code>Affe</code> in diesem Fall ergänzt werden muss. Das
+passiert auch mittels nachgestelltem [-n], was aber <em>nach</em> einer eventuellen abweichenden Genuszuweisung erfolgen muss.</p>
+
+<p>Ein Tier, das sich bei näherem Hinsehen als blöder Affe entpuppt:</p>
+
+<pre><code>+ ape: UntakeableActor 'blöd affe[m][-n]/tier' 'Tier[-es]'
+    "Du schaust dir das Tier näher an und siehst, dass es ein blöder Affe ist. "
+    specialDesc = "Ein Tier streunt hier im Gebüsch herum. "
+    useSpecialDesc = true
+;
+</code></pre>
+
+<h2>4.7 Adjektive mit flexiblen Endungen</h2>
+
+<p>Adjektive im Namen eines Objekts haben je nach Kasus entsprechende Endungen. Damit TADS weiß, dass ein Adjektiv Teil eines Namens ist, muss das Symbol
+<code>[^]</code> nachgestellt werden. Das geht auch bei Ausgabe substantivierter Adjektive wie "Du siehst hier einen Betrunkenen"</p>
+
+<p>Beispiele:</p>
+
+<pre><code>'golden[^] Kugel'
+'weiß[^] Kleid[-es]'
+'Betrunken[^]'
+'nutzlos[^] Gerümpel[-s]'
+</code></pre>
+
+<p>Bei zusammengesetzten Namen wie "Ludwig der Erste" kann mit Textersetzung des direkten Artikels (mehr dazu später) und den Sonderendungen [-s] und [-n]
+gearbeitet werden, um eine korrekte Deklination zu ermöglichen:</p>
+
+<pre><code>'Ludwig[-s] {der} Erst[-n]'
+'Karl[-s] {der} Große[-n]'
+</code></pre>
+
+<h2>4.8 Komplexe Nomen</h2>
+
+<p>Für komplexe Nomen, deren Vokabular nicht in die übliche Schablone "(weak) adj adj noun/noun/noun*plural" passt, muss eine spezielle Deklaration über <code>SpecialNounPhraseProd</code>
+erfolgen. Da das durchaus häufiger vorkommt, z.B. bei "Ludwig van Beethoven" oder "Rickys Imperium" ist eine entsprechende Klasse bereits vordefiniert:</p>
+
+<pre><code>ludwig: Person 'ludwig/beethoven' 'Ludwig[-s] van Beethoven[-s]'
+    isHim = true
+    isProperName = true
+;
+
+grammar nounWord(Ludwig) :
+        'ludwig' (|'van') 'beethoven'  //gilt für "ludwig beethoven" und "ludwig van beethoven"
+        : SpecialNounPhraseProd
+        getMatchList = [ludwig]
+        getAdjustedTokens =
+        ['ludwig', &amp;noun, 'van', &amp;miscWord, 'beethoven', &amp;noun]
+;
+</code></pre>
+
+<p>oder:</p>
+
+<pre><code>rickys: Room 'Rickys Imperium' 'Rickys Imperium[-s]'
+        vocabWords = 'laden[m]/rickys'
+;
+
+grammar nounWord(Rickys) :
+        'rickys' ('laden'|'geschäft'|'imperium') 
+        : SpecialNounPhraseProd
+        getMatchList = [rickys]
+        getAdjustedTokens =
+        ['rickys', &amp;noun, 'imperium', &amp;noun]
+;
+</code></pre>
+
+<p>Wichtig ist, dass explizit über <code>getMatchList</code> festgelegt werden muss, auf welche Objekte diese Schablone zutrifft, und auch die Token, die zurückgegeben werden
+eine korrigierte Zuweisung erhalten: <code>&amp;adjective</code>, <code>&amp;noun</code> oder <code>&amp;miscWord</code>.</p>
+
+<h2>4.9 Pluralwort vs. Pluralname</h2>
+
+<p>Im Regelfall wird ein einzelnes Objekt meist als Pluralwort verwendet, so sind z.B. Passanten vermutlich ein Objekt mit Attribut <code>isPlural</code> und Vokabular 
+'passanten' als &amp;noun bzw. &amp;pluralSyn im Wörterbuch abgelegt. Wird aber ein Objekt verwendet, das es mehrfach gibt, muss dies so definiert werden:</p>
+
+<pre><code>class Torch : LightSource 'fackel*fackeln' 'Fackel'
+        isEquivalent = true
+    isHer = true
+        pluralName = 'Fackeln'
+;
+
++ Torch;
++ Torch;
+
++ Torch
+        isLit = nil
+;
+</code></pre>
+
+<p>Der Code erzeugt drei Fackeln, die mit dem Attribut <code>isEquivalent = true</code> ausgezeichnet sind. Daher wird TADS diese Objekte zusammen nennen, falls mehrere 
+im Raum vorhanden sind, zwei davon leuchten und eine ist erloschen. "Du siehst hier drei Fackeln(zwei Licht spendend)". Parsernachfragen gibt es nicht, wenn
+alle Objekte den gleichen Zustand besitzen, denn dann geht TADS davon aus, dass alle gleichwertig sind und wählt automatisch eine davon aus. In unserem Fall
+disambiguert TADS nach den Zustand, fragt also, ob man eine der leuchtenden Fackeln oder die erloschene meint. Wichtig ist, dass das Pluralvokabular gesetzt
+ist (mittels *) und dass der Pluralname definiert ist.</p>
+
+
+
+<HR>
+<P><FONT SIZE=-1><I>G-TADS Kurzdokumentation</I><BR>
+<a href="index.html">[Index]</a><BR>
+<I><a href="standardeinstellungen.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="verben.htm">[Weiter] </a></I></FONT></P>
+</body></html>

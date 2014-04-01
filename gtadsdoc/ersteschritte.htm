@@ -1,0 +1,65 @@
+<html><head><meta name="generator" content="G-TADS Kurzdokumentation"><title>Erste Schritte</title><meta name="keywords" content="Erste,Schritte,Installation,Windows,Linux,OSX"></meta>
+
+<link rel="stylesheet" href="main.css" type="text/css"></link></head>
+<body>
+<div class="topbar"><a href="index.html"><img src="topbar.jpg" border=0></a></div>
+
+<div class="main">
+<P><FONT SIZE=-1><a href="index.html">[Index]</a><BR>
+<I><a href="willkommen.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="standardeinstellungen.htm">[Weiter] </a></I></FONT></P>
+
+<h1>2. Erste Schritte</h1>
+
+<h2>2.1 Einbinden der deutschen Bibliothek</h2>
+
+<p>Die deutsche Library für TADS ist auf www.michaelbaltes.com unter "downloads" erhältich. Nach dem Herunterladen sind die Dateien in einen Ordner namens "de_de" zu 
+entpacken. Dieser Ordner enthält die relevanten Bibliotheksdateien für die deutsche Ausgabesprache.</p>
+
+<p><em>WINDOWS</em></p>
+
+<p>Für Windows Anwender gibt es die "Windows Workbench". Sie ist auf der TADS Hauptseite unter www.tads.org erhältlich. Hier wird die deutsche Library wie folgt 
+eingebunden: In dem TADS 3 Verzeichnis, das im Installationspfad angelegt wird, befindet sich ein Unterordner namens "Lib", mit einem Unterordner "Adv3". Dorthin #
+muss der "de_de" Ordner kopiert werden.</p>
+
+<p>Wenn ein neues Projekt angelegt wird, ist die dazugehörende Quelltextdatei "[projektname].t" unter den Projektdateien zu finden. Nach einem Rechtsklick darauf im 
+Kontextmenü "build settings" auswählen, dann unter "compiler - defines" den Wert <code>LANGUAGE=en_us</code> ändern auf <code>LANGUAGE=de_de</code>. Schon sind unter der TADS 3 
+Adventure Library die TADS 3 German Language Definitions zu finden. Die erste Zeile des Projekts gibt den verwendeten Zeichensatz an. Hier muss noch der 
+Standard-Eintrag in #charset "iso-8859-1" oder "iso-Latin1" geändert werden.</p>
+
+<p><em>LINUX UND OSX</em></p>
+
+<p>Für Linux gibt es "Frobtads" von Nikos Chantziaras, das zugleich Interpreter und Compiler beinhaltet. Frobtads muss aus dem Quellcode compiliert werden, dazu werden 
+folgende Komponenten benötigt:</p>
+
+<blockquote>
+  <ul>
+<li>ein C und C++ Compiler</li>
+<li>eine Version der Curses/Ncurses Biblitothek</li>
+<li>eine Version der Libcurl-Dev Bibliothek</li>
+</ul>
+</blockquote>
+
+<p>Nach dem erfolgreichen Kompilieren liegen die Compiler-relevanten Dateien im Regelfall unter usr/local/share/frobtads/tads3/lib/adv3. Dorthin muss der "de_de" Ordner 
+kopiert werden.</p>
+
+<p>Für OSX gibt es einen komfortablen Installer. Nach der Installation kann das Verzeichnis wie in Linux auch unter usr/local/share/frobtads/tads3/lib/adv3 gefunden 
+werden, das geht Mithilfe des Finders, der im Menu auch mit der "Gehe zu" Funktion und Eingabe von "/usr" zu der gesuchten Verzeichnisstruktur führt.</p>
+
+<p>Anders als in Windows muss der Autor hier die Sprachdefinitionen direkt in der "[projektname].t3m" Datei ändern:
+<code>-D LANGUAGE=de_de</code></p>
+
+<h2>2.2 Allgemeines</h2>
+
+<p>Die deutsche Übersetzung hält sich eng an die englische Urversion. Da TADS 3 relativ umfangreich ist, kann sich der Autor somit aller verfügbaren Beispielcodes, 
+Tutorials und Handbücher der englischen Version bedienen.</p>
+
+<p>Diese Kurzdokumentation setzt bereits Grundkenntnisse in TADS 3 voraus. Hier sind die umfangreichen Kompendien von Eric Eve "Getting started" und "Learning TADS3" 
+zu empfehlen. Daneben gibt es das "G-TADS Kochbuch", das eine Vielzahl an nützlichen Codeschnipseln beinhaltet.</p>
+
+
+
+<HR>
+<P><FONT SIZE=-1><I>G-TADS Kurzdokumentation</I><BR>
+<a href="index.html">[Index]</a><BR>
+<I><a href="willkommen.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="standardeinstellungen.htm">[Weiter] </a></I></FONT></P>
+</body></html>

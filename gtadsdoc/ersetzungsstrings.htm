@@ -1,0 +1,89 @@
+<html><head><meta name="generator" content="G-TADS Kurzdokumentation"><title>Willkommen</title><meta name="keywords" content="Einstieg,Ausgangspunkt"></meta>
+
+<link rel="stylesheet" href="main.css" type="text/css"></link></head>
+<body>
+<div class="topbar"><a href="index.html"><img src="topbar.jpg" border=0></a></div>
+
+<div class="main">
+<P><FONT SIZE=-1><a href="index.html">[Index]</a><BR>
+<I><a href="listen.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="debugverben.htm">[Weiter] </a></I></FONT></P>
+
+<h1>7. Ersetzungsstrings</h1>
+
+<p>Ersetzungsstrings sind Platzhalter, die bei der Ausgabe durch eine spezifische Funktion ersetzt werden. Zu erkennen sind sie an den geschweiften
+Klammern, z.B. <code>{den iobj/ihn}</code></p>
+
+<h2>7.1 Namen mit Kasus</h2>
+
+<p>Dies spielt bei der Namensausgabe eine Rolle, daher sind alle Namensausgaben mit dem entsprechenden Fall versehen:</p>
+
+<pre><code>{der actor/er}      {ein actor/einer}
+{des actor/dessen}  {eines actor/einer}
+{den actor/ihn}     {einem actor/einer}
+{dem actor(ihm}     {einen actor/eine}
+</code></pre>
+
+<p>Der Bezug zum entsprechenden Objekt wird durch die Schlüsselwörter actor (->gActor), dobj (->gDobj) und iobj (->gIobj) hergestellt, bei Verwendung
+im Nominativ wird das Objekt als Satzsubjekt gesetzt, so dass sich die nachfolgenden Verbersetzungen darauf beziehen. Man kann jedes beliebige Objekt
+mit der Funktion <code>gMessageParams(obj)</code> referenzierbar machen:</p>
+
+<pre><code>gMessageParams(obj); 
+    return '{Der obj/er} {ist} aber zu groß dazu. '; 
+</code></pre>
+
+<p>Außerdem kann man spezifischen Objekten mit der <code>globalParamName</code> Eigenschaft einen allgemeingültigen Parameternamen geben, dazu schreibt man:</p>
+
+<pre><code>sarah : Person 'attraktiv jung frau/brünette' 'jung[^] Frau' 
+    globalParamName = 'sarah'
+</code></pre>
+
+<p>und kann sie dann mit <code>{die sarah/sie}</code> jederzeit referenzieren.</p>
+
+<h2>7.2 Verben mit Subjektbezug</h2>
+
+<p>Mit {ist} haben wir oben bereits das Verb "sein" mit dem vorher gesetzten Subjekt (der Spieler) verknüpft. Es sind eine ganze Reihe der Standardverben,
+die von der Bibliothek verwendet werden, vordefiniert, z.B. {ist} {hat} {sitzt} {liegt} {schiebt} {schreit} {passt} usw. Beispiel einer Standardmeldung:</p>
+
+<pre><code>objNotForKeyringMsg = '{Der dobj/er} {passt} nicht an {den iobj/ihn}{*}. '
+</code></pre>
+
+<p>In selteneren Fällen kommt das Subjekt nach dem Verb, dann kann man das Subjekt auch durch Nachstellen mit einem Verb verknüpfen:</p>
+
+<pre><code>notWearableMsg = '{Den dobj/ihn} {koennt actor} {du/er} nicht anziehen{*}. '
+</code></pre>
+
+<h2>7.3 Partizipkonstruktion mit {*}</h2>
+
+<p>Obige Meldungen enden immer mit einem {*}. Das kommt daher, weil G-TADS ab Version 2.0 alle sechs Zeitformen abbilden kann und daher wissen muss, wo das
+Partizip steht. Die <code>notWearableMsg</code> kann also folgendes ausgeben:</p>
+
+<p><em>Den Gobelin kannst du nicht anziehen</em> <br />
+<em>Den Gobelin konntest du nicht anziehen</em> <br />
+<em>Den Gobelin hast du nicht anziehen können</em> <br />
+<em>Den Gobelin hattest du nicht anziehen können</em> <br />
+<em>Den Gobelin wirst du nicht anziehen können</em> <br />
+<em>Den Gobelin wirst du nicht anziehen gekonnt haben</em>  </p>
+
+<p>In der Praxis wird man dies vermutlich selten verwenden. Nötig ist der Einsatz der Partizip- und flexiblen Verbdefinition nur, wenn der Spielercharakter
+verschiedene Zeitformen oder Personen umfasst, also wenn bspw. ein Charakter in der zweiten Person Präsens, ein anderer aber aus der dritten Person Perfekt
+erzählt und der Spieler zwischen beiden wechseln kann, oder aber wenn der Spieler die Zeitform und Person frei wählen kann, wie z.B. in "Shelter from the
+Storm" von Eric Eve.</p>
+
+<h2>7.4 Übergeordnetes Partizip bei Listen</h2>
+
+<p>In selteneren Fällen haben wir verschachtelte Sätze auszugeben, z.B. bei Listen, die mit Klammern arbeiten. Hier darf das Partizip nicht gelöscht werden,
+sondern muss bis zum Listenende gespeichert werden. {+<em>} speichert das Partizip übergeordnet und {</em>*} gibt es schließlich am Ende der Liste aus.</p>
+
+<pre><code>roomLister: Lister
+        showListPrefixWide(itemCount, pov, parent) { "{Du/er} {sieht}{+*} hier &lt;&lt;withListCaseAccusative&gt;&gt;&lt;&lt;withListArtIndefinite&gt;&gt;"; }
+        showListSuffixWide(itemCount, pov, parent) { "{**}. "; }
+;
+</code></pre>
+
+
+
+<HR>
+<P><FONT SIZE=-1><I>G-TADS Kurzdokumentation</I><BR>
+<a href="index.html">[Index]</a><BR>
+<I><a href="listen.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="debugverben.htm">[Weiter] </a></I></FONT></P>
+</body></html>

@@ -1,0 +1,98 @@
+<html><head><meta name="generator" content="G-TADS Kurzdokumentation"><title>Willkommen</title><meta name="keywords" content="Einstieg,Ausgangspunkt"></meta>
+
+<link rel="stylesheet" href="main.css" type="text/css"></link></head>
+<body>
+<div class="topbar"><a href="index.html"><img src="topbar.jpg" border=0></a></div>
+
+<div class="main">
+<P><FONT SIZE=-1><a href="index.html">[Index]</a><BR>
+<I><a href="verben.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="ersetzungsstrings.htm">[Weiter] </a></I></FONT></P>
+
+<h1>6. Listen</h1>
+
+<p>Die Funktionen für die Listenausgabe sind in der sprachunabhängigen Datei "lister.t" implementiert. Die deutsche Bibliothek muss in diesen Prozess eingreifen,
+um eine sprachabhängige Ausgabe nach Kasus (Nominativ, Genitiv, Dativ, Akkusativ) und Artikel (unbestimmt, bestimmt) zu ermöglichen. Die Ausgabe bestimmt die 
+Variable listName, die auf die gesetzten Flaggen entsprechend reagiert.</p>
+
+<h2>6.1 Eine einfache Liste</h2>
+
+<p>Folgende Makros bestimmen die Ausgabgsparameter:</p>
+
+<pre><code>withListCaseNominative  // -- Nominativ
+withListCaseGenitive    // -- Genitiv
+withListCaseDative  // -- Dativ
+withListCaseAccusative  // -- Akkusativ (Standard)
+
+withListArtDefinite // -- bestimmter Artikel 
+withListArtIndefinite   // -- unbestimmter Artikel (Standard)
+</code></pre>
+
+<p>Ein Beispiel für eine einfache Liste, die das Inventar des Spielers erst in "lst" packt und dann im Nominativ mit bestimmtem Artikel auflistet:</p>
+
+<pre><code>local lst = [];
+foreach(local obj in gPlayerChar.contents) {
+    lst += obj;
+}
+withListCaseNominative;
+withListArtDefinite;
+objectLister.showSimpleList(lst);
+</code></pre>
+
+<p>Das gleiche geht natürlich aus mit einer "Inline" Anweisung in einer Ausgabefunktion:</p>
+
+<pre><code>local lst = [];
+foreach(local obj in gPlayerChar.contents) {
+    lst += obj;
+}
+"&lt;&lt;withNominative&gt;&gt;&lt;&lt;artDefinite&gt;&gt;&lt;&lt;objectLister.showSimpleList(lst)&gt;&gt;";
+</code></pre>
+
+<h2>6.2 Eine zusammengefasste Liste mit spellInt</h2>
+
+<p>Nachstehender Lister gruppiert Gegenstände, die zusammengehören und gibt sie als getrennte Liste (in Klammern) aus, falls mehrere Gegenstände
+die als "writing Material" gelistet werden sollen, auftauchen. <code>spellInt(int)</code> schreibt gibt dabei ein beliebige Zahl in gschriebener Form aus: </p>
+
+<pre><code>writingMaterials: ListGroupParen    
+        compareGroupItems (a, b)
+        {
+            if(a.listOrder &gt; b.listOrder)
+                return 1;
+
+            if(a.listOrder &lt; b.listOrder)
+                return -1;
+
+            /* Return 0 if the two items are at the same sorting order */
+            return 0;
+        }  
+        showGroupCountName(lst)
+        {
+            "&lt;&lt;spellInt(lst.length)&gt;&gt; Schreibmaterialien ";
+        }
+
+;
+
+feather: Thing 'feder' 'Feder[-s]' @startRoom
+        listWith = [writingMaterials]
+        listOrder = 20
+        isHer = true
+;
+
+ink: Thing 'tuschefass/fass' 'Tuschefass[-es]' @startRoom
+        listWith = [writingMaterials]
+        listOrder = 30
+;
+
+pencil: Thing 'bleistift' 'Bleistift[-s]' @startRoom
+        listWith = [writingMaterials]
+        listOrder = 50
+        isHim = true
+;
+</code></pre>
+
+
+
+<HR>
+<P><FONT SIZE=-1><I>G-TADS Kurzdokumentation</I><BR>
+<a href="index.html">[Index]</a><BR>
+<I><a href="verben.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="ersetzungsstrings.htm">[Weiter] </a></I></FONT></P>
+</body></html>

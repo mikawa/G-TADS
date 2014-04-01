@@ -1,0 +1,192 @@
+<html><head><meta name="generator" content="G-TADS Kurzdokumentation"><title>Willkommen</title><meta name="keywords" content="Einstieg,Ausgangspunkt"></meta>
+
+<link rel="stylesheet" href="main.css" type="text/css"></link></head>
+<body>
+<div class="topbar"><a href="index.html"><img src="topbar.jpg" border=0></a></div>
+
+<div class="main">
+<P><FONT SIZE=-1><a href="index.html">[Index]</a><BR>
+<I><a href="vokabular.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="listen.htm">[Weiter] </a></I></FONT></P>
+
+<h1>5. Verben</h1>
+
+<h2>5.1 Ein normales Verb</h2>
+
+<p>Verben werden ohne "e" deklariert, also genügt es "nehm", "geb", "zieh" und "schieb" zu definieren, das angehängte "e" bei "ziehe" wird vom Parser automatisch
+abgeschnitten. Wenn es meherere Schablonen für eine Aktion gibt, sollte immer eine davon mit <code>defaultForRecursion = true</code> als Standardschablone markiert 
+werden. Diese wird für  implizite Aktionen (in Klammern ausgegeben) verwendet, wie z.B. (erst an der Tür läuten).</p>
+
+<pre><code>DefineTAction(Ring)
+;
+
+VerbRule(LaeutAn)
+        'läut' (|'an') dobjList
+        : RingAction
+        verbPhrase = 'zu läuten/läuten (was)'
+;
+</code></pre>
+
+<h2>5.2 Verben mit und ohne angehängtem "e"</h2>
+
+<p>Wichtig dabei ist, dass die Verben, die mit Nomen kollidieren (also beispielsweise die "stelle die Vase auf den Tisch" und die "verbrannte Stelle" auf dem
+Fußboden, in der Verbschablone ausnahmsweise auch die Variante mit dem angehängten "e" zusätzlich definiert wird ('stell'|'stelle'). Falls das nicht gemacht
+wird, kürzt TADS den durch die Nomendefinition bekannten string "stelle" nicht auf "stell" zurück, und erkennt daher das Verb nicht.</p>
+
+<h2>5.3 Verbschablonen mit Dativ</h2>
+
+<p>Steht eines der beiden (oder beide Objekte) im Dativ, ist vor nach der Präposition und vor dem Fragewort das Schlüsselwort "dativ" einzufügen:</p>
+
+<pre><code>VerbRule(KlingelAn)
+        ('klingl' | 'klingel') 'an' dobjList
+        : RingAction
+        verbPhrase = 'zu klingeln/klingeln (an dativ was)'
+;
+</code></pre>
+
+<h2>5.4 Token</h2>
+
+<p>Zu beachten sind hierbei spezielle "Token" im Deutschen, die vom Parser automatisch umgewandelt werden, Mehrfachdeklarationen sind überflüssig.
+So ist "hinüber" gleichbedeutend mit "rüber", "herüber" oder "drüber", usw. Damit diese Formen in den Verbschablonen nicht alle immer definiert werden 
+müssen, gibt es eine Ersetzungsroutine, die aber nur funktioniert, solange der Autor keinen Wörterbucheintrag davon anfertigt. Also darf "rüber"
+beispielsweise in keiner Schablone auftauchen, sonst funktionert die Ersetzung nicht mehr. In der folgenden Tabelle sieht die Token und die Wörter,
+die dazu gewandelt werden in Klammern.</p>
+
+<blockquote>
+  <p>Eintrag in Schablone, (wird ersetzt):
+um (ums)
+durch (durchs)
+an (ans)
+auf (aufs)
+von (vom)
+über (übers)
+in (ins)
+unter (unterm, unters)
+hinter (hinterm, hinters)
+hinunter (herunter, runter, hinab, herab)
+hinauf (herauf, rauf)
+hinaus (heraus, raus)
+hinein (herein, rein)
+hinüber (herüber, drüber, rüber)</p>
+</blockquote>
+
+<h2>5.5 Unregelmäßige Infinitive (neu ab V2.0)</h2>
+
+<p>Ab Version 2.0 der Library gibt es sogenannte "convenience macros" für die Verbdefiniton, die bei Parsernachfragen das verwendete Verb zurückgeben, statt des
+allgemein gehaltenen <code>verbPhrase</code> Attributs. Das bedeutet konkret, dass der Parser bei "streichle" mit "Was willst du streicheln?" anstatt mit "Was willst du berühren?"
+antwortet. Das ist Geschmackssache, aber es klingt vielleicht etwas besser, wenn das eingetippte Verb bei der Nachfrage verwendet wird. Das ist kein Muss, in der 
+englischen Bibliothek ist dies nicht vorgesehen. Dazu sei aber auch kurz angemerkt, dass im Englischen wesentlich weniger Verbsynonyme als im Deutschen existieren.</p>
+
+<p>Die Voraussetzung für das Nachfragen mit eingetipptem Verb ist, dass TADS erkennt, wo in der Eingabe denn das Verb ist. Außerdem müssen unregelmäßige Infinitive 
+gemeldet werden (sonst wird aus streichle: "Was willst du streichlen?"). G-TADS verwaltet die unregelmäßigen Infinitive in einer <code>lookuptable</code>, daher muss für neue 
+Verben ein Eintrag mit der Funktion <code>addInfinitive('irregular', 'regular')</code> erfolgen. Das kann irgendwo passieren, muss aber vor Spielbeginn erfolgen. Ein guter Platz
+wäre die <code>showIntro</code> Funktion im <code>gameMain</code> Objekt, beispielsweise für das Verb "streicheln":</p>
+
+<pre><code>gameMain: GameMainDef
+    showIntro() {
+            addInfinitive('streichl', 'streicheln');
+    }
+;
+</code></pre>
+
+<p>Zurück zur eigentlichen Verbschablone. Hier wird ein Verb auf das Attribut <code>_verb</code> abgebildet. Nachdem das aber sehr mühsam wäre, allen Verben 'nimm'->_verb nachzustellen,
+kann man das verb('...','...','...') Makro mit beliebig vielen Aufzählungen in der Klammer verwenden, wie auch das prep(...) Makro.</p>
+
+<p>Zuletzt muss die <code>verbPhrase</code> bei erkanntem Verb ersetzt werden. Das macht das verbPattern('...','(...)') Makro. Ein Beispiel, mit der "konventionellen" Definition
+der VerbRule (wohlgemerkt dies ist immer noch eine gültige Variante):</p>
+
+<pre><code>VerbRule(SchraubAufMit)
+        ('schraub'|'schraube'|'dreh') dobjList 'mit' singleIobj ('auf'|'locker'|'ab')
+        | ('locker'|'lös') dobjList 'mit' singleIobj
+        : UnscrewWithAction
+        verbPhrase = 'aufzudrehen/aufdrehen (was) (mit dativ was)'
+;
+</code></pre>
+
+<p>Und die "neue" Definition mit den oben genannten Makros:</p>
+
+<pre><code>VerbRule(SchraubAufMit)
+        verb('schraub','schraube','dreh') dobjList 'mit' singleIobj prep('auf','locker','ab')
+        | verb('locker','lös') dobjList 'mit' singleIobj
+        : UnscrewWithAction
+        verbPattern('aufzudrehen/aufdrehen','(was) (mit dativ was)')
+;
+</code></pre>
+
+<p>Die neue Methode stellt für den Autoren keinen großen Mehraufwand dar, dafür ersetzt TADS die Standardschablone mit den
+erkannten Verb-, Präpositions- und Mischwortschnipseln: <br />
+<code>Wo(FrageWort) willst du den Deckel (Präposition)(Verb)en?</code> <br />
+wird also ohne Klammern: <br />
+<code>Womit willst du den Deckel aufschrauben?</code> <br />
+<code>Womit willst du den Deckel lockerdrehen?</code> <br />
+<code>Womit willst du den Deckel abschrauben?</code>  </p>
+
+<h2>5.6 Die askDobjResponseProd Eigenschaft</h2>
+
+<p>Beim Anlegen neuer Verben ist auf die korrekte Verwendung der "askDobjResponseProd" Eigenschaft zu achten, das TADS diese für Parsernachfragen verwendet.
+Ein Beispiel:</p>
+
+<pre><code>VerbRule(JumpOver)
+        ('spring' 'über') singleDobj (|'hinüber')
+        : JumpOverAction
+        verbPhrase = 'zu springen/springen (über was)'
+        askDobjResponseProd = ueberSingleNoun
+;
+</code></pre>
+
+<p>Die letzte Zeile sagt dem Parser, er soll beim Nachfragen:</p>
+
+<blockquote>
+  <p>spring über
+Worüber willst du springen?
+über die Hürde</p>
+</blockquote>
+
+<p>Die obige Antwort mit der Präposition "über" zulassen. Gültige Präposition sind:</p>
+
+<pre><code>grammar inSingleNoun(main):
+grammar umSingleNoun(main):
+grammar nachSingleNoun(main):
+grammar zuSingleNoun(main):
+grammar ueberSingleNoun(main):
+grammar durchSingleNoun(main):
+grammar vonSingleNoun(main):
+grammar aufSingleNoun(main):
+grammar unterSingleNoun(main):
+grammar hinterSingleNoun(main):
+grammar ausSingleNoun(main):
+grammar mitSingleNoun(main):
+grammar anSingleNoun(main):
+</code></pre>
+
+<p>Diese können natürlich nach Bedarf beliebig erweitert werden, die Syntax folgt der obigen Deklaration, zu finden in de_de.t.</p>
+
+<h2>5.7 Das bevorzugte indirekte Objekt</h2>
+
+<p>Eine weitere neue Eigenschaft ist für alle TIActions eingeführt worden. Falls eine Phrase ohne jegliche Präposition (wie z.B. "zeig dem Mann den Hut") 
+verwendet wird, kann der Parser das "dobj" von dem "iobj" nicht mehr unterscheiden. Daher sagt</p>
+
+<pre><code>preferredIobj = Actor
+</code></pre>
+
+<p>dem Parser hier, dass das "iobj" sehr wahrscheinlich vom Typ "Actor" ist. Fall das nicht der Fall ist und das "dobj" ein "Actor" ist, vertauscht der 
+Parser die beiden Objekte. Somit sind die Eingaben:  </p>
+
+<blockquote>
+  <p>zeig mann hut  </p>
+</blockquote>
+
+<p>und  </p>
+
+<blockquote>
+  <p>zeig hut mann  </p>
+</blockquote>
+
+<p>gleichwertig und über eine einzige Verbschablone definiert.</p>
+
+
+
+<HR>
+<P><FONT SIZE=-1><I>G-TADS Kurzdokumentation</I><BR>
+<a href="index.html">[Index]</a><BR>
+<I><a href="vokabular.htm">[Zur&uuml;ck] </a>&nbsp;&nbsp;<a href="listen.htm">[Weiter] </a></I></FONT></P>
+</body></html>

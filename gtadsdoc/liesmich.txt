@@ -1,0 +1,6 @@
+Um die Kurzdokumentation unter der Windows Workbench verfügbar zu machen, 
+
+1. kopiere bitte den gtadsdoc Ordner unter Programmverzeichnis\Tads3\doc
+2. Ersetze mit Programmverzeichnis\Tads3\doc\index.htm mit der Datei unter gtadsdoc\index_ersatz\index.htm
+2. Ersetze mit Programmverzeichnis\Tads3\doc\indexwb.htm mit der Datei unter gtadsdoc\index_ersatz\indexwb.htm
+3. kopiere gtadsdoc\index_ersatz\gtadsdoc.jpg nach Programmverzeichnis\Tads3\doc
