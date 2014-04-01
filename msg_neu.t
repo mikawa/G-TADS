@@ -39,7 +39,7 @@
 // -- setup of version info for Messages
 
 messagesInfo: object
-    version = '1.5 - 131023'
+    version = '2.0 - 140327'
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -188,54 +188,54 @@ libMessages: MessageHelper
     distantThingDesc(obj)
     {
         gMessageParams(obj);
-        "{Es obj/er} {ist} zu weit weg, um Genaueres erkennen zu können. ";
+        "{Es obj/er} {ist} zu weit weg{*}, um Genaueres erkennen zu können. ";
     }
 
     /* generic long description of a Thing under obscured conditions */
     obscuredThingDesc(obj, obs)
     {
         gMessageParams(obj, obs);
-        "{Du/er} {kann} nichts Spezielles durch {den obs/ihn} sehen. ";
+        "{Du/er} {koennt} nichts Spezielles durch {den obs/ihn} sehen{*}. ";
     }
 
     /* generic "listen" description of a Thing at a distance */
     distantThingSoundDesc(obj)
-        { "{Du/er} {kann} aus dieser Entfernung nichts hören. "; }
+        { "{Du/er} {koennt} aus dieser Entfernung nichts hören{*}. "; }
 
     /* generic obscured "listen" description */
     obscuredThingSoundDesc(obj, obs)
     {
         gMessageParams(obj, obs);
-        "{Du/er} {kann} nichts Besonderes durch {den obs/ihn} hören. ";
+        "{Du/er} {koennt} nichts Besonderes durch {den obs/ihn} hören{*}. ";
     }
 
     /* generic "smell" description of a Thing at a distance */
     distantThingSmellDesc(obj)
-        { "{Du/er} {kann} aus dieser Entfernung nichts riechen. "; }
+        { "{Du/er} {koennt} aus dieser Entfernung nichts riechen{*}. "; }
 
     /* generic obscured "smell" description */
     obscuredThingSmellDesc(obj, obs)
     {
         gMessageParams(obj, obs);
-        "{Du/er} {kann} nichts Besonderes durch {den obs/ihn} riechen. ";
+        "{Du/er} {koennt} nichts Besonderes durch {den obs/ihn} riechen{*}. ";
     }
 
     /* generic "taste" description of a Thing */
     thingTasteDesc(obj)
     {
         gMessageParams(obj);
-        "{Er/es obj} schmeck{st/t} so, wie {du/er} es erwartet {hat}. ";
+        "{Er/es obj} {schmeckt} wie erwartet{*}. ";
     }
 
     /* generic "feel" description of a Thing */
     thingFeelDesc(obj)
-        { "{Du/er} fühl{st/t} nichts Außergewöhnliches. "; }
+        { "{Du/er} {fuehlt} nichts Außergewöhnliches{*}. "; }
 
     /* obscured "read" description */
     obscuredReadDesc(obj)
     {
         gMessageParams(obj);
-        "{Du/er} {kann} {den obj/ihn} nicht gut genug sehen, um
+        "{Du/er} {koennt} {den obj/ihn} nicht gut genug sehen{*}, um
         {es/ihn} zu lesen. ";
     }
 
@@ -243,16 +243,16 @@ libMessages: MessageHelper
     dimReadDesc(obj)
     {
         gMessageParams(obj);
-        "Es {ist|war} nicht hell genug, um {den obj/ihn} zu lesen. ";
+        "Es {ist singular} nicht hell genug{*}, um {den obj/ihn} zu lesen. ";
     }
 
     /* lit/unlit match description */
-    litMatchDesc(obj) { "\^<<obj.derName>> <<obj.verbZuSein>> angezündet. "; }
+    litMatchDesc(obj) { "\^<<obj.derName>> <<obj.verbZuSein>> angezündet{*}. "; }
     unlitMatchDesc(obj) { "\^<<obj.derName>> <<obj.verbZuSein>> ein 
-        gewöhnliches Streichholz. "; }
+        gewöhnliches Streichholz{*}. "; }
 
     /* lit candle description */
-    litCandleDesc(obj) { "\^<<obj.derName>> <<obj.verbZuSein>> angezündet. "; }
+    litCandleDesc(obj) { "\^<<obj.derName>> <<obj.verbZuSein>> angezündet{*}. "; }
 
     /*
      *   Prepositional phrases for putting objects into different types of
@@ -263,7 +263,8 @@ libMessages: MessageHelper
     putDestUnder(obj) { return 'unter ' + obj.denNameObj; }
     putDestBehind(obj) { return 'hinter ' + obj.denNameObj; }
     putDestFloor(obj) { return 'auf ' + obj.denNameObj; }
-
+    putDestRoom(obj) { return 'in ' + obj.denNameObj; }
+    
     /* the list separator character in the middle of a list */
     listSepMiddle = ", "
 
@@ -584,7 +585,7 @@ libMessages: MessageHelper
     /* greeting actor while actor is already talking to us */
     alreadyTalkingTo(actor, greeter)
     {
-        "\^<<greeter.derName>> <<greeter.verbZuHaben>> bereits
+        "\^<<greeter.derName>> <<greeter.verbZuHaben>> schon
         die Aufmerksamkeit <<actor.desName>>. ";
     }
 
@@ -1289,14 +1290,14 @@ libMessages: MessageHelper
      *   MenuTopicItem's list of items, to let the user know that there
      *   are no more items available.  
      */
-    menuTopicListEnd = '[The End]'
+    menuTopicListEnd = '[Ende]'
 
     /*
      *   Message to display at the end of a "long topic" in the menu
      *   system.  We'll display this at the end of the long topic's
      *   contents.  
      */
-    menuLongTopicEnd = '[The End]'
+    menuLongTopicEnd = '[Ende]'
 
     /*
      *   instructions text for banner-mode menus - this is displayed in
@@ -1328,7 +1329,7 @@ libMessages: MessageHelper
      */
     cannotReachObject(obj)
     {
-        "{Du/er} {kann} <<obj.denNameObj>> nicht erreichen. ";
+        "{Du/er} {koennt} <<obj.denNameObj>> nicht erreichen{*}. ";
     }
 
     /*
@@ -1338,46 +1339,46 @@ libMessages: MessageHelper
     cannotReachContents(obj, loc)
     {
         gMessageParams(obj, loc);
-        return '{Du/er} {kann} {den obj/ihn} in '
-               + '{dem loc/ihn} nicht erreichen. ';
+        return '{Du/er} {koennt} {den obj/ihn} in '
+            + '{dem loc/ihn} nicht erreichen{*}. ';
     }
 
     /* cannot reach an object because it's outisde the given container */
     cannotReachOutside(obj, loc)
     {
         gMessageParams(obj, loc);
-        return '{Du/er} {kann} {den obj/ihn} von '
-               + '{dem loc/ihm} aus nicht erreichen. ';
+        return '{Du/er} {koennt} {den obj/ihn} von '
+            + '{dem loc/ihm} aus nicht erreichen{*}. ';
     }
 
     /* sound is coming from inside/outside a container */
     soundIsFromWithin(obj, loc)
     {
-        "\^<<obj.derName>> <<obj.verbZuScheinen>> aus 
-         <<loc.demNameObj>> zu kommen. ";
+        "\^<<obj.derName>> <<obj.verbZuKommen>> offenbar aus
+        <<loc.demNameObj>>{*}. ";
     }
     soundIsFromWithout(obj, loc)
     {
-        "\^<<obj.derName>> <<obj.verbZuScheinen>> von
-        <<loc.demNameObj>> zu kommen. ";
+        "\^<<obj.derName>> <<obj.verbZuKommen>> offenbar von
+        <<loc.demNameObj>>{*}. ";
     }
 
     /* odor is coming from inside/outside a container */
     smellIsFromWithin(obj, loc)
     {
-        "\^<<obj.derName>> <<obj.verbZuScheinen>> aus
-        <<loc.demNameObj>> zu kommen. ";
+        "\^<<obj.derName>> <<obj.verbZuKommen>> offenbar aus
+        <<loc.demNameObj>>{*}. ";
     }
     smellIsFromWithout(obj, loc)
     {
-        "\^<<obj.derName>> <<obj.verbZuScheinen>> von
-        <<loc.demNameObj>> zu kommmen. ";
+        "\^<<obj.derName>> <<obj.verbZuKommen>> offenbar von
+        <<loc.demNameObj>>{*}. ";
     }
 
     /* default description of the player character */
     pcDesc(actor)
     {
-        "\^<<actor.derName>> <<actor.verbZuSehen>> aus wie immer. ";
+        "\^<<actor.derName>> <<actor.verbZuSehen>> wie immer aus{-*}. ";
     }
 
     /*
@@ -1401,7 +1402,7 @@ libMessages: MessageHelper
     roomDarkName = 'Dunkelheit'
 
     /* generic long description of a dark room */
-    roomDarkDesc = "Es {ist|war} stockdunkel hier. "
+    roomDarkDesc = "Es {ist singular} hier stockdunkel{*}. "
 
     /*
      *   mention that an actor is here, without mentioning the enclosing
@@ -1410,7 +1411,7 @@ libMessages: MessageHelper
     roomActorHereDesc(actor)
     {
         "\^<<actor.derName>> <<buildSynthParam('subj', actor)>> 
-        <<actor.posture.msgVerbT>> <<tSel('hier', 'dort')>>. ";
+        <<actor.posture.msgVerbT>> hier{*}. ";
     }
 
     /*
@@ -1421,7 +1422,7 @@ libMessages: MessageHelper
     roomActorThereDesc(actor) //HIER EINGEFÜGT BUILD SYNTH PARAM FUNKTION UM SUBJ RICHTIG ZU SETZEN
     {
         "\^<<actor.derName>> <<buildSynthParam('subj', actor)>> 
-        <<actor.posture.msgVerbT>> ganz in der Nähe. ";
+        <<actor.posture.msgVerbT>> ganz in der Nähe{*}. ";
     }
 
     /*
@@ -1432,7 +1433,7 @@ libMessages: MessageHelper
     actorInRoom(actor, cont)
     {
         "\^<<actor.derName>> <<buildSynthParam('subj', actor)>>
-        <<actor.posture.msgVerbT>> <<cont.actorInName>>. ";
+        <<actor.posture.msgVerbT>> <<cont.actorInName>>{*}. ";
     }
 
     /*
@@ -1444,7 +1445,7 @@ libMessages: MessageHelper
     actorInRoomPosture(actor, room)
     {
         "\^<<actor.itNom>> <<buildSynthParam('subj', actor)>>
-        <<actor.posture.msgVerbT>> <<room.actorInName>>. ";
+        <<actor.posture.msgVerbT>> <<room.actorInName>>{*}. ";
     }
 
     /*
@@ -1456,7 +1457,7 @@ libMessages: MessageHelper
     {
         if (actor.posture != standing)
             "\^<<actor.itNom>> <<buildSynthParam('subj', actor)>>
-            <<actor.posture.msgVerbT>> {hier/dort}. ";
+            <<actor.posture.msgVerbT>> hier{*}. ";
     }
 
     /*
@@ -1469,7 +1470,7 @@ libMessages: MessageHelper
     {
         /* say that the actor is in the room, using its remote in-name */
         "\^<<actor.derName>> <<buildSynthParam('subj', actor)>>
-        <<actor.posture.msgVerbT>> <<room.inRoomName(pov)>>. ";
+        <<actor.posture.msgVerbT>> <<room.inRoomName(pov)>>{*}. ";
     }
 
     /*
@@ -1486,7 +1487,7 @@ libMessages: MessageHelper
          */
         "\^<<actor.derName>> <<outer.inRoomName(pov)>>,
         <<buildSynthParam('subj', actor)>><<actor.posture.msgVerbT>> 
-        <<inner.actorInName>>. ";
+        <<inner.actorInName>>{*}. ";
     }
 
     /*
@@ -1499,12 +1500,12 @@ libMessages: MessageHelper
     // -- German: provide modified actor descriptions with the new 
     // -- msgVerbTPastPlural etc ...
     
-    actorInGroupPrefix(posture, cont, lst) { "\^<<withListCaseNominative>><<withListArtIndefinitve>>"; }
+    actorInGroupPrefix(posture, cont, lst) { "\^<<withListCaseNominative>><<withListArtIndefinite>>"; }
     actorInGroupSuffix(posture, cont, lst)
     {
-        " <<lst.length() == 1 ? tSel(posture.msgVerbT, posture.msgVerbTPast) 
-          : tSel(posture.msgVerbTPlural, posture.msgVerbTPastPlural)>> 
-        <<cont.actorInName>>. ";
+        " <<lst.length() == 1 ? posture.msgVerbT 
+          : posture.msgVerbTPlural>> 
+        <<cont.actorInName>>{*}. ";
     }
 
     /*
@@ -1517,13 +1518,12 @@ libMessages: MessageHelper
     // -- German: provide modified actor descriptions with the new 
     // -- msgVerbTPastPlural etc ...
     
-    actorInRemoteGroupPrefix(pov, posture, cont, remote, lst) { "\^<<withListCaseNominative>><<withListArtIndefinitve>>"; }
+    actorInRemoteGroupPrefix(pov, posture, cont, remote, lst) { "\^<<withListCaseNominative>><<withListArtIndefinite>>"; }
     actorInRemoteGroupSuffix(pov, posture, cont, remote, lst)
     {
-        " <<lst.length() == 1 ? tSel('ist', 'war') : tSel('sind', 'waren')>>
-        <<remote.inRoomName(pov)>> und <<lst.length() == 1 ? tSel(posture.msgVerbT, posture.msgVerbTPast) 
-          : tSel(posture.msgVerbTPlural, posture.msgVerbTPastPlural)>>
-        <<cont.actorInName>>. ";
+        " <<lst.length() == 1 ? '{ist singular}' : '{ist plural}'>>
+        <<remote.inRoomName(pov)>> und <<lst.length() == 1 ? posture.msgVerbT 
+          : posture.msgVerbTPlural>> <<cont.actorInName>>{*}. ";
     }
 
     /*
@@ -1542,12 +1542,10 @@ libMessages: MessageHelper
     // -- German: provide modified actor descriptions with the new 
     // -- msgVerbTPastPlural etc ...
     
-    actorHereGroupPrefix(posture, lst) { "\^<<withListCaseNominative>><<withListArtIndefinitve>>"; }
+    actorHereGroupPrefix(posture, lst) { "\^<<withListCaseNominative>><<withListArtIndefinite>>"; }
     actorHereGroupSuffix(posture, lst)
     {
-        " <<lst.length() == 1 ? tSel(posture.msgVerbT, posture.msgVerbTPast) 
-          : tSel(posture.msgVerbTPlural, posture.msgVerbTPastPlural)>>
-        <<tSel('hier', 'dort')>>. ";
+        " <<lst.length() == 1 ? posture.msgVerbT : posture.msgVerbTPlural>> hier{*}. ";
     }
 
     /*
@@ -1556,26 +1554,25 @@ libMessages: MessageHelper
      *   is not to be stated, and the actors are in a remote location:
      *   "Bob and Bill are in the courtyard."  
      */
-    actorThereGroupPrefix(pov, posture, remote, lst) { "\^<<withListCaseNominative>><<withListArtIndefinitve>>"; }
+    actorThereGroupPrefix(pov, posture, remote, lst) { "\^<<withListCaseNominative>><<withListArtIndefinite>>"; }
     actorThereGroupSuffix(pov, posture, remote, lst)
     {
-        " <<lst.length() == 1 ? tSel(posture.msgVerbT, posture.msgVerbTPast) 
-          : tSel(posture.msgVerbTPlural, posture.msgVerbTPastPlural)>> 
-        <<remote.inRoomName(pov)>>. ";
+        " <<lst.length() == 1 ? posture.msgVerbT: posture.msgVerbTPlural>> 
+        <<remote.inRoomName(pov)>>{*}. ";
     }
 
     /* a traveler is arriving, but not from a compass direction */
     sayArriving(traveler)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.denTravelerLocName>>. ";
+        <<traveler.denTravelerLocName>>{*}. ";
     }
 
     /* a traveler is departing, but not in a compass direction */
     sayDeparting(traveler)
     {
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuVerlassen>>
-        <<traveler.denTravelerLocName>>. ";
+        <<traveler.denTravelerLocName>>{*}. ";
     }
 
     /*
@@ -1585,7 +1582,7 @@ libMessages: MessageHelper
     sayArrivingLocally(traveler, dest)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.denTravelerLocName>>. ";
+        <<traveler.denTravelerLocName>>{*}. ";
     }
 
     /*
@@ -1595,7 +1592,7 @@ libMessages: MessageHelper
     sayDepartingLocally(traveler, dest)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuVerlassen>>
-        <<traveler.denTravelerLocName>>. ";
+        <<traveler.denTravelerLocName>>{*}. ";
     }
 
     /*
@@ -1605,14 +1602,14 @@ libMessages: MessageHelper
     sayTravelingRemotely(traveler, dest)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuGehen>> zu
-        <<traveler.demTravelerLocName>>. ";
+        <<traveler.demTravelerLocName>>{*}. ";
     }
 
     /* a traveler is arriving from a compass direction */
     sayArrivingDir(traveler, dirName)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.travelerRemoteLocName>> von \^<<dirName>>. ";
+        <<traveler.travelerRemoteLocName>> von \^<<dirName>>{*}. ";
     }
 
     /* a traveler is leaving in a given compass direction */
@@ -1621,14 +1618,14 @@ libMessages: MessageHelper
         local nm = traveler.denTravelerRemoteLocName;
         
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuVerlassen>>
-        <<nm != '' ? ' ' + nm : ''>> nach \^<<dirName>>. ";
+        <<nm != '' ? ' ' + nm : ''>> nach \^<<dirName>>{*}. ";
     }
     
     /* a traveler is arriving from a shipboard direction */
     sayArrivingShipDir(traveler, dirName)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.travelerRemoteLocName>> von \^<<dirName>>. ";
+        <<traveler.travelerRemoteLocName>> von \^<<dirName>>{*}. ";
     }
 
     /* a traveler is leaving in a given shipboard direction */
@@ -1637,7 +1634,7 @@ libMessages: MessageHelper
         local nm = traveler.demTravelerRemoteLocName;
         
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuGehen>>
-        <<nm != '' ? ' von ' + nm : ''>> nach <<dirName>>. ";
+        <<nm != '' ? ' von ' + nm : ''>> nach <<dirName>>{*}. ";
     }
 
     /* a traveler is going aft */
@@ -1646,7 +1643,7 @@ libMessages: MessageHelper
         local nm = traveler.demTravelerRemoteLocName;
         
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuGehen>>
-        <<nm != '' ? ' von ' + nm : ''>> nach hinten. ";
+        <<nm != '' ? ' von ' + nm : ''>> nach hinten{*}. ";
     }
 
     /* a traveler is going fore */
@@ -1655,53 +1652,53 @@ libMessages: MessageHelper
         local nm = traveler.demTravelerRemoteLocName;
 
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuGehen>>
-        <<nm != '' ? ' von ' + nm : ''>> nach vorne. ";
+        <<nm != '' ? ' von ' + nm : ''>> nach vorne{*}. ";
     }
 
     /* a shipboard direction was attempted while not onboard a ship */
-    notOnboardShip = "Diese Richtung {hat|hatte} {hier|dort} keine Bedeutung. "
+    notOnboardShip = "Diese Richtung {hat singular} hier keine Bedeutung{*}. "
 
     /* a traveler is leaving via a passage */
     sayDepartingThroughPassage(traveler, passage)
     {
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuVerlassen>>
-        <<traveler.travelerRemoteLocName>> durch <<passage.denNameObj>>. ";
+        <<traveler.travelerRemoteLocName>> durch <<passage.denNameObj>>{*}. ";
     }
 
     /* a traveler is arriving via a passage */
     sayArrivingThroughPassage(traveler, passage)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.travelerRemoteLocName>> durch <<passage.denNameObj>>. ";
+        <<traveler.travelerRemoteLocName>> durch <<passage.denNameObj>>{*}. ";
     }
 
     /* a traveler is leaving via a path */
     sayDepartingViaPath(traveler, passage)
     {
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuVerlassen>>
-        <<traveler.travelerRemoteLocName>> und <<traveler.verbZuBetreten>> 
-        <<passage.denNameObj>>. ";
+        <<traveler.travelerRemoteLocName>>{*} und <<traveler.verbZuBetreten>> 
+        <<passage.denNameObj>>{*}. ";
     }
 
     /* a traveler is arriving via a path */
     sayArrivingViaPath(traveler, passage)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.travelerRemoteLocName>> von <<passage.demNameObj>>. ";
+        <<traveler.travelerRemoteLocName>> von <<passage.demNameObj>>{*}. ";
     }
 
     /* a traveler is leaving up a stairway */
     sayDepartingUpStairs(traveler, stairs)
     {
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuGehen>>
-        <<stairs.denNameObj>> hinauf. ";
+        <<stairs.denNameObj>> hinauf{*}. ";
     }
 
     /* a traveler is leaving down a stairway */
     sayDepartingDownStairs(traveler, stairs)
     {
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuGehen>>
-        <<stairs.denNameObj>> hinunter. ";
+        <<stairs.denNameObj>> hinunter{*}. ";
     }
 
     /* a traveler is arriving by coming up a stairway */
@@ -1710,7 +1707,7 @@ libMessages: MessageHelper
         local nm = traveler.denTravelerRemoteLocName;
 
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuKommen>>
-        <<stairs.denNameObj>> hoch<<nm != '' ? ' in ' + nm : ''>>. ";
+        <<stairs.denNameObj>> hoch<<nm != '' ? ' in ' + nm : ''>>{*}. ";
     }
 
     /* a traveler is arriving by coming down a stairway */
@@ -1719,14 +1716,14 @@ libMessages: MessageHelper
         local nm = traveler.denTravelerRemoteLocName;
 
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuKommen>>
-        <<stairs.denNameObj>> hinunter<<nm != '' ? ' in ' + nm : ''>>. ";
+        <<stairs.denNameObj>> hinunter<<nm != '' ? ' in ' + nm : ''>>{*}. ";
     }
 
     /* acompanying another actor on travel */
     sayDepartingWith(traveler, lead)
     {
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuKommen>>
-        mit <<lead.demNameObj>>. ";
+        mit <<lead.demNameObj>>{*}. ";
     }
 
     /*
@@ -1741,15 +1738,14 @@ libMessages: MessageHelper
     sayDepartingWithGuide(guide, lead)
     {
         "\^<<lead.derName>> <<lead.verbZuGehen>>
-        <<guide.demNameObj>> voraus. ";
+        <<guide.demNameObj>> voraus{*}. ";
     }
 
     /* note that a door is being opened/closed remotely */
     sayOpenDoorRemotely(door, stat)
     {
-        "Jemand <<stat ? 'öffnet' + tSel('', 'e')
-                        : 'schl' + tSel('ießt', 'oss')>>
-        <<door.denNameObj>> von der anderen Seite. ";
+        "Jemand <<stat ? '{oeffnet}' : '{schliesst}'>>
+        <<door.denNameObj>> von der anderen Seite{*}. ";
     }
 
     /*
@@ -1760,8 +1756,8 @@ libMessages: MessageHelper
     closedMsg(obj) { return 'geschlossen'; }
 
     /* object is currently open/closed */
-    currentlyOpen = '{Es dobj/er} {ist} momentan offen. '
-    currentlyClosed = '{Es dobj/er} {ist} momentan geschlossen. '
+    currentlyOpen = '{Es dobj/er} {ist} momentan offen{*}. '
+    currentlyClosed = '{Es dobj/er} {ist} momentan geschlossen{*}. '
 
     /* stand-alone independent clause describing current open status */
     openStatusMsg(obj) { return obj.derNameIs + ' ' + obj.openDesc; } //BEDARF
@@ -1771,8 +1767,8 @@ libMessages: MessageHelper
     unlockedMsg(obj) { return 'aufgesperrt'; }
 
     /* object is currently locked/unlocked */
-    currentlyLocked = '{Es dobj/er} {ist} momentan abgesperrt. '
-    currentlyUnlocked = '{Es dobj/er} {ist} momentan aufgesperrt. '
+    currentlyLocked = '{Es dobj/er} {ist} momentan abgesperrt{*}. '
+    currentlyUnlocked = '{Es dobj/er} {ist} momentan aufgesperrt{*}. '
 
     /*
      *   on/off status - these are simply adjectives that can be used to
@@ -1785,22 +1781,21 @@ libMessages: MessageHelper
     matchBurnedOut(obj)
     {
         gMessageParams(obj);
-        "{Der obj/er} {ist} abgebrannt und {hat|hatte} sich in ein
-        Aschehäufchen verwandelt. ";
+        "{Der obj/er} {ist} zu einem Aschehäufchen abgebrannt{*}. ";
     }
 
     /* daemon report for burning out a candle */
     candleBurnedOut(obj)
     {
         gMessageParams(obj);
-        "{Der obj/er} {ist} abgebrannt und ausgegangen. ";
+        "{Der obj/er} {ist} abgebrannt und ausgegangen{*}. ";
     }
 
     /* daemon report for burning out a generic fueled light source */
     objBurnedOut(obj)
     {
         gMessageParams(obj);
-        "{Der obj/er} {ist} ausgegangen. ";
+        "{Der obj/er} {ist} ausgegangen{*}. ";
     }
 
     /* 
@@ -1841,7 +1836,7 @@ libMessages: MessageHelper
         warning = warning.substr(3);
 
         /* build the message */
-        return warning + ' Will du fortfahren?';
+        return warning + ' Willst du fortfahren?';
     }
     inputFileScriptWarningButtons = [
         '&Ja, verwende diese Datei', '&Wähle eine andere Datei', '&Halte das Skript an']
@@ -1874,7 +1869,7 @@ playerMessages: libMessages
      *   is the default for most verbs. 
      */
     noMatchCannotSee(actor, txt) { 
-        "\^<<actor.derName>> <<actor.verbZuSehen>> {hier|dort} <<actor.keinen(txt)>>. "; 
+        "\^<<actor.derName>> <<actor.verbZuSehen>> hier <<actor.keinen(txt)>>. "; 
     }
 
     /*
@@ -1885,7 +1880,7 @@ playerMessages: libMessages
      *   be nonsensical. 
      */
     noMatchNotAware(actor, txt) {
-         "{Du/er} bemerk{st/t} {hier|dort} <<actor.keinen(txt)>>. "; 
+        "{Du/er} {bemerkt} hier <<actor.keinen(txt)>>{*}. "; 
     }
 
     /* 'all' is not allowed with the attempted action */
@@ -1897,13 +1892,13 @@ playerMessages: libMessages
     /* no match for 'all' */
     noMatchForAll(actor)
     {
-        "<.parser>{Du/er} {sieht} {hier|dort} nichts Passendes.<./parser> ";
+        "<.parser>{Du/er} {sieht} hier nichts Passendes.<./parser> ";
     }
 
     /* nothing left for 'all' after removing 'except' items */
     noMatchForAllBut(actor)
     {
-        "<.parser>{Du/er} {sieht} {hier|dort} sonst nichts.<./parser> ";
+        "<.parser>{Du/er} {sieht} hier sonst nichts.<./parser> ";
     }
 
     /* nothing left in a plural phrase after removing 'except' items */
@@ -1947,7 +1942,7 @@ playerMessages: libMessages
      */
     missingObject(actor, action, which)
     {
-        "<.parser>Du musst genauer sagen,
+        "<.parser>Sag bitte genauer,
         <<action.whatObj(which)>> <<actor.derName>>
         <<action.getQuestionInf(which)>> <<actor.referralPerson == SecondPerson
           ? 'willst' : actor.referralPerson == FourthPerson ? 'sollen' : 
@@ -1969,7 +1964,7 @@ playerMessages: libMessages
      */
     missingLiteral(actor, action, which)
     {
-        "<.parser>Bitte sag genauer
+        "<.parser>Sag bitte genauer
         <<action.whatObj(which)>> du
         <<action.getQuestionVerb(which)>> willst.  Versuch, zum Beispiel,
         <q>etwas</q> zu <<action.getQuestionVerb(which)>>.<./parser> ";
@@ -2169,7 +2164,7 @@ playerMessages: libMessages
     /* the actor is missing in a command */
     missingActor(actor)
     {
-        "<.parser>Du musst genauer sagen, <<whomPronoun>> 
+        "<.parser>Sag bitte genauer, <<whomPronoun>> 
         du ansprechen willst.<./parser> ";
     }
 
@@ -2254,15 +2249,15 @@ npcMessages: playerMessages
     /* the target cannot hear a command we gave */
     commandNotHeard(actor)
     {
-        "\^<<actor.derName>> antwort<<actor.verbEndingET>> nicht. ";
+        "\^<<actor.derName>> <<actor.verbZuAntworten>> nicht. ";
     }
 
     /* no match for a noun phrase */
     noMatchCannotSee(actor, txt) {
-        "\^<<actor.derName>> <<actor.verbZuSehen>> {hier|dort} <<actor.keinen(txt)>>. "; 
+        "\^<<actor.derName>> <<actor.verbZuSehen>> hier <<actor.keinen(txt)>>. "; 
     }
     noMatchNotAware(actor, txt) {
-        "\^<<actor.derName>> <<actor.verbZuKennen>> {hier|dort} <<actor.keinen(txt)>>. ";  
+        "\^<<actor.derName>> <<actor.verbZuKennen>> hier <<actor.keinen(txt)>>. ";  
     }
 
     /* no match for 'all' */
@@ -2307,7 +2302,7 @@ npcMessages: playerMessages
     }
     missingObject(actor, action, which)
     {
-        "<.parser>Du musst genauer sagen, <<action.getQuestionWord(which)>> 
+        "<.parser>Sag bitte genauer, <<action.getQuestionWord(which)>> 
         <<actor.derNameObj>> <<action.getQuestionVerb(which)>> soll.<./parser> ";
     }
 
@@ -2315,7 +2310,7 @@ npcMessages: playerMessages
     
     missingLiteral(actor, action, which)
     {
-        "<.parser>Du musst genauer sagen, <<action.whatObj(which)>>
+        "<.parser>Sag bitte genauer, <<action.whatObj(which)>>
         <<actor.derNameObj>> <<action.getQuestionVerb(which)>> soll.
         Zum Beispiel: <<actor.derName>>, <<action.getQuestionVerb(which)>>
         <q>etwas</q>.<./parser> ";
@@ -2363,59 +2358,54 @@ npcDeferredMessages: object
 npcMessagesDirect: npcMessages
     /* no match for a noun phrase */
     noMatchCannotSee(actor, txt) {
-        "\^<<actor.derName>> <<actor.verbZuSehen>> <<actor.itReflexive>> um. <q>Ich sehe hier
+        "\^<<actor.derName>> <<actor.verbZuSehen>> <<actor.itReflexive>> um{-*}. <q>Ich sehe hier
             <<actor.keinen(txt)>>.</q> ";
     }
     noMatchNotAware(actor, txt) {
-        "<q>Ich kenne <<actor.keinen(txt)>></q>, <<actor.verbZuSagen>> <<actor.derName>>. ";
+        "<q>Ich kenne <<actor.keinen(txt)>></q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* no match for 'all' */
     noMatchForAll(actor)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>, <q>Ich sehe nichts passendes.</q> ";
+        "<q>Ich sehe nichts Passendes</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* nothing left for 'all' after removing 'except' items */
     noMatchForAllBut(actor)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>, <q>Ich sehe sonst nichts hier.</q> ";
+        "<q>Ich sehe sonst nichts hier</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* 'take zero books' */
     zeroQuantity(actor, txt)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Das macht doch keinen Sinn.</q> ";
+        "<q>Das macht doch keinen Sinn</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* insufficient quantity to meet a command request ('take five books') */
     insufficientQuantity(actor, txt, matchList, requiredNum)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Ich sehe hier nicht so <<actor.viele(txt)>>.</q> ";
+        "<q>Ich sehe hier nicht so <<actor.viele(txt)>></q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* a unique object is required, but multiple objects were specified */
     uniqueObjectRequired(actor, txt, matchList)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Ich kann hier nur mehrere Objekte verwenden.</q> ";
+        "<q>Ich kann hier nur mehrere Objekte verwenden</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* a single noun phrase is required, but a noun list was used */
     singleObjectRequired(actor, txt)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Ich kann hier nur ein Objekt verwenden.</q> ";
+        "<q>Ich kann hier nur ein Objekt verwenden</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* no match for the response to a disambiguation question */
     noMatchDisambig(actor, origPhrase, disambigResponse)
     {
         /* leave the quote open for the re-prompt */
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Das war keine der Wahlmöglichkeiten. ";
+        "<q>Das war keine der Wahlmöglichkeiten</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /*
@@ -2429,8 +2419,7 @@ npcMessagesDirect: npcMessages
     disambigOrdinalOutOfRange(actor, ordinalWord, originalText)
     {
         /* leave the quote open for the re-prompt */
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Da waren nicht so viele Wahlmöglichkeiten. ";
+        "<q>Da waren nicht so viele Wahlmöglichkeiten</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /*
@@ -2456,7 +2445,7 @@ npcMessagesDirect: npcMessages
         {
             /* one required - ask with the original text */
             if (!askingAgain)
-                "\^<<actor.derName>> <<actor.verbZuFragen>>, <q>";
+                "\^<<actor.derName>> <<actor.verbZuFragen>>{*}, <q>";
             
             "Meinst du <<
             askDisambigList(matchList, fullMatchList, nil, dist)>>?</q> ";
@@ -2468,7 +2457,7 @@ npcMessagesDirect: npcMessages
              *   given the original text, so just use the number 
              */
             if (!askingAgain)
-                "\^<<actor.derName>> <<actor.verbZuFragen>>, <q>";
+                "\^<<actor.derName>> <<actor.verbZuFragen>>{*}, <q>";
             
             "Welche <<spellInt(requiredNum)>> (von <<
             askDisambigList(matchList, fullMatchList, true, dist)>>)
@@ -2482,7 +2471,7 @@ npcMessagesDirect: npcMessages
      */
     ambiguousNounPhrase(actor, originalText, matchList, fullMatchList)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
+        "\^<<actor.derName>> <<actor.verbZuSagen>>{*},
         <q>Ich weiß nicht, was du mit <<originalText>> genau meinst.</q> ";
     }
 
@@ -2498,7 +2487,7 @@ npcMessagesDirect: npcMessages
     }
     missingObject(actor, action, which)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
+        "\^<<actor.derName>> <<actor.verbZuSagen>>{*},
         <q>Ich weiß nicht <<action.whatObj(which)>>
         ich <<action.getQuestionVerb(which)>> soll.</q> ";
     }
@@ -2511,14 +2500,14 @@ npcMessagesDirect: npcMessages
     /* tell the user they entered a word we don't know */
     askUnknownWord(actor, txt)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
+        "\^<<actor.derName>> <<actor.verbZuSagen>>{*},
         <q>Ich kenne das Wort <q><<txt>></q> nicht.</q> ";
     }
 
     /* tell the user they entered a word we don't know */
     wordIsUnknown(actor, txt)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
+        "\^<<actor.derName>> <<actor.verbZuSagen>>{*},
         <q>Du hast ein Wort verwendet, das ich nicht kenne.</q> ";
     }
 ;
@@ -2560,64 +2549,57 @@ npcMessagesDirect: npcMessages
 npcDeferredMessagesDirect: npcDeferredMessages
     commandNotUnderstood(actor)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Ich habe nicht verstanden, was du meinst.</q> ";
+        "<q>Ich habe nicht verstanden, was du meinst</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* no match for a noun phrase */
     noMatchCannotSee(actor, txt) {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>, <q>Ich habe hier <<actor.keinen(txt)>> gesehen.</q> "; 
+        "<q>Ich habe hier <<actor.keinen(txt)>> gesehen</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. "; 
     }
     noMatchNotAware(actor, txt) {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>, <q>Ich habe hier <<actor.keinen(txt)>> bemerkt.</q> ";
+        "<q>Ich habe hier <<actor.keinen(txt)>> bemerkt</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* no match for 'all' */
     noMatchForAll(actor)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>, <q>Ich habe hier nichts Passendes gesehen.</q> ";
+        "<q>Ich habe hier nichts Passendes gesehen</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* nothing left for 'all' after removing 'except' items */
     noMatchForAllBut(actor)
     {
-        "\^<<actor.nameSays>>,
-        <q>Ich weiß nicht, was du meinst.</q> ";
+        "<q>Ich weiß nicht, was du meinst</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* empty noun phrase ('take the') */
     emptyNounPhrase(actor)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Du hast Wörter ausgelassen.</q> ";
+        "<q>Du hast Wörter ausgelassen</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* 'take zero books' */
     zeroQuantity(actor, txt)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Ich habe nicht verstanden, was du meinst.</q> ";
+        "<q>Ich habe nicht verstanden, was du meinst</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* insufficient quantity to meet a command request ('take five books') */
     insufficientQuantity(actor, txt, matchList, requiredNum)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Ich habe hier nicht so <<actor.viele(txt)>> gesehen.</q> ";
+        "<q>Ich habe hier nicht so <<actor.viele(txt)>> gesehen</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* a unique object is required, but multiple objects were specified */
     uniqueObjectRequired(actor, txt, matchList)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Ich habe nicht verstanden, was du meinst.</q> ";
+        "<q>Ich habe nicht verstanden, was du meinst</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* a unique object is required, but multiple objects were specified */
     singleObjectRequired(actor, txt)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Ich habe nicht verstanden, was du meinst.</q> ";
+        "<q>Ich habe nicht verstanden, was du meinst</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /*
@@ -2626,24 +2608,21 @@ npcDeferredMessagesDirect: npcDeferredMessages
      */
     ambiguousNounPhrase(actor, originalText, matchList, fullMatchList)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Ich kann nicht sagen, <<actor.welchen(originalText)>> du meinst.</q> ";
+        "<q>Ich kann nicht sagen, <<actor.welchen(originalText)>> du meinst</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 
     /* an object phrase was missing */
     askMissingObject(actor, action, which)
     {
-        reportQuestion('\^' + actor.derName + ' ' + actor.verbZuSagen
-                       + ', <q>Ich weiß nicht, '
-                       + action.getQuestionWord(which) + ' ich '
-                       + action.getQuestionVerb(which) + ' soll.</q> ');
+        reportQuestion('<q>Ich weiß nicht, ' + action.getQuestionWord(which) + ' ich '
+                       + action.getQuestionVerb(which) + ' soll</q>, ' + actor.verbZuSagen + ' ' + actor.derName + ' ' 
+                       + '{*}. ');
     }
 
     /* tell the user they entered a word we don't know */
     wordIsUnknown(actor, txt)
     {
-        "\^<<actor.derName>> <<actor.verbZuSagen>>,
-        <q>Du hast ein Wort verwendet, das ich nicht kenne.</q> ";
+        "<q>Du hast ein Wort verwendet, das ich nicht kenne</q>, <<actor.verbZuSagen>> <<actor.derName>>{*}. ";
     }
 ;
 
@@ -2665,178 +2644,178 @@ playerActionMessages: MessageHelper
      *   fails because an object doesn't define the action ("doXxx")
      *   method for the verb 
      */
-    cannotDoThatMsg = '{Du/er} {kann} so etwas nicht machen. '
+    cannotDoThatMsg = '{Du/er} {koennt} so etwas nicht machen{*}. '
 
     /* must be holding something before a command */
     mustBeHoldingMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {muss} dazu {den obj/ihn} in der Hand halten. ';
+        return '{Du/er} {muss} dazu erst {den obj/ihn} in der Hand halten{*}. ';
     }
 
     /* it's too dark to do that */
-    tooDarkMsg = 'Es {ist|war} dazu zu dunkel. '
+    tooDarkMsg = 'Es {ist singular} dazu zu dunkel{*}. '
 
     /* object must be visible */
     mustBeVisibleMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {den obj/ihn} nicht sehen. ';
+        return '{Du/er} {koennt} {den obj/ihn} nicht sehen{*}. ';
     }
 
     /* object can be heard but not seen */
     heardButNotSeenMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {einen obj/eine} hören, aber {du/er}
-                 {kann} {ihn obj/sie} nicht sehen. ';
+        return '{Du/er} {koennt} zwar {einen obj/eine} hören{*}, aber {du/er}
+            {koennt} {ihn obj/sie} nicht sehen{*}. ';
     }
 
     /* object can be smelled but not seen */
     smelledButNotSeenMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {einen obj/eine} riechen, aber {du/er}
-                {kann} {ihn obj/sie} nicht sehen. ';
+        return '{Du/er} {koennt} zwar {einen obj/eine} riechen{*}, aber {du/er}
+            {koennt} {ihn obj/sie} nicht sehen{*}. ';
     }
 
     /* cannot hear object */
     cannotHearMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {den obj/ihn} nicht hören. ';
+        return '{Du/er} {koennt} {den obj/ihn} nicht hören{*}. ';
     }
 
     /* cannot smell object */
     cannotSmellMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {den obj/ihn} nicht riechen. ';
+        return '{Du/er} {koennt} {den obj/ihn} nicht riechen{*}. ';
     }
 
     /* cannot taste object */
     cannotTasteMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {den obj/ihn} nicht schmecken. ';
+        return '{Du/er} {koennt} {den obj/ihn} nicht schmecken{*}. ';
     }
 
     /* must remove an article of clothing before a command */
     cannotBeWearingMsg(obj)
     {
         gMessageParams(obj);
-        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst ausziehen. ';
+        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst ausziehen{*}. ';
     }
 
     /* all contents must be removed from object before doing that */
     mustBeEmptyMsg(obj)
     {
         gMessageParams(obj);
-        return 'Dazu {muss actor} {du/er} erst alles aus {dem obj/ihm} entfernen. ';
+        return 'Dazu {muss actor} {du/er} erst alles aus {dem obj/ihm} entfernen{*}. ';
     }
 
     /* object must be opened before doing that */
     mustBeOpenMsg(obj)
     {
         gMessageParams(obj);
-        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst öffnen. ';
+        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst öffnen{*}. ';
     }
 
     /* object must be closed before doing that */
     mustBeClosedMsg(obj)
     {
         gMessageParams(obj);
-        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst schließen. ';
+        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst schließen{*}. ';
     }
 
     /* object must be unlocked before doing that */
     mustBeUnlockedMsg(obj)
     {
         gMessageParams(obj);
-        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst aufsperren. ';
+        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst aufsperren{*}. ';
     }
 
     /* no key is needed to lock or unlock this object */
-    noKeyNeededMsg = '{Der dobj/er} benötig{st/t} offenbar keinen Schlüssel. '
+    noKeyNeededMsg = '{Der dobj/er} {benoetigt} offenbar keinen Schlüssel{*}. '
 
     /* actor must be standing before doing that */
-    mustBeStandingMsg = 'Dazu {muss actor} {du/er} {den obj/ihn} erst aufstehen. '
+    mustBeStandingMsg = 'Dazu {muss actor} {du/er} erst aufstehen{*}. '
 
     /* must be sitting on/in chair */
     mustSitOnMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {muss} {sichselbst} erst auf {den obj/ihn} setzen. ';
+        return '{Du/er} {muss} {dich} erst auf {den obj/ihn} setzen{*}. ';
     }
 
     /* must be lying on/in object */
     mustLieOnMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {muss} {sichselbst} erst auf {den obj/ihn} legen. ';
+        return '{Du/er} {muss} {dich} erst auf {den obj/ihn} legen{*}. ';
     }
 
     /* must get on/in object */
     mustGetOnMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {muss} erst in {den obj/ihn} steigen. ';
+        return '{Du/er} {muss} erst in {den obj/ihn} steigen{*}. ';
     }
 
     /* object must be in loc before doing that */
     mustBeInMsg(obj, loc)
     {
         gMessageParams(obj, loc);
-        return 'Dazu {muss actor} {du/er} {sichselbst} erst in {dem obj/ihm} befinden. ';
+        return 'Dazu {muss actor} {du/er} {dich} erst in {dem obj/ihm} befinden{*}. ';
     }
 
     /* actor must be holding the object before we kann do that */
     mustBeCarryingMsg(obj, actor)
     {
         gMessageParams(obj, actor);
-        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst in der Hand halten. ';
+        return 'Dazu {muss actor} {du/er} {den obj/ihn} erst in der Hand halten{*}. ';
     }
 
     /* generic "that's not important" message for decorations */
     decorationNotImportantMsg(obj)
     {
         gMessageParams(obj);
-        return '{Der obj/er} {ist} uninteressant. ';
+        return '{Der obj/er} {ist} uninteressant{*}. ';
     }
 
     /* generic "you don't see that" message for "unthings" */
     unthingNotHereMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {sieht} {den obj/ihn} {hier|dort} nicht. ';
+        return '{Du/er} {sieht} {den obj/ihn} hier nicht{*}. ';
     }
 
     /* generic "that's too far away" message for Distant items */
     tooDistantMsg(obj)
     {
         gMessageParams(obj);
-        return '{Der obj/er} {ist} zu weit weg. ';
+        return '{Der obj/er} {ist} zu weit weg{*}. ';
     }
 
     /* generic "no can do" message for intangibles */
     notWithIntangibleMsg(obj)
     {
         gMessageParams(obj);
-        return 'Damit {bezweckt actor} {du/er} bei {einem obj/einer} nichts. ';
+        return 'Das {bringt singular} bei {einem obj/einer} nichts{*}. ';
     }
 
     /* generic failure message for varporous objects */
     notWithVaporousMsg(obj)
     {
         gMessageParams(obj);
-        return 'Damit {bezweckt actor} {du/er} bei {einem obj/einer} nichts. ';
+        return 'Das {bringt singular} bei {einem obj/einer} nichts{*}. ';
     }
 
     /* look in/look under/look through/look behind/search vaporous */
     lookInVaporousMsg(obj)
     {
         gMessageParams(obj);
-        return 'Da {ist obj} nur {der obj/er}. ';
+        return 'Da {ist obj} nur {der obj/er}{*}. ';
     }
 
     /*
@@ -2848,276 +2827,271 @@ playerActionMessages: MessageHelper
     cannotReachObjectMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {den obj/ihn} nicht erreichen. ';
+        return '{Du/er} {koennt} {den obj/ihn} nicht erreichen{*}. ';
     }
 
     /* cannot reach an object through an obstructor */
     cannotReachThroughMsg(obj, loc)
     {
         gMessageParams(obj, loc);
-        return '{Du/er} {kommt} durch {den loc/ihn} nicht an {den obj/ihn} heran. ';
+        return '{Du/er} {kommt} durch {den loc/ihn} nicht an {den obj/ihn} heran{-*}. ';
     }
 
     /* generic long description of a Thing */
     thingDescMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {sieht} nichts Ungewöhnliches an '
-               + '{dem obj/ihm}. ';
+        return '{Du/er} {sieht} nichts Ungewöhnliches an ' + '{dem obj/ihm}{*}. ';
     }
 
     /* generic LISTEN TO description of a Thing */
     thingSoundDescMsg(obj)
-        { return '{Du/er} hör{st/t} nichts Ungewöhnliches. '; }
+        { return '{Du/er} {hoert} nichts Ungewöhnliches{*}. '; }
 
     /* generic "smell" description of a Thing */
     thingSmellDescMsg(obj)
-        { return '{Du/er} {riecht} nichts Ungewöhnliches. '; }
+        { return '{Du/er} {riecht} nichts Ungewöhnliches{*}. '; }
 
     /* default description of a non-player character */
     npcDescMsg(npc)
     {
         gMessageParams(npc);
-        return '{Du/er} {sieht} nichts Ungewöhnliches an '
-               + '{dem npc/ihm}. ';
+        return '{Du/er} {sieht} nichts Ungewöhnliches an ' + '{dem npc/ihm}{*}. ';
     }
 
     /* generic messages for looking prepositionally */
     nothingInsideMsg =
-        'Da {ist|war} nichts Ungewöhnliches in {dem dobj/ihm}. '
+        'Da {ist singular} nichts Ungewöhnliches in {dem dobj/ihm}{*}. '
     nothingUnderMsg =
-        '{Du/er} {sieht} nichts Ungewöhnliches unter {dem dobj/ihm}. '
+        '{Du/er} {sieht} nichts Ungewöhnliches unter {dem dobj/ihm}{*}. '
     nothingBehindMsg =
-        '{Du/er} {sieht} nichts Ungewöhnliches hinter {dem dobj/ihm}. '
+        '{Du/er} {sieht} nichts Ungewöhnliches hinter {dem dobj/ihm}{*}. '
     nothingThroughMsg =
-        '{Du/er} {kann} durch {den dobj/ihn} nichts erkennen. '
+        '{Du/er} {koennt} durch {den dobj/ihn} nichts erkennen{*}. '
 
     /* this is an object we can't look behind/through */
-    cannotLookBehindMsg = '{Du/er} {kann} nicht hinter {den dobj/ihn} schauen. '
-    cannotLookUnderMsg = '{Du/er} {kann} nicht unter {den dobj/ihn} schauen. '
-    cannotLookThroughMsg = '{Du/er} {kann} nicht durch {den dobj/ihn} schauen. '
+    cannotLookBehindMsg = '{Du/er} {koennt} nicht hinter {den dobj/ihn} schauen{*}. '
+    cannotLookUnderMsg = '{Du/er} {koennt} nicht unter {den dobj/ihn} schauen{*}. '
+    cannotLookThroughMsg = '{Du/er} {koennt} nicht durch {den dobj/ihn} schauen{*}. '
 
     /* looking through an open passage */
-    nothingThroughPassageMsg = '{Du/er} {kann} von {hier|dort} durch
-        {den dobj/ihn} nichts Besonderes erkennen. '
+    nothingThroughPassageMsg = '{Du/er} {koennt} von hier nichts Besonderes erkennen{*}. '
 
     /* there's nothing on the other side of a door we just opened */
-    nothingBeyondDoorMsg = 'Das Öffnen {des dobj/dessen} {bringt|brachte} nichts
-        Ungewöhnliches zum Vorschein. '
+    nothingBeyondDoorMsg = 'Das Öffnen {des dobj/dessen} {bringt singular} nichts
+        Ungewöhnliches zum Vorschein{*}. '
 
     /* there's nothing here with a specific odor */
     nothingToSmellMsg =
-        '{Du/er} {riecht} {hier|dort} nichts Besonderes. '
+        '{Du/er} {riecht} hier nichts Besonderes{*}. '
 
     /* there's nothing here with a specific noise */
-    nothingToHearMsg = '{Du/er} hör{st/t} {hier|dort} nichts Besonderes. '
+    nothingToHearMsg = '{Du/er} {hoert} hier nichts Besonderes{*}. '
 
     /* a sound appears to be coming from a source */
     noiseSourceMsg(src)
     {
-        return '{Der dobj/er} {scheint} ' + (gDobj.ofKind(Container) ? 'aus' : 'von')
-            + src.demNameObj + ' zu kommen. ';
+        return '{Der dobj/er} {kommt} scheinbar ' + (gDobj.ofKind(Container) ? 'aus ' : 'von ')
+            + src.demNameObj + '{*}. ';
     }
 
     /* an odor appears to be coming from a source */
     odorSourceMsg(src)
     {
-        return '{Der dobj/er} {scheint} ' + (gDobj.ofKind(Container) ? 'aus' : 'von')
-            + src.demNameObj + ' zu kommen. ';
+        return '{Der dobj/er} {kommt} scheinbar ' + (gDobj.ofKind(Container) ? 'aus ' : 'von ')
+            + src.demNameObj + '{*}. ';
     }
 
     /* an item is not wearable */
     notWearableMsg =
-        '{Den dobj/ihn} {kann actor} {du/er} nicht anziehen. '
+        '{Den dobj/ihn} {koennt actor} {du/er} nicht anziehen{*}. '
 
     /* doffing something that isn't wearable */
     notDoffableMsg =
-        '{Den dobj/ihn} {kann actor} {du/er} nicht ausziehen. '
+        '{Den dobj/ihn} {koennt actor} {du/er} nicht ausziehen{*}. '
 
     /* already wearing item */
-    alreadyWearingMsg = '{Du/er} {hat} {den dobj/ihn} bereits angezogen. '
+    alreadyWearingMsg = '{Du/er} {hat} {den dobj/ihn} schon angezogen{*}. '
 
     /* not wearing (item being doffed) */
-    notWearingMsg = '{Du/er} {hat} {den dobj/ihn} nicht angezogen. '
+    notWearingMsg = '{Du/er} {hat} {den dobj/ihn} nicht angezogen{*}. '
 
     /* default response to 'wear obj' */
-    okayWearMsg = '{Du/er} {hat} {den dobj/ihn} angezogen. '
+    okayWearMsg = '{Du/er} {zieht} {den dobj/ihn} an{-*}. '
 
     /* default response to 'doff obj' */
-    okayDoffMsg = '{Du/er} {hat} {den dobj/ihn} ausgezogen. '
+    okayDoffMsg = '{Du/er} {zieht} {den dobj/ihn} aus{-*}. '
 
     /* default response to open/close */
     okayOpenMsg = shortTMsg(
-        '{Du/er} {hat} {den dobj/ihn} geöffnet. ', '{Du/er} {hat} {den dobj/ihn} geöffnet. ')
+        '{Du/er} {oeffnet} {den dobj/ihn}{*}. ', '{Du/er} {oeffnet} {den dobj/ihn}{*}. ')
     okayCloseMsg = shortTMsg(
-        '{Du/er} {hat} {den dobj/ihn} geschlossen. ', '{Du/er} {hat} {den dobj/ihn} geschlossen. ')
+        '{Du/er} {schliesst} {den dobj/ihn}{*}. ', '{Du/er} {schliesst} {den dobj/ihn}{*}. ')
 
     /* default response to lock/unlock */
     okayLockMsg = shortTMsg(
-        '{Du/er} {hat} {den dobj/ihn} zugesperrt. ', '{Du/er} {hat} {den dobj/ihn} zugesperrt. ')
+        '{Du/er} {schliesst} {den dobj/ihn} zu{-*}. ', '{Du/er} {schliesst} {den dobj/ihn} zu{-*}. ')
     okayUnlockMsg = shortTMsg(
-        '{Du/er} {hat} {den dobj/ihn} aufgesperrt. ', '{Du/er} {hat} {den dobj/ihn} aufgesperrt. ')
+        '{Du/er} {schliesst} {den dobj/ihn} auf{-*}. ', '{Du/er} {schliesst} {den dobj/ihn} auf{-*}. ')
 
     /* cannot dig here */
-    cannotDigMsg = '{Du/er} {hat} keinerlei Veranlassung, in {dem dobj/ihm} zu graben. '
+    cannotDigMsg = '{Du/er} {sieht} keinen Sinn darin{*}, in {dem dobj/ihm} zu graben. '
 
     /* not a digging implement */
     cannotDigWithMsg =
-        '{Du/er} {sieht} keine Möglichkeit, {den iobj/ihn} dafür zu verwenden. '
+        '{Du/er} {sieht} keine Möglichkeit{*}, {den iobj/ihn} dafür zu verwenden. '
 
     /* taking something already being held */
-    alreadyHoldingMsg = '{Du/er} {hat} {den dobj/ihn} schon. '
+    alreadyHoldingMsg = '{Du/er} {hat} {den dobj/ihn} schon{*}. '
 
     /* actor taking self ("take me") */
-    takingSelfMsg = '{Du/er} {kann} {dichselbst} nicht nehmen. '
+    takingSelfMsg = '{Du/er} {koennt} {dich} nicht nehmen{*}. '
 
     /* dropping an object not being carried */
-    notCarryingMsg = '{Du/er} {hat} {den dobj/ihn} gar nicht. '
+    notCarryingMsg = '{Du/er} {hat} {den dobj/ihn} gar nicht{*}. '
 
     /* actor dropping self */
-    droppingSelfMsg = '{Du/er} {kann} {dichselbst} nicht ablegen. '
+    droppingSelfMsg = '{Du/er} {koennt} {dich} nicht ablegen{*}. '
 
     /* actor putting self in something */
-    puttingSelfMsg = '{Du/er} {kann} das nicht mit {dirselbst} tun. '
+    puttingSelfMsg = '{Du/er} {koennt} das nicht mit {dir} tun{*}. '
 
     /* actor throwing self */
-    throwingSelfMsg = '{Du/er} {kann} {dichselbst} nicht werfen. '
+    throwingSelfMsg = '{Du/er} {koennt} {dich} nicht werfen{*}. '
 
     /* we can't put the dobj in the iobj because it's already there */
-    alreadyPutInMsg = '{Der dobj/er} {ist} schon in {dem iobj/ihm}. '
+    alreadyPutInMsg = '{Der dobj/er} {ist} schon in {dem iobj/ihm}{*}. '
 
     /* we can't put the dobj on the iobj because it's already there */
-    alreadyPutOnMsg = '{Der dobj/er} {ist} schon auf {dem iobj/ihm}. '
+    alreadyPutOnMsg = '{Der dobj/er} {ist} schon auf {dem iobj/ihm}{*}. '
 
     /* we can't put the dobj under the iobj because it's already there */
-    alreadyPutUnderMsg = '{Der dobj/er} {ist} schon unter {dem iobj/ihm}. '
+    alreadyPutUnderMsg = '{Der dobj/er} {ist} schon unter {dem iobj/ihm}{*}. '
 
     /* we can't put the dobj behind the iobj because it's already there */
-    alreadyPutBehindMsg = '{Der dobj/er} {ist} schon hinter {dem iobj/ihm}. '
+    alreadyPutBehindMsg = '{Der dobj/er} {ist} schon hinter {dem iobj/ihm}{*}. '
 
     /*
      *   trying to move a Fixture to a new container by some means (take,
      *   drop, put in, put on, etc) 
      */
-    cannotMoveFixtureMsg = '{Der dobj/er} {kann} nicht bewegt werden. '
+    cannotMoveFixtureMsg = '{Der dobj/er} {koennt} nicht bewegt werden{*}. '
 
     /* trying to take a Fixture */
-    cannotTakeFixtureMsg = '{Du/er} {kann} {den dobj/ihn} nicht nehmen. '
+    cannotTakeFixtureMsg = '{Du/er} {koennt} {den dobj/ihn} nicht nehmen{*}. '
 
     /* trying to put a Fixture in something */
-    cannotPutFixtureMsg = '{Du/er} {kann} {den dobj/ihn} nicht irgendwohin legen. '
+    cannotPutFixtureMsg = '{Du/er} {koennt} {den dobj/ihn} nicht irgendwohin legen{*}. '
 
     /* trying to take/move/put an Immovable object */
-    cannotTakeImmovableMsg = '{Du/er} {kann} {den dobj/ihn} nicht nehmen. '
-    cannotMoveImmovableMsg = '{Der dobj/er} {kann} nicht bewegt werden. '
-    cannotPutImmovableMsg = '{Du/er} {kann} {den dobj/ihn} nicht irgendwohin legen. '
+    cannotTakeImmovableMsg = '{Du/er} {koennt} {den dobj/ihn} nicht nehmen{*}. '
+    cannotMoveImmovableMsg = '{Der dobj/er} {koennt} nicht bewegt werden{*}. '
+    cannotPutImmovableMsg = '{Du/er} {koennt} {den dobj/ihn} nicht irgendwohin legen{*}. '
 
     /* trying to take/move/put a Heavy object */
-    cannotTakeHeavyMsg = '{Der dobj/er} {ist} viel zu schwer. '
-    cannotMoveHeavyMsg = '{Der dobj/er} {ist} viel zu schwer. '
-    cannotPutHeavyMsg = '{Der dobj/er} {ist} viel zu schwer. '
+    cannotTakeHeavyMsg = '{Der dobj/er} {ist} viel zu schwer{*}. '
+    cannotMoveHeavyMsg = '{Der dobj/er} {ist} viel zu schwer{*}. '
+    cannotPutHeavyMsg = '{Der dobj/er} {ist} viel zu schwer{*}. '
 
     /* trying to move a component object */
     cannotMoveComponentMsg(loc)
     {
-        return '{Der dobj/er} {ist} Teil ' + loc.desNameObj + '. ';
+        return '{Der dobj/er} {ist} Teil ' + loc.desNameObj + '{*}. ';
     }
 
     /* trying to take a component object */
     cannotTakeComponentMsg(loc)
     {
-        return '{Du/er} {kann} {den dobj/ihn} nicht nehmen, '
-            + '{er dobj/es} {ist} Teil ' + loc.desNameObj + '. ';
+        return '{Du/er} {koennt} {den dobj/ihn} nicht nehmen{*}, '
+            + '{er dobj/es} {ist} Teil ' + loc.desNameObj + '{*}. ';
     }
 
     /* trying to put a component in something */
     cannotPutComponentMsg(loc)
     {
-        return '{Du/er} {kann} {den dobj/ihn} nicht irgendwohin legen, '
-            + '{er dobj/es} ist Teil ' + loc.desNameObj + '. ';
+        return '{Du/er} {koennt} {den dobj/ihn} nicht irgendwohin legen{*}, '
+            + '{er dobj/es} {ist} Teil ' + loc.desNameObj + '{*}. ';
     }
 
     /* specialized Immovable messages for TravelPushables */
-    cannotTakePushableMsg = '{Du/er} {kann} {den dobj/ihn} nicht nehmen,
-        {ihn dobj/sie} aber vielleicht schieben. '
-    cannotMovePushableMsg = 'Es {bringt|brachte} wenig, {den dobj/ihn}
-        ziellos umherzuschieben, aber vielleicht {kann actor} {du/er} {ihn dobj/sie} 
-        in eine bestimmte Richtung schieben. '
-    cannotPutPushableMsg = '{Du/er} {kann} {den dobj/him} nicht irgendwo hinlegen,
-        {ihn dobj/sie} aber vielleicht schieben.'
+    cannotTakePushableMsg = '{Du/er} {koennt} {den dobj/ihn} nicht nehmen,
+        {ihn dobj/sie} aber vielleicht schieben{*}. '
+    cannotMovePushableMsg = '{Du/er} {schiebt} {den dobj/ihn} herum{-*}, vielleicht {koennt actor} {du/er} 
+        {ihn dobj/sie} in eine bestimmte Richtung schieben{*}. '
+    cannotPutPushableMsg = '{Du/er} {koennt} {den dobj/ihn} nicht irgendwo hinlegen,
+        {ihn dobj/sie} aber vielleicht schieben{*}.'
 
     /* can't take something while occupying it */
-    cannotTakeLocationMsg = '{Du/er} {kann} {den dobj/ihn} nicht nehmen,
-        solange {du actor/er} {ihn dobj/sie} in Beschlag {nimmt actor}. '
+    cannotTakeLocationMsg = '{Du/er} {koennt} {den dobj/ihn} nicht nehmen{*},
+        solange {du actor/er} {ihn dobj/sie} in Beschlag {!*}{nimmt actor}. '
 
     /* can't REMOVE something that's being held */
-    cannotRemoveHeldMsg = 'Da {gibt|gab} es nichts, wovon der 
-        {der dobj/er} entfernt werden {kann|konnte}. '
+    cannotRemoveHeldMsg = 'Da {ist singular} nichts zu entfernen{*}. '
 
     /* default 'take' response */
     okayTakeMsg = shortTMsg(
-        '{Du/er} {nimmt} {den dobj/ihn} mit. ', '{Du/er} {nimmt} {den dobj/ihn} mit. ')
+        '{Du/er} {nimmt} {den dobj/ihn} mit{-*}. ', '{Du/er} {nimmt} {den dobj/ihn} mit{-*}. ')
 
     /* default 'drop' response */
     okayDropMsg = shortTMsg(
-        '{Du/er} leg{st/t} {den dobj/ihn} ab. ', '{Du/er} leg{st/t} {den dobj/ihn} ab. ')
+        '{Du/er} {legt} {den dobj/ihn} ab{-*}. ', '{Du/er} {legt} {den dobj/ihn} ab{-*}. ')
 
     /* dropping an object */
     droppingObjMsg(dropobj)
     {
         gMessageParams(dropobj);
-        return '{Du/er} {hat} {den dropobj/ihn} abgelegt. ';
+        return '{Du/er} {legt} {den dropobj/ihn} ab{-*}. ';
     }
 
     /* default receiveDrop suffix for floorless rooms */
     floorlessDropMsg(dropobj)
     {
         gMessageParams(dropobj);
-        return '{Der dropobj/er} {faellt} unter {dirselbst} in die Tiefe. ';
+        return '{Der dropobj/er} {faellt} unter {dir actor} in die Tiefe{*}. ';
     }
 
     /* default successful 'put in' response */
     okayPutInMsg = shortTIMsg(
-        '{Du/er} leg{st/t} {den dobj/ihn} in {den iobj/ihn}. ', 
-        '{Du/er} leg{st/t} {den dobj/ihn} in {den iobj/ihn}. ')
+        '{Du/er} {legt} {den dobj/ihn} in {den iobj/ihn}{*}. ', 
+        '{Du/er} {legt} {den dobj/ihn} in {den iobj/ihn}{*}. ')
 
     /* default successful 'put on' response */
     okayPutOnMsg = shortTIMsg(
-        '{Du/er} leg{st/t} {den dobj/ihn} auf {den iobj/ihn}. ', 
-        '{Du/er} leg{st/t} {den dobj/ihn} auf {den iobj/ihn}. ')
+        '{Du/er} {legt} {den dobj/ihn} auf {den iobj/ihn}{*}. ', 
+        '{Du/er} {legt} {den dobj/ihn} auf {den iobj/ihn}{*}. ')
 
     /* default successful 'put under' response */
     okayPutUnderMsg = shortTIMsg(
-        '{Du/er} leg{st/t} {den dobj/ihn} unter {den iobj/ihn}. ', 
-        '{Du/er} leg{st/t} {den dobj/ihn} unter {den iobj/ihn}. ')
+        '{Du/er} {legt} {den dobj/ihn} unter {den iobj/ihn}{*}. ', 
+        '{Du/er} {legt} {den dobj/ihn} unter {den iobj/ihn}{*}. ')
 
     /* default successful 'put behind' response */
     okayPutBehindMsg = shortTIMsg(
-        '{Du/er} leg{st/t} {den dobj/ihn} hinter {den iobj/ihn}. ', 
-        '{Du/er} leg{st/t} {den dobj/ihn} hinter {den iobj/ihn}. ')
+        '{Du/er} {legt} {den dobj/ihn} hinter {den iobj/ihn}{*}. ', 
+        '{Du/er} {legt} {den dobj/ihn} hinter {den iobj/ihn}{*}. ')
 
     /* try to take/move/put/taste an untakeable actor */
-    cannotTakeActorMsg = '{Der dobj/er} {will} {sichselbst actor} nicht lassen. '
-    cannotMoveActorMsg = '{Der dobj/er} {will} {sichselbst actor} nicht lassen. '
-    cannotPutActorMsg = '{Der dobj/er} {will} {sichselbst actor} nicht lassen. '
-    cannotTasteActorMsg = '{Der dobj/er} {will} {sichselbst actor} nicht lassen. '
+    cannotTakeActorMsg = '{Der dobj/er} {will} {dich actor} nicht lassen{*}. '
+    cannotMoveActorMsg = '{Der dobj/er} {will} {dich actor} nicht lassen{*}. '
+    cannotPutActorMsg = '{Der dobj/er} {will} {dich actor} nicht lassen{*}. '
+    cannotTasteActorMsg = '{Der dobj/er} {will} {dich actor} nicht lassen{*}. '
 
     /* trying to take/move/put/taste a person */
     cannotTakePersonMsg =
-        '{Dem dobj/ihm} {gefällt|gefiel} das sicher nicht. '
+        '{Dem dobj/ihm} hätte das sicher nicht gefallen. '
     cannotMovePersonMsg =
-        '{Dem dobj/ihm} {gefällt|gefiel} das sicher nicht. '
+        '{Dem dobj/ihm} hätte das sicher nicht gefallen. '
     cannotPutPersonMsg =
-        '{Dem dobj/ihm} {gefällt|gefiel} das sicher nicht. '
+        '{Dem dobj/ihm} hätte das sicher nicht gefallen. '
     cannotTastePersonMsg =
-        '{Dem dobj/ihm} {gefällt|gefiel} das sicher nicht. '
+        '{Dem dobj/ihm} hätte das sicher nicht gefallen. '
 
     /* cannot move obj through obstructor */
     cannotMoveThroughMsg(obj, obs)
     {
         gMessageParams(obj, obs);
         return '{Du/er} {bekommt} {den obj/ihn} nicht durch '
-               + '{den obs/ihn} hindurch. ';
+               + '{den obs/ihn} hindurch{-*}. ';
     }
 
     /* cannot move obj in our out of container cont */
@@ -3125,76 +3099,76 @@ playerActionMessages: MessageHelper
     {
         gMessageParams(obj, cont);
         return '{Du/er} {bekommt} {den obj/ihn} nicht aus '
-               + '{dem cont/ihn} heraus. ';
+               + '{dem cont/ihm} heraus{-*}. ';
     }
 
     /* cannot move obj because cont is closed */
     cannotMoveThroughClosedMsg(obj, cont)
     {
         gMessageParams(cont);
-        return '{Du/er} {kommt} nicht an {den obj/ihn}, weil {der cont/er} 
-            geschlossen {ist}. ';
+        return '{Du/er} {kommt} nicht an {den obj/ihn}{*}, weil {der cont/er} 
+            geschlossen {!*}{ist}. ';
     }
 
     /* cannot fit obj into cont through cont's opening */
     cannotFitIntoOpeningMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} zu groß,
-            um {inh obj/sie} in {den cont/ihn} zu legen. ';
+        return '{Der obj/er} {ist} zu groß{*},
+            um {ihn obj/sie} in {den cont/ihn} zu legen. ';
     }
 
     /* cannot fit obj out of cont through cont's opening */
     cannotFitOutOfOpeningMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} zu groß,
-            um {inh obj/sie} aus {den cont/ihn} heraus zu bekommen. ';
+        return '{Der obj/er} {ist} zu groß{*},
+            um {ihn obj/sie} aus {den cont/ihn} heraus zu bekommen. ';
     }
 
     /* actor 'obj' cannot reach in our out of container 'cont' */
     cannotTouchThroughContainerMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {kann} nichts außerhalb '
-               + '{des cont/dessen} erreichen. ';
+        return '{Der obj/er} {koennt} nichts außerhalb '
+               + '{des cont/dessen} erreichen{*}. ';
     }
 
     /* actor 'obj' cannot reach through cont because cont is closed */
     cannotTouchThroughClosedMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {kann} nichts außerhalb
-            {des cont/dessen} erreichen, weil {einer/er} geschlossen {ist}. ';
+        return '{Der obj/er} {koennt} nichts außerhalb
+            {des cont/dessen} erreichen{*}, weil {der/er} geschlossen {!*}{ist}. ';
     }
 
     /* actor cannot fit hand into cont through cont's opening */
     cannotReachIntoOpeningMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {kommt} mit {seiner/ihrer} Hand nicht in '
-               + '{den cont/ihn} hinein. ';
+        return '{Der obj/er} {koennt} mit der Hand nicht in '
+               + '{den cont/ihn} greifen{*}. ';
     }
 
     /* actor cannot fit hand into cont through cont's opening */
     cannotReachOutOfOpeningMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {kommt} mit {seiner/ihrer} Hand nicht durch
-               {den cont/ihn} hindurch. ';
+        return '{Der obj/er} {koennt} mit der Hand nicht durch
+            {den cont/ihn} greifen{*}. ';
     }
 
     /* the object is too large for the actor to hold */
     tooLargeForActorMsg(obj)
     {
         gMessageParams(obj);
-        return '{Der obj/er} {ist} zu groß, um {es obj/ihn} zu halten. '; 
+        return '{Der obj/er} {ist} zu groß{*}, um {ihn obj/sie} zu halten. '; 
     }
 
     /* the actor doesn't have room to hold the object */
     handsTooFullForMsg(obj)
     {
-        return '{Deine} Hände {sind|waren} zu voll, um '
+        return '{Deine} Hände {ist plural} zu voll{*}, um '
                + obj.denNameObj + ' zu halten. ';
     }
 
@@ -3202,21 +3176,21 @@ playerActionMessages: MessageHelper
     becomingTooLargeForActorMsg(obj)
     {
         gMessageParams(obj);
-        return '{Der obj/er} {ist} zu groß, um {ihn/sie} in der Hand zu halten. ';
+        return '{Der obj/er} {ist} zu groß{*}, um {ihn/sie} in der Hand zu halten. ';
     }
 
     /* the object is becoming large enough that the actor's hands are full */
     handsBecomingTooFullForMsg(obj)
     {
         gMessageParams(obj);
-        return '{Deine} Hände {sind|waren} zu voll, um {den obj/ihn} zu halten. ';
+        return '{Deine} Hände {ist plural} zu voll{*}, um {den obj/ihn} zu halten. ';
     }
 
     /* the object is too heavy (all by itself) for the actor to hold */
     tooHeavyForActorMsg(obj)
     {
         gMessageParams(obj);
-        return '{Der obj/er} {ist} zu schwer, um {ihn/sie} mitzunehmen. ';
+        return '{Der obj/er} {ist} zu schwer{*}, um {ihn/sie} mitzunehmen. ';
     }
 
     /*
@@ -3226,68 +3200,67 @@ playerActionMessages: MessageHelper
     totalTooHeavyForMsg(obj)
     {
         gMessageParams(obj);
-        return '{Der obj/er} {ist} zu schwer, {du/er} {muss} dafür etwas
-            Anderes ablegen. ';
+        return '{Der obj/er} {ist} zu schwer{*}, {du/er} {muss} dafür erst etwas
+            ablegen{*}. ';
     }
 
     /* object is too large for container */
     tooLargeForContainerMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} zu groß für {den cont/ihn}. ';
+        return '{Der obj/er} {ist} zu groß für {den cont/ihn}{*}. ';
     }
 
     /* object is too large to fit under object */
     tooLargeForUndersideMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} zu groß, um {ihn/sie} unter {den cont/ihn} zu legen. ';
+        return '{Der obj/er} {ist} zu groß{*}, um {ihn/sie} unter {den cont/ihn} zu legen. ';
     }
 
     /* object is too large to fit behind object */
     tooLargeForRearMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} zu groß, um {ihn/sie} hinter {den cont/ihn} zu legen. ';
+        return '{Der obj/er} {ist} zu groß{*}, um {ihn/sie} hinter {den cont/ihn} zu legen. ';
     }
 
     /* container doesn't have room for object */
     containerTooFullMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der cont/er} {ist} schon zu voll, um {den obj/ihn} aufzunehmen. ';
+        return '{Der cont/er} {ist} schon zu voll{*}, um {den obj/ihn} aufzunehmen. ';
     }
 
     /* surface doesn't have room for object */
     surfaceTooFullMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return 'Da {ist|war} kein Platz für {den obj/ihn} auf '
-               + '{dem cont/ihm}. ';
+        return 'Da {ist singular} kein Platz für {den obj/ihn} auf '
+               + '{dem cont/ihm}{*}. ';
     }
 
     /* underside doesn't have room for object */
     undersideTooFullMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return 'Da {ist|war} kein Platz für {den obj/ihn} unter '
-               + '{dem cont/ihm}. ';
+        return 'Da {ist singular} kein Platz für {den obj/ihn} unter '
+               + '{dem cont/ihm}{*}. ';
     }
 
     /* rear surface/space doesn't have room for object */
     rearTooFullMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return 'Da {ist|war} kein Platz für {den obj/ihn} hinter '
-               + '{dem cont/ihm}. ';
+        return 'Da {ist singular} kein Platz für {den obj/ihn} hinter '
+               + '{dem cont/ihm}{*}. ';
     }
 
     /* the current action would make obj too large for its container */
     becomingTooLargeForContainerMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {wuerde-waere} dann zu groß 
-            {werden|geworden} für {den cont/ihn}. ';
+        return '{Der obj/er} {wird} dann zu groß für {den cont/ihn}{*}. ';
     }
 
     /*
@@ -3297,205 +3270,203 @@ playerActionMessages: MessageHelper
     containerBecomingTooFullMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der cont/er} {wuerde-waere} dann zu voll
-            {werden|geworden} für {den obj/ihn}. ';
+        return '{Der cont/er} {wird} dann zu voll für {den obj/ihn}{*}. ';
     }
 
     /* trying to put an object in a non-container */
-    notAContainerMsg = '{Du/er} {kann} nichts in {den iobj/ihn} legen. '
+    notAContainerMsg = '{Du/er} {koennt} nichts in {den iobj/ihn} legen{*}. '
 
     /* trying to put an object on a non-surface */
-    notASurfaceMsg = 'Dazu {ist|war} keine geeignete Fläche auf
-        {dem iobj/ihm}. '
+    notASurfaceMsg = 'Dazu {ist singular} keine geeignete Fläche auf
+        {dem iobj/ihm}{*}. '
 
     /* can't put anything under iobj */
     cannotPutUnderMsg =
-        '{Du/er} {kann} nichts unter {den iobj/ihn} legen. '
+        '{Du/er} {koennt} nichts unter {den iobj/ihn} legen{*}. '
 
     /* nothing kann be put behind the given object */
     cannotPutBehindMsg = 
-        '{Du/er} {kann} nichts hinter {den iobj/ihn} legen. '
+        '{Du/er} {koennt} nichts hinter {den iobj/ihn} legen{*}. '
 
     /* trying to put something in itself */
-    cannotPutInSelfMsg = '{Du/er} {kann} {den dobj/ihn} nicht in {ihn/sie} selbst legen. '
+    cannotPutInSelfMsg = '{Du/er} {koennt} {den dobj/ihn} nicht in {ihn/sie} selbst legen{*}. '
 
     /* trying to put something on itself */
-    cannotPutOnSelfMsg = '{Du/er} {kann} {den dobj/ihn} nicht auf {ihn/sie} selbst legen. '
+    cannotPutOnSelfMsg = '{Du/er} {koennt} {den dobj/ihn} nicht auf {ihn/sie} selbst legen{*}. '
 
     /* trying to put something under itself */
     cannotPutUnderSelfMsg = 
-        '{Du/er} {kann} {den dobj/ihn} nicht unter {ihn/sie} selbst legen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht unter {ihn/sie} selbst legen{*}. '
 
     /* trying to put something behind itself */
             
     cannotPutBehindSelfMsg = 
-        '{Du/er} {kann} {den dobj/ihn} nicht hinter {ihn/sie} selbst legen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht hinter {ihn/sie} selbst legen{*}. '
 
     /* can't put something in/on/etc a restricted container/surface/etc */
     cannotPutInRestrictedMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht in {den iobj/ihn} legen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht in {den iobj/ihn} legen{*}. '
     cannotPutOnRestrictedMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht auf {den iobj/ihn} legen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht auf {den iobj/ihn} legen{*}. '
     cannotPutUnderRestrictedMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht unter {den iobj/ihn} legen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht unter {den iobj/ihn} legen{*}. '
     cannotPutBehindRestrictedMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht hinter {den iobj/ihn} legen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht hinter {den iobj/ihn} legen{*}. '
 
     /* trying to return something to a remove-only dispenser */
     cannotReturnToDispenserMsg =
-        '{Du/er} {kann} {einen dobj/ihn} nicht in {den iobj/ihn} zurücklegen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht in {den iobj/ihn} zurücklegen{*}. '
 
     /* wrong item type for dispenser */
     cannotPutInDispenserMsg =
-        '{Du/er} {kann} {einen dobj/ihn} nicht in {den iobj/ihn} legen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht in {den iobj/ihn} legen{*}. '
 
     /* the dobj doesn't fit on this keyring */
-    objNotForKeyringMsg = '{Der dobj/er} passt{t/t} nicht an {den iobj/ihn}. '
+    objNotForKeyringMsg = '{Der dobj/er} {passt} nicht an {den iobj/ihn}{*}. '
 
     /* the dobj isn't on the keyring */
-    keyNotOnKeyringMsg = '{Der dobj/er} {ist} nicht an {dem iobj/ihm} befestigt. '
+    keyNotOnKeyringMsg = '{Der dobj/er} {ist} nicht an {dem iobj/ihm} festgemacht{*}. '
 
     /* kann't detach key (with no iobj specified) because it's not on a ring */
-    keyNotDetachableMsg = '{Der dobj/er} {ist} an nichts befestigt. '
+    keyNotDetachableMsg = '{Der dobj/er} {ist} nicht festgemacht{*}. '
 
     /* we took a key and attached it to a keyring */
     takenAndMovedToKeyringMsg(keyring)
     {
         gMessageParams(keyring);
-        return '{Du/er} {nimmt} {den dobj/ihn} und
-            befestig{st/t} {ihn dobj/sie} an {dem keyring/ihm}. ';
+        return '{Du/er} {nimmt} {den dobj/ihn}{*} und
+            {haengt actor} {ihn dobj/sie} an {den keyring/ihn}{*}. ';
     }
 
     /* we attached a key to a keyring automatically */
     movedKeyToKeyringMsg(keyring)
     {
         gMessageParams(keyring);
-        return '{Du/er} befestig{st/t} {den dobj/ihn} an {dem keyring/ihm}. ';
+        return '{Du/er} {haengt} {den dobj/ihn} an {den keyring/ihn}{*}. ';
     }
 
     /* we moved several keys to a keyring automatically */
     movedKeysToKeyringMsg(keyring, keys)
     {
         gMessageParams(keyring);
-        return '{Du/er} befestig{st/t} {deine} losen Schlüssel '
-            + ' an {dem keyring/ihm}. ';
+        return '{Du/er} {haengt} {deine} losen Schlüssel '
+            + ' an {den keyring/ihn}{*}. ';
     }
 
     /* putting y in x when x is already in y */
     circularlyInMsg(x, y)
     {
         gMessageParams(x, y);
-        return '{Der x/er} {befindet} sich aber in {dem y/ihm}. ';
+        return '{Der x/er} {ist} aber in {dem y/ihm}{*}. ';
     }
 
     /* putting y in x when x is already on y */
     circularlyOnMsg(x, y)
     {
         gMessageParams(x, y);
-        return '{Der x/er} {befindet} sich aber auf {dem y/ihm}. ';
+        return '{Der x/er} {ist} aber auf {dem y/ihm}{*}. ';
     }
 
     /* putting y in x when x is already under y */
     circularlyUnderMsg(x, y)
     {
         gMessageParams(x, y);
-        return '{Der x/er} {befindet} sich aber unter {dem y/ihm}. ';
+        return '{Der x/er} {ist} aber unter {dem y/ihm}{*}. ';
     }
 
     /* putting y in x when x is already behind y */
     circularlyBehindMsg(x, y)
     {
         gMessageParams(x, y);
-        return '{Der x/er} {befindet} sich aber hinter {dem y/ihm}. ';
+        return '{Der x/er} {ist} aber hinter {dem y/ihm}{*}. ';
     }
 
     /* taking dobj from iobj, but dobj isn't in iobj */
-    takeFromNotInMsg = '{Der dobj/er} {ist} nicht in {dem iobj/ihm}. '
+    takeFromNotInMsg = '{Der dobj/er} {ist} nicht in {dem iobj/ihm}{*}. '
 
     /* taking dobj from surface, but dobj isn't on iobj */
-    takeFromNotOnMsg = '{Der dobj/er} {ist} nicht auf {dem iobj/ihm}. '
+    takeFromNotOnMsg = '{Der dobj/er} {ist} nicht auf {dem iobj/ihm}{*}. '
 
     /* taking dobj from under something, but dobj isn't under iobj */
-    takeFromNotUnderMsg = '{Der dobj/er} {ist} nicht unter {dem iobj/ihm}. '
+    takeFromNotUnderMsg = '{Der dobj/er} {ist} nicht unter {dem iobj/ihm}{*}. '
 
     /* taking dobj from behind something, but dobj isn't behind iobj */
-    takeFromNotBehindMsg = '{Der dobj/er} {ist} nicht hinter {dem iobj/ihm}. '
+    takeFromNotBehindMsg = '{Der dobj/er} {ist} nicht hinter {dem iobj/ihm}{*}. '
 
     /* taking dobj from an actor, but actor doesn't have iobj */
-    takeFromNotInActorMsg = '{Der iobj/er} {hat} {den dobj/ihn} gar nicht. '
+    takeFromNotInActorMsg = '{Der iobj/er} {hat} {den dobj/ihn} gar nicht{*}. '
 
     /* actor won't let go of a possession */
     willNotLetGoMsg(holder, obj)
     {
         gMessageParams(holder, obj);
-        return '{Der holder/er} {will} {den obj/ihn} nicht hergeben. ';
+        return '{Der holder/er} {will} {den obj/ihn} nicht hergeben{*}. ';
     }
 
     /* must say which way to go */
-    whereToGoMsg = '{Du/er} {muss} sagen, in welche Richtung {du/er} gehen {will}. '
+    whereToGoMsg = '{Du/er} {muss} sagen{*}, in welche Richtung. '
 
     /* travel attempted in a direction with no exit */
-    cannotGoThatWayMsg = '{Du/er} {kann} nicht in diese Richtung gehen. '
+    cannotGoThatWayMsg = '{Du/er} {koennt} nicht in diese Richtung gehen{*}. '
 
     /* travel attempted in the dark in a direction with no exit */
-    cannotGoThatWayInDarkMsg = 'Es {ist|war} zu dunkel. {Du/er}
-        {kann} nicht sehen, wohin {du/er} {geht}. '
+    cannotGoThatWayInDarkMsg = 'Es {ist singular} zu dunkel{*}. {Du/er}
+        {koennt} nicht sehen{*}, wohin {du/er} {!*}{geht}. '
 
     /* we don't know the way back for a GO BACK */
-    cannotGoBackMsg = '{Du/er} {weiss} nicht, wie {du/er} {hierhin|dorthin}
-        zurückkehren {kann}. '
+    cannotGoBackMsg = '{Du/er} {weiss} nicht{*} wie. '
 
     /* cannot carry out a command from this location */
-    cannotDoFromHereMsg = '{Du/er} {kann} das von {hier|dort} aus nicht tun. '
+    cannotDoFromHereMsg = '{Du/er} {koennt} das von hier aus nicht tun{*}. '
 
     /* can't travel through a close door */
     cannotGoThroughClosedDoorMsg(door)
     {
         gMessageParams(door);
-        return 'Das {geht|ging} nicht, weil {der door/er} geschlossen {ist}. ';
+        return 'Das {geht singular} nicht{*}, weil {der door/er} geschlossen {!*}{ist}. ';
     }
 
     /* cannot carry out travel while 'dest' is within 'cont' */
     invalidStagingContainerMsg(cont, dest)
     {
         gMessageParams(cont, dest);
-        return '{Der dest/er} {ist} aber in {dem cont/ihm}. ';
+        return '{Der dest/er} {ist} aber in {dem cont/ihm}{*}. ';
     }
 
     /* cannot carry out travel while 'cont' (an actor) is holding 'dest' */
     invalidStagingContainerActorMsg(cont, dest)
     {
         gMessageParams(cont, dest);
-        return 'Das {geht|ging} nicht während {der cont/er} 
-            {den dest/ihn} in der Hand {hat cont}. ';
+        return 'Das {geht singular} nicht{*} solange {der cont/er} 
+            {den dest/ihn} in der Hand {!*}{hat cont}. ';
     }
     
     /* can't carry out travel because 'dest' isn't a valid staging location */
     invalidStagingLocationMsg(dest)
     {
         gMessageParams(dest);
-        return '{Du/er} {kann} {den dest(ihn} nicht betreten. ';
+        return '{Du/er} {koennt} {den dest/ihn} nicht betreten{*}. ';
     }
 
     /* destination is too high to enter from here */
     nestedRoomTooHighMsg(obj)
     {
         gMessageParams(obj);
-        return '{Der obj/er} {ist} zu weit oben, um {ihn/sie} von {hier|dort} 
+        return '{Der obj/er} {ist} zu weit oben{*}, um {ihn/sie} von hier 
             zu erreichen. ';
     }
 
     /* enclosing room is too high to reach by GETTING OUT OF here */
     nestedRoomTooHighToExitMsg(obj)
     {
-        return 'Dazu {geht|ging} es von {hier|dort} zu weit hinunter. ';
+        return 'Dazu {geht singular} es von hier zu weit hinunter{*}. ';
     }
 
     /* cannot carry out a command from a nested room */
     cannotDoFromMsg(obj)
     {
         gMessageParams(obj);
-        return 'Das {geht|ging} nicht von {dem obj/ihm} aus. ';
+        return 'Das {geht singular} nicht von {dem obj/ihm} aus{*}. ';
     }
 
     /* cannot carry out a command from within a vehicle in a nested room */
@@ -3503,58 +3474,57 @@ playerActionMessages: MessageHelper
     {
         local loc = obj.location;
         gMessageParams(obj, loc);
-        return 'Das {geht|ging} nicht, solange {der obj/er} in {dem loc/ihm} {ist obj}. ';
+        return 'Das {geht singular} nicht, solange {der obj/er} in {dem loc/ihm} {!*}{ist obj}. ';
     }
 
     /* cannot go that way in a vehicle */
     cannotGoThatWayInVehicleMsg(traveler)
     {
         gMessageParams(traveler);
-        return '{Du/er} {kann} dorthin nicht mit {dem traveler/ihm}. ';
+        return '{Du/er} {koennt} dorthin nicht mit {dem traveler/ihm} gelangen{*}. ';
     }
 
     /* cannot push an object that way */
     cannotPushObjectThatWayMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {den obj/ihn} nicht dorthin schieben. ';
+        return '{Du/er} {koennt} {den obj/ihn} nicht dorthin schieben{*}. ';
     }
 
     /* cannot push an object to a nested room */
     cannotPushObjectNestedMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {den obj/ihn} nicht dorthin schieben. ';
+        return '{Du/er} {koennt} {den obj/ihn} nicht dorthin schieben{*}. ';
     }
 
     /* cannot enter an exit-only passage */
     cannotEnterExitOnlyMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} {den obj/ihn} von {hier|dort} nicht betreten. ';
+        return '{Du/er} {koennt} {den obj/ihn} von hier nicht betreten{*}. ';
     }
 
     /* must open door before going that way */
     mustOpenDoorMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {muss} {den obj/ihn} erst öffnen. ';
+        return '{Du/er} {muss} {den obj/ihn} erst öffnen{*}. ';
     }
 
     /* door closes behind actor during travel through door */
     doorClosesBehindMsg(obj)
     {
         gMessageParams(obj);
-        return '<.p>Nachdem {du/er} durch {den obj/ihn} gegangen {ist actor}, {schliesst obj}
-            {er/sie} sich hinter {dem actor/ihm}. ';
+        return '<.p>Danach {schliesst} sich {der obj/er} hinter {dem actor/ihm}{*}. ';
     }
 
     /* the stairway does not go up/down */
-    stairwayNotUpMsg = '{Der dobj/er} führ{st/t} von {hier|dort} nur nach unten. '
-    stairwayNotDownMsg = '{Der dobj/er} führ{st/t} von {hier|dort} nur nach oben. '
+    stairwayNotUpMsg = '{Der dobj/er} {fuehrt} von hier nur nach unten{*}. '
+    stairwayNotDownMsg = '{Der dobj/er} {fuehrt} von hier nur nach oben{*}. '
 
     /* "wait" */
-    timePassesMsg = 'Die Zeit ver{geht|ging}... '
+    timePassesMsg = 'Die Zeit {vergeht singular}{*}... '
 
     /* "hello" with no target actor */
     sayHelloMsg = (addressingNoOneMsg)
@@ -3569,94 +3539,92 @@ playerActionMessages: MessageHelper
     /* an internal common handler for sayHelloMsg, sayGoodbyeMsg, etc */
     addressingNoOneMsg
     {
-        return '{Du/er} {muss} genauer sagen, mit wem '
-            + ' {er actor/sie} sprechen {will}. ';
+        return 'Sag bitte genauer, zu wem. ';
     }
 
     /* "yell" */
-    okayYellMsg = '{Du/er} {schreit} so laut {er actor/es} {kann}. '
+    okayYellMsg = '{Du/er} {schreit} so laut{*} wie {er actor/es} {!*}{kann}. '
 
     /* "jump" */
-    okayJumpMsg = '{Du/er} {springt} auf der Stelle. '
+    okayJumpMsg = '{Du/er} {springt} auf der Stelle{*}. '
 
     /* cannnot jump over object */
-    cannotJumpOverMsg = '{Du/er} {kann} nicht über {den dobj/ihn} springen. '
+    cannotJumpOverMsg = '{Du/er} {koennt} nicht über {den dobj/ihn} springen{*}. '
 
     /* cannnot jump off object */
-    cannotJumpOffMsg = '{Du/er} {kann} nicht von {dem dobj/ihm} springen. '
+    cannotJumpOffMsg = '{Du/er} {koennt} nicht von {dem dobj/ihm} springen{*}. '
 
     /* cannnot jump off (with no direct object) from here */
-    cannotJumpOffHereMsg = '{Hier|Dort} {ist|war} nichts, wovon {er actor/es}
-        springen {kann}. '
+    cannotJumpOffHereMsg = 'Hier {koennt actor} {er actor/sie} nicht hinunter springen{*}. '
 
     /* failed to find a topic in a consultable object */
     cannotFindTopicMsg =
-        '{Du/er} {kann} darüber nichts in {dem dobj/ihm} finden. '
+        '{Du/er} {koennt} darüber nichts in {dem dobj/ihm} finden{*}. '
 
     /* an actor doesn't accept a command from another actor */
     refuseCommand(targetActor, issuingActor)
     {
         gMessageParams(targetActor, issuingActor);
-        return '{Der targetActor/er} weiger{st/t} sich, das zu tun. ';
+        return '{Der targetActor/er} {weigert} sich{*}, das zu tun. ';
     }
 
     /* cannot talk to an object (because it makes no sense to do so) */
     notAddressableMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {kann} nicht mit {dem obj/ihm} reden. ';
+        return '{Du/er} {koennt} nicht mit {dem obj/ihm} reden{*}. ';
     }
 
     /* actor won't respond to a request or other communicative gesture */
     noResponseFromMsg(other)
     {
         gMessageParams(other);
-        return '{Der other/er} antwort{est/et} nicht. ';
+        return '{Der other/er} {antwortet} nicht{*}. ';
     }
 
     /* trying to give something to someone who already has the object */
-    giveAlreadyHasMsg = '{Der iobj/er} {hat} {den dobj/ihn} bereits in der Hand. '
+    giveAlreadyHasMsg = '{Der iobj/er} {hat} {den dobj/ihn} schon in der Hand{*}. '
 
     /* can't talk to yourself */
     cannotTalkToSelfMsg = 'Selbstgespräche zu führen,
-        {bringt|brachte} wenig. '
+        {bringt singular} wenig{*}. '
 
     /* can't ask yourself about anything */
-    cannotAskSelfMsg = '{Dirselbst} danach zu fragen,
-        {bringt|brachte} wenig. '
+    cannotAskSelfMsg = '{Dirselbst} zu fragen,
+        {bringt singular} wenig{*}. '
 
     /* can't ask yourself for anything */
-    cannotAskSelfForMsg = '{Dirselbst} darum zu bitten,
-        {bringt|brachte} wenig. '
+    cannotAskSelfForMsg = '{Dich} zu bitten,
+        {bringt singular} wenig{*}. '
 
     /* can't tell yourself about anything */
-    cannotTellSelfMsg = '{Dirselbst} davon zu erzählen,
-        {bringt|brachte} wenig. '
+    cannotTellSelfMsg = 'Mit {dir} zu reden,
+        {bringt singular} wenig{*}. '
 
     /* can't give yourself something */
-    cannotGiveToSelfMsg = '{Dirselbst} {den dobj/ihn} zu geben,
-        {bringt|brachte} wenig. '
+    cannotGiveToSelfMsg = '{Den dobj/ihn} {dir} zu geben,
+        {bringt singular} wenig{*}. '
     
     /* can't give something to itself */
-    cannotGiveToItselfMsg = '{Dem dobj/ihm} {den dobj/ihn} zu geben,
-        {bringt|brachte} wenig. '
+    cannotGiveToItselfMsg = '{Den dobj/ihn} sich selbst zu geben,
+        {bringt} wenig{*}. '
 
     /* can't show yourself something */
-    cannotShowToSelfMsg = '{Dirselbst} {den dobj/ihn} zu zeigen,
-        {bringt|brachte} wenig. '
+    cannotShowToSelfMsg = '{Den dobj/ihn} {dir} zu zeigen,
+        {bringt} wenig{*}. '
 
     /* can't show something to itself */
-    cannotShowToItselfMsg = '{Dem dobj/ihm} {den dobj/ihn} zu zeigen,
-        {bringt|brachte} wenig. '
+    cannotShowToItselfMsg = '{Den dobj/ihn} sich selbst zu zeigen,
+        {bringt} wenig{*}. '
 
     /* can't give/show something to a non-actor */
-    cannotGiveToMsg = '{Du/er} {kann} {dem iobj/ihm} nichts geben. '
-    cannotShowToMsg = '{Du/er} {kann} {dem iobj/ihm} nichts zeigen. '
+    cannotGiveToMsg = '{Du/er} {koennt} {dem iobj/ihm} nichts geben{*}. '
+    cannotShowToMsg = '{Du/er} {koennt} {dem iobj/ihm} nichts zeigen{*}. '
 
     /* actor isn't interested in something being given/shown */
     notInterestedMsg(actor)
     {
-        return '\^' + actor.derName + ' ' + actor.verbZuScheinen + ' daran nicht interessiert zu sein. ';
+        return '\^<<buildSynthParam('subj', actor)>>' + actor.derName + ' ' + actor.verbZuSein + ' offenbar daran nicht interessiert{*}. ';
     }
 
     /* vague ASK/TELL (for ASK/TELL <actor> <topic> syntax errors) */
@@ -3668,25 +3636,25 @@ playerActionMessages: MessageHelper
     /* object cannot hear actor */
     objCannotHearActorMsg(obj)
     {
-        return '\^' + obj.derName + ' ' + obj.verbZuScheinen +
-            ' {dich/ihn} nicht zu hören. ';
+        return '\^<<buildSynthParam('subj', obj)>>' + obj.derName + ' ' + obj.verbZuHoeren +
+            ' {dich/ihn} offenbar nicht{*}. ';
     }
 
     /* actor cannot see object being shown to actor */
     actorCannotSeeMsg(actor, obj)
     {
-        return '\^' + actor.derName + ' ' + actor.verbZuScheinen + ' ' + obj.denNameObj 
-            + ' nicht zu sehen. ';
+        return '\^<<buildSynthParam('subj', actor)>>' + actor.derName + ' ' + actor.verbZuSehen + ' ' + obj.denNameObj 
+            + ' offenbar nicht{*}. ';
     }
 
     /* not a followable object */
-    notFollowableMsg = '{Du/er} {kann} {dem dobj/ihm} nicht folgen. '
+    notFollowableMsg = '{Du/er} {koennt} {dem dobj/ihm} nicht folgen{*}. '
 
     /* cannot follow yourself */
-    cannotFollowSelfMsg = '{Du/er} {kann} nicht {dirselbst} selbst folgen. '
+    cannotFollowSelfMsg = '{Du/er} {koennt} schlecht {dirselbst} folgen{*}. '
 
     /* following an object that's in the same location as the actor */
-    followAlreadyHereMsg = '{Der dobj/er} {ist} bereits {hier|dort}. '
+    followAlreadyHereMsg = '{Der dobj/er} {ist} schon hier{*}. '
 
     /*
      *   following an object that we *think* is in our same location (in
@@ -3694,12 +3662,11 @@ playerActionMessages: MessageHelper
      *   last saw the object go), but it's too dark to see if that's
      *   really true 
      */
-    followAlreadyHereInDarkMsg = '{Der dobj/er} sollt{e/est} eigentlich
-        {hier|dort} sein, aber es ist zu dunkel, um {ihn dobj/sie} zu sehen. '
+    followAlreadyHereInDarkMsg = 'Es {ist singular} zu dunkel{*}, um {den dobj/ihn} zu sehen. '
 
     /* trying to follow an object, but don't know where it went from here */
-    followUnknownMsg = '{Du/er} {ist} {dirselbst} nicht sicher, wohin {der dobj/er} 
-        von {hier|dort} gegangen {ist}. '
+    followUnknownMsg = '{Du/er} {ist} {dir} nicht sicher{*}, wohin {der dobj/er} 
+        von hier gegangen {!*}{ist}. '
 
     /*
      *   we're trying to follow an actor, but we last saw the actor in the
@@ -3707,225 +3674,223 @@ playerActionMessages: MessageHelper
      */
     cannotFollowFromHereMsg(srcLoc)
     {
-        return 'Der letzte Ort, an dem {du/er} {den dobj/ihn} gesehen {hat}, 
-            {ist|war} ' + srcLoc.getDestName(gActor, gActor.location) + '. ';
+        return 'Der letzte Ort, an dem {du/er} {den dobj/ihn} gesehen {!*}{hat actor}, 
+            {ist singular} ' + srcLoc.getDestName(gActor, gActor.location) + '{*}. ';
     }
 
     /* acknowledge a 'follow' for a target that was in sight */
     okayFollowInSightMsg(loc)
     {
-        return '{Du/er} folg{e/st} {dem dobj/ihm} in '
-            + loc.actorIntoName + '. ';
+        return '{Du/er} {folgt} {dem dobj/ihm} in '
+            + loc.actorIntoName + '{*}. ';
     }
 
     /* obj is not a weapon */
-    notAWeaponMsg = '{Du/er} {kann} nicht mit {einem iobj/einer} angreifen. '
+    notAWeaponMsg = '{Der iobj/er} {ist} dafür nicht zu gebrauchen{*}. '
 
     /* no effect attacking obj */
-    uselessToAttackMsg = '{Du/er} {kann} {den dobj/ihn} nicht angreifen. '
+    uselessToAttackMsg = '{Du/er} {kommt} hier mit Gewalt auch nicht weiter{*}. '
 
     /* pushing object has no effect */
-    pushNoEffectMsg = '{Den dobj/ihn} zu schieben zeig{t|te} keinerlei Wirkung. '
+    pushNoEffectMsg = '{Den dobj/ihn} zu schieben {zeigt} keinerlei Wirkung{*}. '
 
     /* default 'push button' acknowledgment */
     okayPushButtonMsg = '<q>Klick.</q> '
 
     /* lever is already in pushed state */
     alreadyPushedMsg =
-        '{Der dobj/er} {ist} bereits soweit wie möglich hineingedrückt. '
+        '{Der dobj/er} {ist} schon soweit wie möglich hinein gedrückt{*}. '
 
     /* default acknowledgment to pushing a lever */
-    okayPushLeverMsg = '{Du/er} drück{st/t} {den dobj/ihn} soweit wie
-        möglich hinein. '
+    okayPushLeverMsg = '{Du/er} {drueckt} {den dobj/ihn} soweit wie möglich hinein{*}. '
 
     /* pulling object has no effect */
-    pullNoEffectMsg = 'An {dem dobj/ihm} zu ziehen zeig{t|te} keinerlei Wirkung. '
+    pullNoEffectMsg = 'An {dem dobj/ihm} zu ziehen {zeigt} keinerlei Wirkung{*}. '
 
     /* lever is already in pulled state */
     alreadyPulledMsg =
-        '{Der dobj/er} {ist} bereits soweit wie möglich herausgezogen. '
+        '{Der dobj/er} {ist} schon soweit wie möglich heraus gezogen{*}. '
 
     /* default acknowledgment to pulling a lever */
     okayPullLeverMsg = '{Du/er} {zieht} {den dobj/ihn} soweit wie
-        möglich heraus. '
+        möglich heraus{*}. '
 
     /* default acknowledgment to pulling a spring-loaded lever */
-    okayPullSpringLeverMsg = '{Du/er} {zieht} {den dobj/ihn}, {der dobj/er}
-        {springt} zurück in die Ausgangsposition, sobald {du/er} 
-        {es dobj/ihn} los{laesst}. '
+    okayPullSpringLeverMsg = '{Du/er} {zieht} {den dobj/ihn} und {er/sie}
+        {springt} zurück in die Ausgangsposition{*}, sobald {du/er} 
+        {es dobj/ihn} los {!*}{laesst}. '
 
     /* moving object has no effect */
-    moveNoEffectMsg = '{Den dobj/ihn} zu bewegen mach{t|te} wenig Sinn. '
+    moveNoEffectMsg = '{Den dobj/ihn} zu bewegen {macht} wenig Sinn{*}. '
 
     /* cannot move object to other object */
-    moveToNoEffectMsg = 'Das mach{t|te} wenig Sinn. '
+    moveToNoEffectMsg = 'Das {macht singular} wenig Sinn{*}. '
 
     /* cannot push an object through travel */
-    cannotPushTravelMsg = 'Das mach{t|te} wenig Sinn. '
+    cannotPushTravelMsg = 'Das {macht singular} wenig Sinn{*}. '
 
     /* acknowledge pushing an object through travel */
     okayPushTravelMsg(obj)
     {
         return '<.p>{Du/er} {schiebt} ' + obj.denNameObj
-            + ' hierher. ';
+            + ' hierher{*}. ';
     }
 
     /* cannot use object as an implement to move something */
     cannotMoveWithMsg =
-        '{Du/er} {kann} mit {dem iobj/ihm} nichts bewegen. '
+        '{Du/er} {koennt} mit {dem iobj/ihm} nichts bewegen{*}. '
 
     /* cannot set object to setting */
-    cannotSetToMsg = '{Du/er} {kann} {den dobj/ihn} nicht auf etwas einstellen. '
+    cannotSetToMsg = '{Du/er} {koennt} {den dobj/ihn} nicht auf etwas einstellen{*}. '
 
     /* invalid setting for generic Settable */
-    setToInvalidMsg = '{Der dobj/er} {hat} keine solche Einstellung. '
+    setToInvalidMsg = '{Der dobj/er} {hat} keine solche Einstellung{*}. '
 
     /* default 'set to' acknowledgment */
     okaySetToMsg(val)
-        { return 'In Ordnung, {der dobj/er} {ist} jetzt auf ' + val + ' eingestellt. '; }
+        { return 'In Ordnung, {der dobj/er} {ist} jetzt auf ' + val + ' eingestellt{*}. '; }
 
     /* cannot turn object */
-    cannotTurnMsg = '{Du/er} {kann} {den dobj/ihn} nicht drehen. '
+    cannotTurnMsg = '{Du/er} {koennt} {den dobj/ihn} nicht drehen{*}. '
 
     /* must specify setting to turn object to */
-    mustSpecifyTurnToMsg = '{Du/er} {muss} genauer sagen, worauf {du/er} 
-        {den dobj/ihn} einstellen {will actor}. '
+    mustSpecifyTurnToMsg = 'Sag bitte genauer, worauf {du/er} 
+        {den dobj/ihn} einstellen {!*}{will actor}. '
 
     /* cannot turn anything with object */
     cannotTurnWithMsg =
-        '{Du/er} {kann} mit {dem iobj/ihm} nichts drehen. '
+        '{Du/er} {koennt} mit {dem iobj/ihm} nichts drehen{*}. '
 
     /* invalid setting for dial */
-    turnToInvalidMsg = '{Der dobj/er} {hat} keine solche Einstellung. '
+    turnToInvalidMsg = '{Der dobj/er} {hat} keine solche Einstellung{*}. '
 
     /* default 'turn to' acknowledgment */
     okayTurnToMsg(val)
-        { return 'In Ordnung, {der dobj/er} {ist} nun auf ' + val + ' eingestellt. '; }
+        { return 'In Ordnung, {der dobj/er} {ist} nun auf ' + val + ' eingestellt{*}. '; }
 
     /* switch is already on/off */
-    alreadySwitchedOnMsg = '{Der dobj/er} {ist} schon an. '
-    alreadySwitchedOffMsg = '{Der dobj/er} {ist} schon aus. '
+    alreadySwitchedOnMsg = '{Der dobj/er} {ist} schon an{*}. '
+    alreadySwitchedOffMsg = '{Der dobj/er} {ist} schon aus{*}. '
 
     /* default acknowledgment for switching on/off */
-    okayTurnOnMsg = 'In Ordnung, {der dobj/er} {ist} jetzt an. '
-    okayTurnOffMsg = 'In Ordnung, {der dobj/er} {ist} jetzt aus. '
+    okayTurnOnMsg = 'In Ordnung, {der dobj/er} {ist} jetzt an{*}. '
+    okayTurnOffMsg = 'In Ordnung, {der dobj/er} {ist} jetzt aus{*}. '
 
     /* flashlight is on but doesn't light up */
-    flashlightOnButDarkMsg = '{Du/er} schalte{st/t} {den dobj/ihn} ein, 
-        aber es {scheint|schien} nichts zu passieren. '
+    flashlightOnButDarkMsg = '{Du/er} {schaltet} {den dobj/ihn} ein{-*}, 
+        aber es {passiert singular} scheinbar nichts{*}. '
 
     /* default acknowledgment for eating something */
-    okayEatMsg = '{Du/er} {hat} {den dobj/ihn} gegessen. '
+    okayEatMsg = '{Du/er} {isst} {den dobj/ihn}{*}. '
 
     /* object must be burning before doing that */
     mustBeBurningMsg(obj)
     {
         return '{Du/er} {muss} ' + obj.denNameObj
-            + ' zuerst anzünden. ';
+            + ' zuerst anzünden{*}. ';
     }
 
     /* match not lit */
-    matchNotLitMsg = '{Der dobj/er} {ist} nicht angezündet. '
+    matchNotLitMsg = '{Der dobj/er} {ist} nicht angezündet{*}. '
 
     /* lighting a match */
     okayBurnMatchMsg =
-        '{Du/er} zünd{est/et} {den dobj/ihn} an und eine kleine Flamme {erscheint|erschien}. '
+        '{Du/er} {zuendet} {den dobj/ihn} an{-*} und eine kleine Flamme {erscheint singular}{*}. '
 
     /* extinguishing a match */
-    okayExtinguishMatchMsg = '{Du/er} mach{st/t} {den dobj/ihn} aus und {er dobj/sie}
-        verschwind{est/et} in einer Aschewolke. '
+    okayExtinguishMatchMsg = '{Du/er} {macht} {den dobj/ihn} aus{-*} und {er dobj/sie}
+        {loest} {sich} in einer Aschewolke auf{-*}. '
 
     /* trying to light a kanndle with no fuel */
     candleOutOfFuelMsg =
-        '{Der dobj/er} {ist} heruntergebrannt und {kann} nicht mehr angezündet werden. '
+        '{Der dobj/er} {ist} heruntergebrannt und {koennt} nicht mehr angezündet werden{*}. '
 
     /* lighting a kanndle */
-    okayBurnCandleMsg = '{Du/er} zünd{est/et} {den dobj/ihn} an. '
+    okayBurnCandleMsg = '{Du/er} {zündet} {den dobj/ihn} an{-*}. '
 
     /* extinguishing a kanndle that isn't lit */
-    candleNotLitMsg = '{Der dobj/er} {ist} nicht angezündet. '
+    candleNotLitMsg = '{Der dobj/er} {ist} nicht angezündet{*}. '
 
     /* extinguishing a kanndle */
     okayExtinguishCandleMsg = 'Erledigt. '
 
     /* cannot consult object */
     cannotConsultMsg =
-        '{Der dobj/er} {ist} nichts, worin {du/er} etwas nachschlagen {kann}. '
+        '{Du/er} {koennt} in {dem dobj/ihm} nichts nachschlagen{*}. '
 
     /* cannot type anything on object */
-    cannotTypeOnMsg = '{Du/er} {kann} auf {dem dobj/ihm} nichts tippen. '
+    cannotTypeOnMsg = '{Du/er} {koennt} auf {dem dobj/ihm} nichts tippen{*}. '
 
     /* cannot enter anything on object */
-    cannotEnterOnMsg = '{Du/er} {kann} auf {dem dobj/ihm} nichts eingeben. '
+    cannotEnterOnMsg = '{Du/er} {koennt} auf {dem dobj/ihm} nichts eingeben{*}. '
     
     /* cannot switch object */
-    cannotSwitchMsg = '{Du/er} {kann} {den dobj/ihn} nicht an- oder ausschalten. '
+    cannotSwitchMsg = '{Du/er} {koennt} {den dobj/ihn} nicht an- oder ausschalten{*}. '
 
     /* cannot flip object */
-    cannotFlipMsg = '{Du/er} {kann} {den dobj/ihn} nicht umdrehen. '
+    cannotFlipMsg = '{Du/er} {koennt} {den dobj/ihn} nicht umdrehen{*}. '
 
     /* cannot turn object on/off */
     cannotTurnOnMsg =
-        '{Der dobj/er} {kann} nicht eingeschaltet werden. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht einschalten{*}. '
     cannotTurnOffMsg =
-        '{Der dobj/er} {kann} nicht ausgeschaltet werden. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht ausschalten{*}. '
     
     /* cannot light */
-    cannotLightMsg = '{Du/er} {kann} {den dobj/ihn} nicht anzünden. '
+    cannotLightMsg = '{Du/er} {will} {den dobj/ihn} nicht anzünden{*}. '
 
     /* cannot burn */
-    cannotBurnMsg = '{Den dobj/ihn} zu verbrennen, {bringt|brachte} wenig. '
+    cannotBurnMsg = '{Du/er} {will} {den dobj/ihn} nicht verbrennen{*}. '
     cannotBurnWithMsg =
-        '{Du/er} {kann} mit {dem iobj/ihm} nichts verbrennen. '
+        '{Du/er} {koennt} mit {dem iobj/ihm} nichts verbrennen{*}. '
 
     /* cannot burn this specific direct object with this specific iobj */
-    cannotBurnDobjWithMsg = '{Du/er} {kann} {den dobj/ihn} nicht mit
-                          {dem iobj/ihm} anzünden. '
+    cannotBurnDobjWithMsg = '{Du/er} {koennt} {den dobj/ihn} nicht mit
+                          {dem iobj/ihm} anzünden{*}. '
 
     /* object is already burning */
-    alreadyBurningMsg = '{Der dobj/er} {brennt} bereits. '
+    alreadyBurningMsg = '{Der dobj/er} {brennt} schon{*}. '
 
     /* cannot extinguish */
-    cannotExtinguishMsg = '{Du/er} {kann} {den dobj/ihn} nicht löschen. '
+    cannotExtinguishMsg = '{Du/er} {koennt} {den dobj/ihn} nicht löschen{*}. '
 
     /* cannot pour/pour in/pour on */
-    cannotPourMsg = '{Der dobj/er} {kann} nicht entleert werden. '
+    cannotPourMsg = '{Du/er} {koennt} {den dobj/ihn} nicht schütten{*}. '
     cannotPourIntoMsg =
-        '{Du/er} {kann} nichts in {den iobj/ihn} schütten. '
+        '{Du/er} {koennt} nichts in {den iobj/ihn} schütten{*}. '
     cannotPourOntoMsg =
-        '{Du/er} {kann} nichts auf {den iobj/ihn} schütten. '
+        '{Du/er} {koennt} nichts auf {den iobj/ihn} schütten{*}. '
 
     /* cannot attach object to object */
     cannotAttachMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht an etwas befestigen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht an etwas befestigen{*}. '
     cannotAttachToMsg =
-        '{Du/er} {kann} nichts an {dem iobj/ihm} befestigen. '
+        '{Du/er} {koennt} nichts an {dem iobj/ihm} befestigen{*}. '
 
     /* cannot attach to self */
     cannotAttachToSelfMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht an {sichselbst} selbst befestigen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht an {sichselbst} befestigen{*}. '
 
     /* cannot attach because we're already attached to the given object */
     alreadyAttachedMsg =
-        '{Der dobj/er} {ist} schon an {dem iobj/ihm} befestigt. '
+        '{Der dobj/er} {ist} schon an {dem iobj/ihm} befestigt{*}. '
 
     /*
      *   dobj and/or iobj can be attached to certain things, but not to
      *   each other 
      */
     wrongAttachmentMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht an {dem iobj/ihm} befestigen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht an {dem iobj/ihm} befestigen{*}. '
 
     /* dobj and iobj are attached, but they can't be taken apart */
     wrongDetachmentMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht von {dem iobj/ihm} lösen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht von {dem iobj/ihm} lösen{*}. '
 
     /* must detach the object before proceeding */
     mustDetachMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {muss} {den obj/ihn} lösen, bevor {er actor/sie}
-            das tun {kann}. ';
+        return '{Du/er} {muss} {den obj/ihn} erst lösen{*}. ';
     }
 
     /* default message for successful Attachable attachment */
@@ -3935,164 +3900,162 @@ playerActionMessages: MessageHelper
     okayDetachFromMsg = 'Erledigt. '
 
     /* cannot detach object from object */
-    cannotDetachMsg = '{Du/er} {kann} {den dobj/ihn} nicht lösen. '
+    cannotDetachMsg = '{Du/er} {koennt} {den dobj/ihn} nicht lösen{*}. '
     cannotDetachFromMsg =
-        '{Du/er} {kann} nichts von {dem iobj/ihm} lösen. '
+        '{Du/er} {koennt} nichts von {dem iobj/ihm} lösen{*}. '
 
     /* no obvious way to detach a permanent attachment */
     cannotDetachPermanentMsg =
-        'Es {gibt|gab} offensichtlich keine Möglichkeit, {den dobj/ihn} zu lösen. '
+        'Es {gibt singular} offensichtlich keine Möglichkeit{*}, {den dobj/ihn} zu lösen. '
 
     /* dobj isn't attached to iobj */
-    notAttachedToMsg = '{Der dobj/er} {ist} an {dem iobj/ihm} gar nicht befestigt. '
+    notAttachedToMsg = '{Der dobj/er} {ist} an {dem iobj/ihm} gar nicht befestigt{*}. '
 
     /* breaking object would serve no purpose */
     shouldNotBreakMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht zerbrechen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht zerbrechen{*}. '
 
     /* cannot cut that */
-    cutNoEffectMsg = '{Der iobj/er} {kann} {den dobj/ihn} nicht durchschneiden. '
+    cutNoEffectMsg = '{Der iobj/er} {koennt} {den dobj/ihn} nicht durchschneiden{*}. '
 
     /* can't use iobj to cut anything */
-    cannotCutWithMsg = '{Du/er} {kann} mit {dem iobj/ihm} nichts schneiden. '
+    cannotCutWithMsg = '{Du/er} {koennt} mit {dem iobj/ihm} nichts schneiden{*}. '
 
     /* cannot climb object */
     cannotClimbMsg =
-        'Auf {den dobj/ihn} {kann|konnte} nicht geklettert werden. '
+        'Auf {den dobj/ihn} {kann} nicht geklettert werden{*}. '
 
     /* object is not openable/closable */
-    cannotOpenMsg = '{Der dobj/er} {kann} nicht geöffnet werden. '
+    cannotOpenMsg = '{Der dobj/er} {kann} nicht geöffnet werden{*}. '
     cannotCloseMsg =
-        '{Der dobj/er} {kann} nicht geschlossen werden. '
+        '{Der dobj/er} {kann} nicht geschlossen werden{*}. '
 
     /* already open/closed */
-    alreadyOpenMsg = '{Der dobj/er} {ist} schon offen. '
-    alreadyClosedMsg = '{Der dobj/er} {ist} schon geschlossen. '
+    alreadyOpenMsg = '{Der dobj/er} {ist} schon offen{*}. '
+    alreadyClosedMsg = '{Der dobj/er} {ist} schon geschlossen{*}. '
 
     /* already locked/unlocked */
-    alreadyLockedMsg = '{Der dobj/er} {ist} schon abgesperrt. '
-    alreadyUnlockedMsg = '{Der dobj/er} {ist} schon aufgesperrt. '
+    alreadyLockedMsg = '{Der dobj/er} {ist} schon abgesperrt{*}. '
+    alreadyUnlockedMsg = '{Der dobj/er} {ist} schon aufgesperrt{*}. '
     
     /* cannot look in container because it's closed */
-    cannotLookInClosedMsg = '{Der dobj/er} {ist} geschlossen. '
+    cannotLookInClosedMsg = '{Der dobj/er} {ist} geschlossen{*}. '
 
     /* object is not lockable/unlockable */
     cannotLockMsg =
-        '{Der dobj/er} {kann} nicht abgesperrt werden. '
+        '{Der dobj/er} {kann} nicht abgesperrt werden{*}. '
     cannotUnlockMsg =
-        '{Der dobj/er} {kann} nicht aufgesperrt werden. '
+        '{Der dobj/er} {kann} nicht aufgesperrt werden{*}. '
     
     /* attempting to open a locked object */
-    cannotOpenLockedMsg = '{Der dobj/er} {scheint} abgesperrt zu sein. '
+    cannotOpenLockedMsg = '{Der dobj/er} {ist} scheinbar abgesperrt{*}. '
 
     /* object requires a key to unlock */
     unlockRequiresKeyMsg =
-        '{Du/er} brauch{st/t} offenbar einen Schlüssel, um {den dobj/ihn} aufzusperren. '
+        '{Du/er} {braucht} offenbar einen Schlüssel{*}, um {den dobj/ihn} aufzusperren. '
 
     /* object is not a key */
     cannotLockWithMsg =
-        '{Der iobj/er} {ist} dafür nicht geeignet. '
+        '{Der iobj/er} {ist} dafür nicht geeignet{*}. '
     cannotUnlockWithMsg =
-        '{Der iobj/er} {ist} dafür nicht geeignet. '
+        '{Der iobj/er} {ist} dafür nicht geeignet{*}. '
 
     /* we don't know how to lock/unlock this */
     unknownHowToLockMsg =
-        'Es {ist|war} unklar, wie man {den dobj/ihn} absperren {kann|konnte}. '
+        'Es {ist singular} unklar{*}, wie man {den dobj/ihn} absperren kann. '
     unknownHowToUnlockMsg =
-        'Es {ist|war} unklar, wie man {den dobj/ihn} aufsperren {kann|konnte}. '
+        'Es {ist singular} unklar{*}, wie man {den dobj/ihn} aufsperren kann. '
 
     /* the key (iobj) does not fit the lock (dobj) */
-    keyDoesNotFitLockMsg = '{Der iobj/er} {scheint} nicht zu passen. '
+    keyDoesNotFitLockMsg = '{Der iobj/er} {passt} scheinbar nicht{*}. '
 
     /* found key on keyring */
     foundKeyOnKeyringMsg(ring, key)
     {
         gMessageParams(ring, key);
-        return '{Du/er} {hat} alle Schlüssel an {dem ring/ihm} versucht und 
-            festgestellt, dass {der key/er} pass{t/t}. ';
+        return '{Du/er} {probiert} alle Schlüssel an {dem ring/ihm}{*}. {Der key/er} {passt}{*}! ';
     }
 
     /* failed to find a key on keyring */
     foundNoKeyOnKeyringMsg(ring)
     {
         gMessageParams(ring);
-        return '{Du/er} {hat} alle Schlüssel an {dem ring/ihm} versucht und 
-            festgestellt, dass keiner davon pass{t/t}. ';
+        return '{Du/er} {probiert} alle Schlüssel an {dem ring/ihm}{*} aber keiner davon {passt singular}{*}. ';
     }
 
     /* not edible/drinkable */
-    cannotEatMsg = '{Der dobj/er} {ist} nicht essbar. '
-    cannotDrinkMsg = '{Der dobj/er} {ist} nicht trinkbar. '
+    cannotEatMsg = '{Der dobj/er} {ist} nicht essbar{*}. '
+    cannotDrinkMsg = '{Der dobj/er} {ist} nicht trinkbar{*}. '
 
     /* cannot clean object */
     cannotCleanMsg =
-        '{Du/er} {weiss} nicht, wie man {den dobj/ihn} reinigen kann. '
+        '{Du/er} {will} {den dobj/ihn} nicht reinigen{*}. '
     cannotCleanWithMsg =
-        '{Du/er} {kann} mit {dem iobj/ihm} nichts reinigen. '
+        '{Du/er} {koennt} mit {dem iobj/ihm} nichts reinigen{*}. '
 
     /* cannot attach key (dobj) to (iobj) */
     cannotAttachKeyToMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht an {dem iobj/ihm} befestigen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht an {dem iobj/ihm} befestigen{*}. '
 
     /* actor cannot sleep */
-    cannotSleepMsg = '{Du/er} {muss} jetzt nicht schlafen. '
+    cannotSleepMsg = '{Du/er} {muss} jetzt nicht schlafen{*}. '
 
     /* cannot sit/lie/stand/get on/get out of */
     cannotSitOnMsg =
-        '{Du/er} {kann} nicht {aufdem dobj} sitzen. '
+        '{Du/er} {kann} nicht {aufdem dobj} sitzen{*}. '
     cannotLieOnMsg =
-        '{Du/er} {kann} nicht {aufdem dobj} liegen. '
-    cannotStandOnMsg = '{Du/er} {kann} nicht {aufdem dobj} stehen. '
-    cannotBoardMsg = '{Du/er} {kann} nicht {aufden dobj} steigen. '
-    cannotUnboardMsg = '{Du/er} {kann} {den dobj/ihn} nicht verlassen. '
-    cannotGetOffOfMsg = '{Du/er} {kann} nicht von {dem dobj/ihm} steigen. '
+        '{Du/er} {kann} nicht {aufdem dobj} liegen{*}. '
+    cannotStandOnMsg = '{Du/er} {kann} nicht {aufdem dobj} stehen{*}. '
+    cannotBoardMsg = '{Du/er} {kann} nicht {aufden dobj} steigen{*}. '
+    cannotUnboardMsg = '{Du/er} {kann} {den dobj/ihn} nicht verlassen{*}. '
+    cannotGetOffOfMsg = '{Du/er} {kann} nicht von {dem dobj/ihm} steigen{*}. '
 
     /* standing on a PathPassage */
-    cannotStandOnPathMsg = 'Wenn {du/er} {dem dobj/ihm} folgen {will},
+    cannotStandOnPathMsg = 'Wenn {du/er} {dem dobj/ihm} folgen {will}{*},
         sag es einfach. '
 
     /* cannot sit/lie/stand on something being held */
     cannotEnterHeldMsg =
-        'Das geht nicht, während {du/er} {den dobj/ihn} in der Hand {hat}. '
+        'Das geht nicht, solange {du/er} {den dobj/ihn} in der Hand {hat}{*}. '
 
     /* cannot get out (of current location) */
-    cannotGetOutMsg = '{Du/er} befind{est/et} {dichselbst} in nichts, was {du/er} verlassen {kann}. '
+    cannotGetOutMsg = 'Hier {ist singular} nichts zu verlassen{*}. '
 
     /* actor is already in a location */
-    alreadyInLocMsg = '{Du/er} {ist} schon {in dobj}. '
+    alreadyInLocMsg = '{Du/er} {ist} schon {in dobj}{*}. '
 
     /* actor is already standing/sitting on/lying on */
-    alreadyStandingMsg = '{Du/er} {steht} schon. '
-    alreadyStandingOnMsg = '{Du/er} {steht} bereits {auf dobj}. '
-    alreadySittingMsg = '{Du/er} {sitzt} schon. '
-    alreadySittingOnMsg = '{Du/er} {sitzt} bereits {auf dobj}. '
-    alreadyLyingMsg = '{Du/er} {liegt} schon. '
-    alreadyLyingOnMsg = '{Du/er} {liegt} bereits {auf dobj}. '
+    alreadyStandingMsg = '{Du/er} {steht} schon{*}. '
+    alreadyStandingOnMsg = '{Du/er} {steht} schon {auf dobj}{*}. '
+    alreadySittingMsg = '{Du/er} {sitzt} schon{*}. '
+    alreadySittingOnMsg = '{Du/er} {sitzt} schon {auf dobj}{*}. '
+    alreadyLyingMsg = '{Du/er} {liegt} schon{*}. '
+    alreadyLyingOnMsg = '{Du/er} {liegt} schon {auf dobj}{*}. '
 
     /* getting off something you're not on */
-    notOnPlatformMsg = '{Du/er} {ist} nicht {auf dobj}. '
+    notOnPlatformMsg = '{Du/er} {ist} nicht {auf dobj}{*}. '
 
     /* no room to stand/sit/lie on dobj */
     noRoomToStandMsg =
-        'Da {ist|war} kein Platz, um {auf dobj} zu stehen. '
+        'Da {ist singular} kein Platz{*}, um {auf dobj} zu stehen. '
     noRoomToSitMsg =
-        'Da {ist|war} kein Platz, um {auf dobj} zu sitzen. '
+        'Da {ist singular} kein Platz{*}, um {auf dobj} zu sitzen. '
     noRoomToLieMsg =
-        'Da {ist|war} kein Platz, um {auf dobj} zu liegen. '
+        'Da {ist singular} kein Platz{*}, um {auf dobj} zu liegen. '
 
     /* default report for standing up/sitting down/lying down */
     okayPostureChangeMsg(posture)
-        { return 'In Ordnung, {du/er} ' + posture.msgVerbT + ' nun. '; } //vorher posture.participle
+    { return 'In Ordnung, {du/er} ' + posture.msgVerbT + ' nun{*}. '; } //vorher posture.participle
 
     /* default report for standing/sitting/lying in/on something */
     roomOkayPostureChangeMsg(posture, obj)
     {
         gMessageParams(obj);
-        return 'In Ordnung, {du/er} ' + posture.msgVerbT + ' jetzt {auf obj}. '; //vorher posture.participle
+        return 'In Ordnung, {du/er} ' + posture.msgVerbT + ' nun {auf obj}{*}. '; //vorher posture.participle
     }
 
     /* default report for getting off of a platform */
-    okayNotStandingOnMsg = 'In Ordnung, {du/er} {verlaesst} {den dobj/ihn}. '
+    okayNotStandingOnMsg = 'In Ordnung, {du/er} {verlaesst} {den dobj/ihn}{*}. '
 
     /* cannot fasten/unfasten */ // -- We have no fasten / unfasten in german
     cannotFastenMsg = '{Du/er} {cannot} fasten {the dobj/him}. '
@@ -4103,70 +4066,70 @@ playerActionMessages: MessageHelper
         '{Du/er} {cannot} unfasten anything from {the iobj/him}. '
 
     /* cannot plug/unplug */
-    cannotPlugInMsg = '{Du/er} {sieht} keine Möglichkeit, {den dobj/ihn} irgendwo einzustecken. '
+    cannotPlugInMsg = '{Du/er} {sieht} keine Möglichkeit{*}, {den dobj/ihn} irgendwo einzustecken. '
     cannotPlugInToMsg =
-        '{Du/er} {sieht} keine Möglichkeit, etwas in {den iobj/ihn} zu stecken. '
-    cannotUnplugMsg = '{Du/er} {sieht} keine Möglichkeit, {den dobj/ihn} auszustecken. '
+        '{Du/er} {sieht} keine Möglichkeit{*}, etwas in {den iobj/ihn} zu stecken. '
+    cannotUnplugMsg = '{Du/er} {sieht} keine Möglichkeit{*}, {den dobj/ihn} auszustecken. '
     cannotUnplugFromMsg =
-        '{Du/er} {sieht} keine Möglichkeit, etwas aus {dem iobj/ihm} zu ziehen. '
+        '{Du/er} {sieht} keine Möglichkeit{*}, etwas aus {dem iobj/ihm} zu ziehen. '
 
     /* cannot screw/unscrew */
-    cannotScrewMsg = '{Du/er} {kann} {den dobj/ihn} nicht zudrehen. '
+    cannotScrewMsg = '{Du/er} {koennt} {den dobj/ihn} nicht zuschrauben{*}. '
     cannotScrewWithMsg =
-        '{Du/er} {kann} nichts mit {dem iobj/ihm} festschrauben. '
-    cannotUnscrewMsg = '{Du/er} {kann} {den dobj/ihn} nicht aufdrehen. '
+        '{Du/er} {koennt} nichts mit {dem iobj/ihm} festschrauben{*}. '
+    cannotUnscrewMsg = '{Du/er} {koennt} {den dobj/ihn} nicht aufschrauben{*}. '
     cannotUnscrewWithMsg =
-        '{Du/er} {kann} nichts mit {dem iobj/ihm} aufschrauben. '
+        '{Du/er} {koennt} nichts mit {dem iobj/ihm} aufschrauben{*}. '
 
     /* cannot enter/go through */
     cannotEnterMsg =
-        '{Den dobj/ihn} {kann actor} {du/er} nicht betreten. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht betreten{*}. '
     cannotGoThroughMsg =
-        'Durch {den dobj/ihn} {kann actor} {du/er} nicht gehen. '
+        '{Du/er} {koennt} nicht durch {den dobj/ihn} gehen{*}. '
         
     /* can't throw something at itself */
     cannotThrowAtSelfMsg =
-        '{Du/er} {kann} {den dobj/ihn} nicht auf {sichselbst} selbst werfen. '
+        '{Du/er} {koennt} {den dobj/ihn} nicht auf {sichselbst} selbst werfen{*}. '
 
     /* can't throw something at an object inside itself */
     cannotThrowAtContentsMsg = 'Dazu {muss actor} {du/er} erst {den iobj/ihn}
-        von {dem dobj/ihm} entfernen. '
+        von {dem dobj/ihm} entfernen{*}. '
 
     /* shouldn't throw something at the floor */
     shouldNotThrowAtFloorMsg =
-        '{Du/er} {kann} {den dobj/ihn} stattdessen einfach ablegen. '
+        '{Du/er} {koennt} {den dobj/ihn} stattdessen einfach ablegen{*}. '
 
     /* THROW <obj> <direction> isn't supported; use THROW AT instead */
     dontThrowDirMsg =
-        ('<.parser>Du musst genauer sagen, worauf {du/er}'
+        ('<.parser>Sag bitte genauer, worauf {du/er}'
          + ' {den dobj/ihn} werfen ' 
          + (gActor.referralPerson == FirstPerson ? ' soll' : 
             gActor.referralPerson == ThirdPerson ? ' soll' : 
             gActor.referralPerson == FourthPerson ? ' sollen' : 
-            gActor.referralPerson == FifthPerson ? ' wollt{|et}' : 
+            gActor.referralPerson == FifthPerson ? ' wollt' : 
             gActor.referralPerson == SixthPerson ? ' sollen' : ' willst') + '.<./parser> ')
 
     /* thrown object bounces off target (short report) */
     throwHitMsg(projectile, target)
     {
         gMessageParams(projectile, target);
-        return '{Der projectile/er} {trifft} {den target/ihn} ohne nennenswerte Wirkung. ';
+        return '{Der projectile/er} {trifft} {den target/ihn} ohne nennenswerte Wirkung{*}. ';
     }
 
     /* thrown object lands on target */
     throwFallMsg(projectile, target)
     {
         gMessageParams(projectile, target);
-        return '{Der projectile/er} {faellt} auf {den target/ihn}. ';
+        return '{Der projectile/er} {faellt} auf {den target/ihn}{*}. ';
     }
 
     /* thrown object bounces off target and falls to destination */
     throwHitFallMsg(projectile, target, dest)
     {
         gMessageParams(projectile, target);
-        return '{Der projectile/er} {trifft} {den target/ihn}
+        return '{Der projectile/er} {trifft} {den target/ihn}{*}
             und {faellt projectile} '
-            + dest.putInName + '. ';
+            + dest.putInName + '{*}. ';
     }
 
     /* thrown object falls short of distant target (sentence prefix only) */
@@ -4174,7 +4137,7 @@ playerActionMessages: MessageHelper
     {
         gMessageParams(projectile, target);
         return '{Der projectile/er} {faellt} vor '
-               + '{den target/ihn}. ';
+               + '{den target/ihn}{*}. ';
     }
         
     /* thrown object falls short of distant target */
@@ -4182,7 +4145,7 @@ playerActionMessages: MessageHelper
     {
         gMessageParams(projectile, target);
         return '{Der projectile/er} {faellt} ' + dest.putInName
-            + ' vor {dem target/ihm} auf den Boden. ';
+            + ' vor {dem target/ihm} auf den Boden{*}. ';
     }
 
     /* target catches object */
@@ -4190,32 +4153,32 @@ playerActionMessages: MessageHelper
     {
         return '\^' + target.derName + ' '
             + target.verbZuFangen 
-            + ' ' + obj.denNameObj + '. ';
+            + ' ' + obj.denNameObj + '{*}. ';
     }
 
     /* we're not a suitable target for THROW TO (because we're not an NPC) */
-    cannotThrowToMsg = '{Du/er} {kann} nichts auf {den iobj/ihn} werfen. '
+    cannotThrowToMsg = '{Du/er} {koennt} nichts auf {den iobj/ihn} werfen{*}. '
 
     /* target does not want to catch anything */
     willNotCatchMsg(catcher)
     {
         return '\^' + catcher.derName
-            + '{schaut|sah} nicht so aus, als ob ' + catcher.itNom 
+            + ' {sieht} nicht so aus{-*}, als ob ' + catcher.itNom 
             + ' etwas fangen will.';
     }
 
     /* cannot kiss something */
-    cannotKissMsg = '{Den dobj/ihn} zu küssen {zeigt|zeigte} keine Wirkung. '
+    cannotKissMsg = '{Den dobj/ihn} zu küssen {bringt} nichts{*}. '
 
     /* person uninterested in being kissed */
     cannotKissActorMsg
-    = '{Der dobj/er} {will} das sicher nicht. '
+    = '{Der dobj/er} {will} das sicher nicht{*}. '
 
     /* cannot kiss yourself */
-    cannotKissSelfMsg = '{Du/er} {kann} {dichselbst} nicht küssen. '
+    cannotKissSelfMsg = '{Du/er} {koennt} {dich} nicht küssen{*}. '
 
     /* it is now dark at actor's location */
-    newlyDarkMsg = 'Es {ist|war} nun stockdunkel. '
+    newlyDarkMsg = 'Es {ist singular} nun stockdunkel{*}. '
 ;
 
 /*
@@ -4225,187 +4188,186 @@ playerActionMessages: MessageHelper
  */
 npcActionMessages: playerActionMessages
     /* "wait" */
-    timePassesMsg = '{Du/er} wart{est/et}... '
+    timePassesMsg = '{Du/er} {wartet}{*}. '
 
     /* trying to move a Fixture/Immovable */
-    cannotMoveFixtureMsg = '{Du/er} {kann} {den dobj/ihn} nicht bewegen. '
-    cannotMoveImmovableMsg = '{Du/er} {kann} {den dobj/ihn} nicht bewegen. '
+    cannotMoveFixtureMsg = '{Du/er} {koennt} {den dobj/ihn} nicht bewegen{*}. '
+    cannotMoveImmovableMsg = '{Du/er} {koennt} {den dobj/ihn} nicht bewegen{*}. '
 
     /* trying to take/move/put a Heavy object */
     cannotTakeHeavyMsg =
-        '{Der dobj/er {ist} zu schwer, um ihn zu nehmen. '
+        '{Der dobj/er} {ist} zu schwer{*}, um ihn zu nehmen. '
     cannotMoveHeavyMsg =
-        '{Der dobj/er} {ist} zu schwer, um ihn zu bewegen. '
+        '{Der dobj/er} {ist} zu schwer{*}, um ihn zu bewegen. '
     cannotPutHeavyMsg =
-        '{Der dobj/er} {ist} zu schwer, um ihn zu bewegen. '
+        '{Der dobj/er} {ist} zu schwer{*}, um ihn zu bewegen. '
 
     /* trying to move a component object */
     cannotMoveComponentMsg(loc)
     {
-        return '{Du/er} {kann} das nicht tun, weil {der dobj/er} 
-            Teil von ' + loc.demNameObj + '{ist dobj}. ';
+        return '{Du/er} {koennt} das nicht tun{*}, weil {der dobj/er} 
+            Teil von ' + loc.demNameObj + '{!*}{ist dobj}. ';
     }
 
     /* default successful 'take' response */
-    okayTakeMsg = '{Du/er} {nimmt} {den dobj/ihn}. '
+    okayTakeMsg = '{Du/er} {nimmt} {den dobj/ihn}{*}. '
 
     /* default successful 'drop' response */
-    okayDropMsg = '{Du/er} leg{st/t|} {den dobj/ihn} hin. '
+    okayDropMsg = '{Du/er} {legt} {den dobj/ihn} hin{-*}. '
 
     /* default successful 'put in' response */
-    okayPutInMsg = '{Du/er} leg{st/t} {den dobj/ihn} in {den iobj/ihn}. '
+    okayPutInMsg = '{Du/er} {legt} {den dobj/ihn} in {den iobj/ihn}{*}. '
 
     /* default successful 'put on' response */
-    okayPutOnMsg = '{Du/er} leg{st/t} {den dobj/ihn} auf {den iobj/ihn}. '
+    okayPutOnMsg = '{Du/er} {legt} {den dobj/ihn} auf {den iobj/ihn}{*}. '
 
     /* default successful 'put under' response */
     okayPutUnderMsg =
-        '{Du/er} leg{st/t} {den dobj/ihn} unter {den iobj/ihn}. '
+        '{Du/er} {legt} {den dobj/ihn} unter {den iobj/ihn}{*}. '
 
     /* default successful 'put behind' response */
     okayPutBehindMsg =
-        '{Du/er} leg{st/t} {den dobj/ihn} hinter {den iobj/ihn}. '
+        '{Du/er} {legt} {den dobj/ihn} hinter {den iobj/ihn}{*}. '
 
     /* default succesful response to 'wear obj' */
     okayWearMsg =
-        '{Du/er} {zieht} {den dobj/ihn} an. '
+        '{Du/er} {zieht} {den dobj/ihn} an{-*}. '
 
     /* default successful response to 'doff obj' */
-    okayDoffMsg = '{Du/er} {zieht} {den dobj/ihn} aus. '
+    okayDoffMsg = '{Du/er} {zieht} {den dobj/ihn} aus{-*}. '
 
     /* default successful responses to open/close */
-    okayOpenMsg = '{Du/er} öffn{est/et} {den dobj/ihn}. '
-    okayCloseMsg = '{Du/er} {schliesst} {den dobj/ihn}. '
+    okayOpenMsg = '{Du/er} {oeffnet} {den dobj/ihn}{*}. '
+    okayCloseMsg = '{Du/er} {schliesst} {den dobj/ihn}{*}. '
 
     /* default successful responses to lock/unlock */
-    okayLockMsg = '{Du/er} sperr{st/t} {den dobj/ihn} auf. '
-    okayUnlockMsg = '{Du/er} sperr{st/t} {den dobj/ihn} zu. '
+    okayLockMsg = '{Du/er} {schliesst} {den dobj/ihn} auf{-*}. '
+    okayUnlockMsg = '{Du/er} {schliesst} {den dobj/ihn} zu{-*}. '
 
     /* push/pull/move with no effect */
-    pushNoEffectMsg = '{Du/er} versuch{st/t} {den dobj/ihn} zu schieben,
+    pushNoEffectMsg = '{Du/er} {versucht}{*} {den dobj/ihn} zu schieben,
                       aber ohne nennenswerte Wirkung. '
-    pullNoEffectMsg = '{Du/er} versuch{st/t} {den dobj/ihn} zu ziehen,
+    pullNoEffectMsg = '{Du/er} {versucht}{*} {den dobj/ihn} zu ziehen,
                       aber ohne nennenswerte Wirkung. '
-    moveNoEffectMsg = '{Du/er} versuch{st/t} {den dobj/ihn} zu bewegen,
+    moveNoEffectMsg = '{Du/er} {versucht}{*} {den dobj/ihn} zu bewegen,
                       aber ohne nennenswerte Wirkung. '
-    moveToNoEffectMsg = '{Du/er} {laesst} {den dobj/ihn} besser wo {er/sie} {ist}. '
+    moveToNoEffectMsg = '{Du/er} {laesst} {den dobj/ihn} besser{*}, wo {er/sie} {!*}{ist}. '
 
     whereToGoMsg =
-        'Du musst genauer sagen, in welche Richtung {du/er} gehen {will}. '
+        'Sag bitte genauer, in welche Richtung {du/er} gehen ' + (gActor.isPlural ? 'sollen' : 'soll') + '. '
 
     /* object is too large for container */
     tooLargeForContainerMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} zu groß für {den cont/ihn}. ';
+        return '{Der obj/er} {ist} zu groß für {den cont/ihn}{*}. ';
     }
 
     /* object is too large for underside */
     tooLargeForUndersideMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} {passt} nicht unter {den cont/ihn}. ';
+        return '{Der obj/er} {passt} nicht unter {den cont/ihn}{*}. ';
     }
 
     /* object is too large to fit behind something */
     tooLargeForRearMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} {passt} nicht hinter {den cont/ihn}. ';
+        return '{Der obj/er} {passt} nicht hinter {den cont/ihn}{*}. ';
     }
 
     /* container doesn't have room for object */
     containerTooFullMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der cont/er} {ist} schon zu voll für {den obj/ihn}. ';
+        return '{Der cont/er} {ist} schon zu voll für {den obj/ihn}{*}. ';
     }
 
     /* surface doesn't have room for object */
     surfaceTooFullMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return 'Für {den obj/ihn} {ist|war} kein Platz auf {dem cont/ihm}. ';
+        return 'Für {den obj/ihn} {ist} kein Platz auf {dem cont/ihm}{*}. ';
     }
 
     /* the dobj doesn't fit on this keyring */
-    objNotForKeyringMsg = '{Der dobj/er} {passt} nicht an {den iobj/ihn}. '
+    objNotForKeyringMsg = '{Der dobj/er} {passt} nicht an {den iobj/ihn}{*}. '
 
     /* taking dobj from iobj, but dobj isn't in iobj */
-    takeFromNotInMsg = 'Aber {der dobj/er} {ist} gar nicht in {dem iobj/ihm}. '
+    takeFromNotInMsg = 'Aber {der dobj/er} {ist} gar nicht in {dem iobj/ihm}{*}. '
 
     /* taking dobj from surface, but dobj isn't on iobj */
-    takeFromNotOnMsg = 'Aber {der dobj/er} {ist} gar nicht auf {dem iobj/ihm}. '
+    takeFromNotOnMsg = 'Aber {der dobj/er} {ist} gar nicht auf {dem iobj/ihm}{*}. '
 
     /* taking dobj under something, but dobj isn't under iobj */
-    takeFromNotUnderMsg = 'Aber {der dobj/er} {ist} gar nicht unter {dem iobj/ihm}. '
+    takeFromNotUnderMsg = 'Aber {der dobj/er} {ist} gar nicht unter {dem iobj/ihm}{*}. '
 
     /* taking dobj from behind something, but dobj isn't behind iobj */
-    takeFromNotBehindMsg = 'Aber {der dobj/er} {ist} gar nicht hinter {dem iobj/ihm}. '
+    takeFromNotBehindMsg = 'Aber {der dobj/er} {ist} gar nicht hinter {dem iobj/ihm}{*}. '
 
     /* cannot jump off (with no direct object) from here */
-    cannotJumpOffHereMsg = 'Hier {ist|war} nichts, wovon
-        {du/er} springen {kann}. '
+    cannotJumpOffHereMsg = 'Hier {koennt dobj} {der dobj/er} nicht hinunter springen{*}. '
 
     /* should not break object */
-    shouldNotBreakMsg = '{Du/er} {will} {den dobj/ihn} nicht beschädigen. '
+    shouldNotBreakMsg = '{Du/er} {will} {den dobj/ihn} nicht beschädigen{*}. '
 
     /* report for standing up/sitting down/lying down */
     okayPostureChangeMsg(posture)
-        { return '{Du/er} ' + posture.msgVerbI + ' nun. '; }
+        { return '{Du/er} ' + posture.msgVerbT + ' nun{*}. '; }
 
     /* report for standing/sitting/lying in/on something */
     roomOkayPostureChangeMsg(posture, obj)
     {
         gMessageParams(obj);
-        return '{Du/er} ' + posture.msgVerbT + ' auf {dem obj/ihm}. ';
+        return '{Du/er} ' + posture.msgVerbT + ' nun {auf obj}{*}. ';
     }
 
     /* report for getting off a platform */
-    okayNotStandingOnMsg = '{Du/er} {verlaesst} {den dobj/ihn}. '
+    okayNotStandingOnMsg = '{Du/er} {verlaesst} {den dobj/ihn}{*}. '
 
     /* default 'turn to' acknowledgment */
     okayTurnToMsg(val)
-        { return '{Du/er} dreh{st/t} {den dobj/ihn} auf ' + val + '. '; }
+        { return '{Du/er} {stellt} {den dobj/ihn} auf ' + val + '{*}. '; }
 
     /* default 'push button' acknowledgment */
-    okayPushButtonMsg = '{Du/er} drück{st/t} {den dobj/ihn}. '
+    okayPushButtonMsg = '{Du/er} {drueckt} {den dobj/ihn}{*}. '
 
     /* default acknowledgment for switching on/off */
-    okayTurnOnMsg = '{Du/er} schalt{est/et} {den dobj/ihn} an. '
-    okayTurnOffMsg = '{Du/er} schalt{est/et} {den dobj/ihn} aus. '
+    okayTurnOnMsg = '{Du/er} {schaltet} {den dobj/ihn} an{-*}. '
+    okayTurnOffMsg = '{Du/er} {schaltet} {den dobj/ihn} aus{-*}. '
 
     /* the key (iobj) does not fit the lock (dobj) */
-    keyDoesNotFitLockMsg = '{Du/er} probier{st/t} {den iobj/ihn}, aber
-                         {er iobj/sie} pass{t/t} nicht ins Schloss. '
+    keyDoesNotFitLockMsg = '{Du/er} {probiert} {den iobj/ihn}{*}, aber
+        {er iobj/sie} {passt} nicht ins Schloss{*}. '
 
     /* acknowledge entering "follow" mode */
     okayFollowModeMsg = '<q>In Ordnung, Ich werde {dem dobj/ihm} folgen.</q> '
 
     /* note that we're already in "follow" mode */
-    alreadyFollowModeMsg = '<q>Ich folge bereits {dem dobj/ihm}.</q> '
+    alreadyFollowModeMsg = '<q>Ich folge schon {dem dobj/ihm}.</q> '
 
     /* extinguishing a candle */
-    okayExtinguishCandleMsg = '{Du/er} lösch{st/t} {den dobj/ihn}. '
+    okayExtinguishCandleMsg = '{Du/er} {loescht} {den dobj/ihn}{*}. '
 
     /* acknowledge attachment */
     okayAttachToMsg =
-        '{Du/er} verbind{est/et} {den dobj/ihn} mit {dem iobj/ihm}. '
+        '{Du/er} {verbindet} {den dobj/ihn} mit {dem iobj/ihm}{*}. '
 
     /* acknowledge detachment */
     okayDetachFromMsg =
-        '{Du/er} lös{t/t} {den dobj/ihn} von {dem iobj/ihm}. '
+        '{Du/er} {loest} {den dobj/ihn} von {dem iobj/ihm}{*}. '
 
     /*
      *   the PC's responses to conversational actions applied to oneself
      *   need some reworking for NPC's 
      */
-    cannotTalkToSelfMsg = 'Mit {dirselbst} zu reden, {bringt} wenig. '
-    cannotAskSelfMsg = '{Dichselbst} danach zu fragen, {bringt} wenig. '
-    cannotAskSelfForMsg = '{Dichselbst} darum zu bitten, {bringt} wenig. '
-    cannotTellSelfMsg = '{Dirselbst} davon zu erzählen, {bringt} wenig. '
-    cannotGiveToSelfMsg = '{Den dobj/ihn} {dirselbst} zu geben, {bringt} wenig. '
-    cannotShowToSelfMsg = '{Den dobj/ihn} {dirselbst} zu zeigen, {bringt} wenig. '
+    cannotTalkToSelfMsg = 'Mit {dirselbst} zu reden, {bringt} wenig{*}. '
+    cannotAskSelfMsg = '{Dichselbst} danach zu fragen, {bringt} wenig{*}. '
+    cannotAskSelfForMsg = '{Dichselbst} darum zu bitten, {bringt} wenig{*}. '
+    cannotTellSelfMsg = '{Dirselbst} davon zu erzählen, {bringt} wenig{*}. '
+    cannotGiveToSelfMsg = '{Den dobj/ihn} {dirselbst} zu geben, {bringt} wenig{*}. '
+    cannotShowToSelfMsg = '{Den dobj/ihn} {dirselbst} zu zeigen, {bringt} wenig{*}. '
 ;   
 
 /* ------------------------------------------------------------------------ */
@@ -4471,11 +4433,11 @@ undoTip: Tip
  */
 roomLister: Lister
     /* show the prefix/suffix in wide mode */
-    showListPrefixWide(itemCount, pov, parent) { "{Du/er} {sieht} {hier|dort} <<withListCaseAccusative>><<withListArtIndefinitve>>"; }
-    showListSuffixWide(itemCount, pov, parent) { ". "; }
+    showListPrefixWide(itemCount, pov, parent) { "{Du/er} {sieht}{+*} hier <<withListCaseAccusative>><<withListArtIndefinite>>"; }
+    showListSuffixWide(itemCount, pov, parent) { "{**}. "; }
 
     /* show the tall prefix */
-    showListPrefixTall(itemCount, pov, parent) { "{Du/er} {sieht}:<<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+    showListPrefixTall(itemCount, pov, parent) { "{Du/er} {sieht}{*}:<<withListCaseAccusative>><<withListArtIndefinite>>"; }
 ;
 
 /*
@@ -4483,12 +4445,12 @@ roomLister: Lister
  */
 darkRoomLister: Lister
     showListPrefixWide(itemCount, pov, parent)
-        { "In der Dunkelheit {kann actor} {du/er} <<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+        { "In der Dunkelheit {koennt actor} {du/er} <<withListCaseAccusative>><<withListArtIndefinite>>"; }
 
-    showListSuffixWide(itemCount, pov, parent) { "sehen. "; }
+    showListSuffixWide(itemCount, pov, parent) { "sehen{*}. "; }
 
     showListPrefixTall(itemCount, pov, parent)
-        { "In der Dunkelheit {sieht actor} {du/er}:<<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+        { "In der Dunkelheit {sieht actor} {du/er}{*}:<<withListCaseAccusative>><<withListArtIndefinite>>"; }
 ;
 
 /*
@@ -4502,12 +4464,12 @@ class RemoteRoomLister: Lister
     construct(room) { remoteRoom = room; }
     
     showListPrefixWide(itemCount, pov, parent)
-        { "\^<<remoteRoom.inRoomName(pov)>>, {sieht actor} {du/er} <<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+        { "\^<<remoteRoom.inRoomName(pov)>>, {sieht actor} {du/er} <<withListCaseAccusative>><<withListArtIndefinite>>"; }
     showListSuffixWide(itemCount, pov, parent)
-        { ". "; }
+        { "{*}. "; }
 
     showListPrefixTall(itemCount, pov, parent)
-        { "\^<<remoteRoom.inRoomName(pov)>>, {sieht actor} {du/er}:<<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+        { "\^<<remoteRoom.inRoomName(pov)>>, {sieht actor} {du/er}{*}:<<withListCaseAccusative>><<withListArtIndefinite>>"; }
 
     /* the remote room we're viewing */
     remoteRoom = nil
@@ -4542,17 +4504,17 @@ class CustomRoomLister: Lister
  */
 actorSingleInventoryLister: InventoryLister
     showListPrefixWide(itemCount, pov, parent)
-        { "<<buildSynthParam('Du/er', parent)>><<withListCaseAccusative>><<withListArtIndefinitve>> {hat} "; }
+        { "<<buildSynthParam('Du/er', parent)>><<withListCaseAccusative>><<withListArtIndefinite>> {hat} "; }
     showListSuffixWide(itemCount, pov, parent)
-        { "bei {dirselbst}. "; }
+        { "bei {dir}{*}. "; }
 
     showListPrefixTall(itemCount, pov, parent)
-        { "<<buildSynthParam('Du/er', parent)>><<withListCaseAccusative>><<withListArtIndefinitve>> {hat} Folgendes bei sich:"; }
+        { "<<buildSynthParam('Du/er', parent)>><<withListCaseAccusative>><<withListArtIndefinite>> {hat} Folgendes bei sich{*}:"; }
     showListContentsPrefixTall(itemCount, pov, parent)
-        { "<<buildSynthParam('Einer/er', parent)>>,<<withListCaseAccusative>><<withListArtIndefinitve>> der Folgendes bei {dichselbst} {hat}:"; }
+        { "<<buildSynthParam('Einer/er', parent)>>,<<withListCaseAccusative>><<withListArtIndefinite>> der Folgendes bei {dir} {hat}{*}:"; }
 
     showListEmpty(pov, parent)
-        { "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dichselbst}. "; }
+        { "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dir}{*}. "; }
 ;
 
 /*
@@ -4575,7 +4537,7 @@ actorInventoryLister: DividedInventoryLister
     
     showList(pov, parent, lst, options, indent, infoTab, parentGroup)
     {
-        withListArtIndefinitve;
+        withListArtIndefinite;
         withListCaseAccusative;   // -- German: set list case to accusative, before
                             // -- buildung the strings ...
         /* 
@@ -4729,34 +4691,34 @@ actorInventoryLister: DividedInventoryLister
     showInventoryEmpty(parent)
     {
         /* empty inventory */
-        "<<buildSynthParam('Einer/er', parent)>> {hat} nichts bei {dirselbst}. ";
+        "<<buildSynthParam('Einer/er', parent)>> {hat} nichts bei {dir}{*}. ";
     }
     showInventoryWearingOnly(parent, wearing)
     {
         /* we're carrying nothing but wearing some items */
-        "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dirselbst}
-        und {hat} <<wearing>> angezogen. ";
+        "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dir}{*}
+        und {hat} <<wearing>> angezogen{*}. ";
     }
     showInventoryCarryingOnly(parent, carrying)
     {
         /* we have only carried items to report */
-        "<<buildSynthParam('Du/er', parent)>> {hat} <<carrying>> bei {dirselbst}. ";
+        "<<buildSynthParam('Du/er', parent)>> {hat} <<carrying>> bei {dir}{*}. ";
     }
     showInventoryShortLists(parent, carrying, wearing)
     {
         local nm = gSynthMessageParam(parent);
         
         /* short lists - combine carried and worn in a single sentence */
-        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dirselbst},
-        und <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen. ";
+        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir}{*},
+        und <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen{*}. ";
     }
     showInventoryLongLists(parent, carrying, wearing)
     {
         local nm = gSynthMessageParam(parent);
 
         /* long lists - show carried and worn in separate sentences */
-        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dirselbst}.
-        <<buildParam('Du/er', nm)>> {hat} <<wearing>> angezogen. ";
+        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir}{*}.
+        <<buildParam('Du/er', nm)>> {hat} <<wearing>> angezogen{*}. ";
     }
 
     /*
@@ -4764,11 +4726,11 @@ actorInventoryLister: DividedInventoryLister
      *   need to provide the framing messages for the tall-mode listing.  
      */
     showListPrefixTall(itemCount, pov, parent)
-        { "<<buildSynthParam('Du/er', parent)>> {hat} bei {dirselbst}:"; }
+        { "<<buildSynthParam('Du/er', parent)>> {hat} bei {dir}{*}:"; }
     showListContentsPrefixTall(itemCount, pov, parent)
-        { "<<buildSynthParam('Einer/er', parent)>>, der Folgendes bei {dirselbst} {hat}:"; }
+        { "<<buildSynthParam('Einer/er', parent)>>, der Folgendes bei {dir} {hat}{*}:"; }
     showListEmpty(pov, parent)
-        { "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dirselbst}. "; }
+        { "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dir}{*}. "; }
 ;
 
 /*
@@ -4789,28 +4751,28 @@ actorHoldingDescInventoryListerLong: actorInventoryLister
     {
         /* we're carrying nothing but wearing some items */
         "<.p><<buildSynthParam('Der/er', parent)>> {hat}
-        <<wearing>> angezogen. ";
+        <<wearing>> angezogen{*}. ";
     }
     showInventoryCarryingOnly(parent, carrying)
     {
         /* we have only carried items to report */
-        "<.p><<buildSynthParam('Du/er', parent)>> {hat} <<carrying>> bei {sichselbst}. ";
+        "<.p><<buildSynthParam('Du/er', parent)>> {hat} <<carrying>> bei {sich}{*}. ";
     }
     showInventoryShortLists(parent, carrying, wearing)
     {
         local nm = gSynthMessageParam(parent);
 
         /* short lists - combine carried and worn in a single sentence */
-        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {sichselbst},
-        und <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen. ";
+        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {sich}{*},
+        und <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen{*}. ";
     }
     showInventoryLongLists(parent, carrying, wearing)
     {
         local nm = gSynthMessageParam(parent);
 
         /* long lists - show carried and worn in separate sentences */
-        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {sichselbst}.
-        <<buildParam('Einer/er', nm)>> {hat} <<wearing>> angezogen. ";
+        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {sich}{*}.
+        <<buildParam('Einer/er', nm)>> {hat} <<wearing>> angezogen{*}. ";
     }
 ;
 
@@ -4823,28 +4785,28 @@ actorHoldingDescInventoryListerShort: actorInventoryLister
     showInventoryWearingOnly(parent, wearing)
     {
         /* we're carrying nothing but wearing some items */
-        "<<buildSynthParam('Einer/er', parent)>> {hat} <<wearing>> angezogen. ";
+        "<<buildSynthParam('Einer/er', parent)>> {hat} <<wearing>> angezogen{*}. ";
     }
     showInventoryCarryingOnly(parent, carrying)
     {
         /* we have only carried items to report */
-        "<<buildSynthParam('Einer/er', parent)>> {hat} <<carrying>> bei {sichselbst}. ";
+        "<<buildSynthParam('Einer/er', parent)>> {hat} <<carrying>> bei {sichselbst}{*}. ";
     }
     showInventoryShortLists(parent, carrying, wearing)
     {
         local nm = gSynthMessageParam(parent);
 
         /* short lists - combine carried and worn in a single sentence */
-        "<<buildParam('Einer/er', nm)>> {hat} <<carrying>> bei {sichselbst} und
-        <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen. ";
+        "<<buildParam('Einer/er', nm)>> {hat} <<carrying>> bei {sichselbst}{*} und
+        <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen{*}. ";
     }
     showInventoryLongLists(parent, carrying, wearing)
     {
         local nm = gSynthMessageParam(parent);
 
         /* long lists - show carried and worn in separate sentences */
-        "<<buildParam('Einer/er', nm)>> {hat} <<carrying>> bei {sichselbst}.
-        <<buildParam('Einer/er', nm)>> {hat} <<wearing>> angezogen. ";
+        "<<buildParam('Einer/er', nm)>> {hat} <<carrying>> bei {sichselbst}{*}.
+        <<buildParam('Einer/er', nm)>> {hat} <<wearing>> angezogen{*}. ";
     }
 ;
 
@@ -4855,20 +4817,20 @@ actorHoldingDescInventoryListerShort: actorInventoryLister
  */
 class BaseThingContentsLister: Lister
     showListPrefixWide(itemCount, pov, parent)
-        { "\^In <<parent.demName>> <<itemCount > 1 ? tSel('befinden', 'befanden')
-              : tSel('befindet', 'befand')>> sich <<withListCaseNominative>><<withListArtIndefinitve>>"; }
+        { "\^In <<parent.demName>> <<itemCount > 1 ? '{befindet plural}'
+              : '{befindet singular}'>> sich <<withListCaseNominative>><<withListArtIndefinite>>"; }
     showListSuffixWide(itemCount, pov, parent)
-        { "<<withListCaseAccusative>><<withListArtIndefinitve>>. "; }
+        { "<<withListCaseAccusative>><<withListArtIndefinite>>{*}. "; }
     showListPrefixTall(itemCount, pov, parent)
-        { "\^In <<parent.demName>><<withListCaseNominative>><<withListArtIndefinitve>> <<itemCount > 1 ? tSel('befinden', 'befanden')
-              : tSel('befindet', 'befand')>> sich:"; }
+        { "\^In <<parent.demName>><<withListCaseNominative>><<withListArtIndefinite>> <<itemCount > 1 ? '{befindet plural}'
+              : '{befindet singular}'>> sich{*}:"; }
     showListSuffixTall(itemCount, pov, parent) // -- German: added to get the default listcase accusative!
-        { "<<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+        { "<<withListCaseAccusative>><<withListArtIndefinite>>"; }
     showListContentsPrefixTall(itemCount, pov, parent)
-        { "in <<parent.einemName>> <<itemCount > 1 ? tSel('befinden', 'befanden')
-              : tSel('befindet', 'befand')>> sich Folgendes:"; }
+        { "in <<parent.einemName>> <<itemCount > 1 ? '{befindet plural}'
+              : '{befindet singular}'>> sich{*}:"; }
     showListContentsSuffixTall(itemCount, pov, parent) // -- German: added to get the default listcase accusative!
-        { "<<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+        { "<<withListCaseAccusative>><<withListArtIndefinite>>"; }
 ;
 
 // -- German: We have to decide when to use "befindet" or "befinden":
@@ -4893,7 +4855,7 @@ thingContentsLister: ContentsLister, BaseThingContentsLister
  */
 thingDescContentsLister: DescContentsLister, BaseThingContentsLister
     showListPrefixWide(itemCount, pov, parent)
-        { "\^<<parent.itNom>> <<parent.verbZuEnthalten>><<withListCaseAccusative>><<withListArtIndefinitve>> "; }
+        { "\^<<parent.itNom>> <<parent.verbZuEnthalten>><<withListCaseAccusative>><<withListArtIndefinite>> "; }
 ;
   
 /*
@@ -4907,8 +4869,10 @@ openableDescContentsLister: thingContentsLister
     showListPrefixWide(itemCount, pov, parent)
     {
         gMessageParams(parent);
-        "\^<<parent.openStatus>>,<<withListCaseAccusative>><<withListArtIndefinitve>> und {subj parent} {enthaelt} ";
+        "\^<<parent.openStatus>>,<<withListCaseAccusative>><<withListArtIndefinite>> und {subj parent} {enthaelt} ";
     }
+    showListSuffixWide(itemCount, pov, parent)
+        { "<<withListCaseAccusative>><<withListArtIndefinite>>{*} "; }
 ;
 
 /*
@@ -4925,7 +4889,7 @@ class LookWhereContentsLister: DescContentsLister
         /* show a default message indicating the surface is empty */
         gMessageParams(parent);
         defaultDescReport('{Du/er} {sieht} nichts ' + parent.objInPrep
-                          + ' {dem parent/ihm}. ');
+                          + ' {dem parent/ihm}{*}. ');
     }
 ;
 
@@ -4948,7 +4912,7 @@ thingLookInLister: LookWhereContentsLister, BaseThingContentsLister
          */
         gMessageParams(parent);
         defaultDescReport('{Du/er} {sieht} nichts Ungewöhnliches
-            in {dem parent/ihm}. ');
+            in {dem parent/ihm}{*}. ');
     }
 ;
 
@@ -4973,13 +4937,13 @@ openableOpeningLister: BaseThingContentsLister
          */
         gMessageParams(pov, parent);
         if (pov.isPlayerChar())
-            "Das Öffnen {des parent/dessen} {bringt|brachte} <<withListCaseAccusative>><<withListArtIndefinitve>>";
+            "Das Öffnen {des parent/dessen} {bringt} <<withListCaseAccusative>><<withListArtIndefinite>>";
         else
-            "{Der pov/er} öffn{e/est} {den parent/ihn} und {bringt|brachte} <<withListCaseAccusative>><<withListArtIndefinitve>>";
+            "{Der pov/er} {oeffnet} {den parent/ihn} und {bringt} <<withListCaseAccusative>><<withListArtIndefinite>>";
     }
     showListSuffixWide(itemCount, pov, parent)
     {
-        " zum Vorschein. ";
+        " zum Vorschein{*}. ";
     }
 ;
 
@@ -4995,30 +4959,30 @@ openableOpeningLister: BaseThingContentsLister
 class BaseContentsLister: Lister
     showListPrefixWide(itemCount, pov, parent)
     {
-        "\^<<parent.objInPrep>> <<parent.demNameObj>><<withListCaseNominative>><<withListArtIndefinitve>>
-        <<itemCount == 1 ? tSel('ist', 'war') : tSel('sind', 'waren')>> ";
+        "\^<<parent.objInPrep>> <<parent.demNameObj>><<withListCaseNominative>><<withListArtIndefinite>>
+        <<itemCount == 1 ? '{ist singular}' : '{ist plural}'>> ";
     }
     showListSuffixWide(itemCount, pov, parent)
     {
-        "<<withListCaseAccusative>><<withListArtIndefinitve>>. ";
+        "<<withListCaseAccusative>><<withListArtIndefinite>>{*}. ";
     }
     showListPrefixTall(itemCount, pov, parent)
     {
-        "\^<<parent.objInPrep>> <<parent.demNameObj>><<withListCaseNominative>><<withListArtIndefinitve>>
-        <<itemCount == 1 ? tSel('ist', 'war') : tSel('sind', 'waren')>>:";
+        "\^<<parent.objInPrep>> <<parent.demNameObj>><<withListCaseNominative>><<withListArtIndefinite>>
+        <<itemCount == 1 ? '{ist singular}' : '{ist plural}'>>{*}:";
     }
     showListSuffixTall(itemCount, pov, parent) // -- German: added to get the default listcase accusative!
     {
-        "<<withListCaseAccusative>><<withListArtIndefinitve>>";
+        "<<withListCaseAccusative>><<withListArtIndefinite>>";
     }
     showListContentsPrefixTall(itemCount, pov, parent)
     {
-        "<<parent.einName>>, <<parent.objInPrep>><<withListCaseNominative>><<withListArtIndefinitve>> <<parent.isPlural ? 'denen' : parent.isHer ? 'der' : 'dem' >>
-        <<itemCount == 1 ? tSel('ist', 'war') : tSel('sind', 'waren')>>:";
+        "<<parent.einName>>, <<parent.objInPrep>><<withListCaseNominative>><<withListArtIndefinite>> <<parent.isPlural ? 'denen' : parent.isHer ? 'der' : 'dem' >>
+        <<itemCount == 1 ? '{ist singular}' : '{ist plural}'>>{*}:";
     }
     showListContentsSuffixTall(itemCount, pov, parent) // -- German: added to get the default listcase accusative!
     {
-        "<<withListCaseAccusative>><<withListArtIndefinitve>>";
+        "<<withListCaseAccusative>><<withListArtIndefinite>>";
     }
 ;
 
@@ -5106,21 +5070,23 @@ undersideLookUnderLister: LookWhereContentsLister, BaseUndersideContentsLister
 undersideAbandonContentsLister: undersideLookUnderLister
     showListEmpty(pov, parent) { }
     showListPrefixWide(itemCount, pov, parent)
-        { "Das Nehmen <<parent.desNameObj>> {bringt|brachte} <<withListCaseAccusative>><<withListArtIndefinitve>> "; }
+        { "Das Nehmen <<parent.desNameObj>> {bringt singular} <<withListCaseAccusative>><<withListArtIndefinite>> "; }
     showListSuffixWide(itemCount, pov, parent)
         { " zum Vorschein. "; }
     showListPrefixTall(itemCount, pov, parent)
-        { "Das Nehmen <<parent.desNameObj>> {enthüllt|enthüllte}: "; }
+        { "Das Nehmen <<parent.desNameObj>> {bringt singular} zum Vorschein{*}: "; }
 ;
  
 /* contents lister for an Underside, used in a long description */
 undersideDescContentsLister: DescContentsLister, BaseUndersideContentsLister
     showListPrefixWide(itemCount, pov, parent)
     {
-        "Unter <<parent.demNameObj>><<setcaseNom()>>
-        <<itemCount == 1 ? tSel('ist', 'war')
-                         : tSel('sind', 'waren')>> ";
+        "Unter <<parent.demNameObj>>
+        <<itemCount == 1 ? '{ist singular}'
+                         : '{ist plural}'>><<withListCaseNominative>> ";
     }
+    showListSuffixWide(itemCount, pov, parent)
+        { "{*}. "; }
 ;
 
 /*
@@ -5141,23 +5107,25 @@ rearLookBehindLister: LookWhereContentsLister, BaseRearContentsLister
 rearAbandonContentsLister: undersideLookUnderLister
     showListEmpty(pov, parent) { }
     showListPrefixWide(itemCount, pov, parent)
-        { "Das Bewegen <<parent.desNameObj>> {bringt|brachte} "; }
+        { "Das Bewegen <<parent.desNameObj>> {bringt singular} "; }
     showListSuffixWide(itemCount, pov, parent)
-        { " hinter <<parent.itDat>> zum Vorschein. "; }
+        { " hinter <<parent.itDat>> zum Vorschein{*}. "; }
     showListPrefixTall(itemCount, pov, parent)
-        { "Das Bewegen <<parent.desNameObj>> {bringt|brachte} "; }
+        { "Das Bewegen <<parent.desNameObj>> {bringt singular} "; }
     showListSuffixTall(itemCount, pov, parent)
-        { " zum Vorschein. "; }
+        { " zum Vorschein{*}. "; }
 ;
  
 /* long-description contents lister for a RearContainer/Surface */
 rearDescContentsLister: DescContentsLister, BaseRearContentsLister
     showListPrefixWide(itemCount, pov, parent)
     {
-        "Hinter <<parent.demNameObj>><<setcaseNom()>>
-        <<itemCount == 1 ? tSel('ist', 'war')
-                         : tSel('sind', 'waren')>> ";
+        "Hinter <<parent.demNameObj>>
+        <<itemCount == 1 ? '{ist singular}'
+                         : '{ist plural}'>><<withListCaseNominative>> ";
     }
+    showListSuffixWide(itemCount, pov, parent)
+        { "{*} "; }
 ;
 
 
@@ -5171,10 +5139,10 @@ class BaseInlineContentsLister: ContentsLister
     showListPrefixWide(cnt, pov, parent)
     {
         " (<<parent.objInPrep>> <<parent.isPlural ? 'denen' : parent.isHer ? 'der' : 'dem' >> 
-        <<cnt == 1 ? tSel('ist', 'war') : tSel('sind', 'waren')>><<withListCaseNominative>><<withListArtIndefinitve>> ";
+        <<cnt == 1 ? '{ist singular}' : '{ist plural}'>><<withListCaseNominative>><<withListArtIndefinite>> ";
     }
     showListSuffixWide(itemCount, pov, parent)
-        { "<<withListCaseAccusative>><<withListArtIndefinitve>>)"; }
+        { "<<withListCaseAccusative>><<withListArtIndefinite>>{*})"; }
 ;
 
 /*
@@ -5184,7 +5152,7 @@ class BaseInlineContentsLister: ContentsLister
  */
 inlineListingContentsLister: BaseInlineContentsLister
     showListPrefixWide(cnt, pov, parent)
-        { " (<<parent.itNom>> <<parent.verbZuEnthalten>> <<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+        { verbHelper.lastVerb = 'undefined'; " (<<parent.itNom>> <<parent.verbZuEnthalten>> <<withListCaseAccusative>><<withListArtIndefinite>>"; }
 ;
 
 /* in-line contents lister for a surface */
@@ -5206,9 +5174,9 @@ rearInlineContentsLister: BaseInlineContentsLister
  */
 keyringInlineContentsLister: inlineListingContentsLister
     showListPrefixWide(cnt, pov, parent)
-        { " (mit <<withListCaseDative>><<withListArtIndefinitve>>"; }
+        { " (mit <<withListCaseDative>><<withListArtIndefinite>>"; }
     showListSuffixWide(cnt, pov, parent)
-        { " verbunden)<<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+        { " daran)<<withListCaseAccusative>><<withListArtIndefinite>>"; }
 ;
 
 
@@ -5218,17 +5186,17 @@ keyringInlineContentsLister: inlineListingContentsLister
 keyringExamineContentsLister: DescContentsLister
     showListEmpty(pov, parent)
     {
-        "\^<<parent.derName>> <<parent.verbZuSein>> leer. ";
+        "\^<<parent.derName>> <<parent.verbZuSein>> leer{*}. ";
     }
     showListPrefixWide(cnt, pov, parent)
     {
         "Verbunden mit <<parent.demNameObj>>
-        <<cnt == 1 ? tSel('ist', 'war')
-                   : tSel('sind', 'waren')>> <<withListCaseNominative>><<withListArtIndefinitve>>";
+        <<cnt == 1 ? '{ist singular}'
+                   : '{ist plural}'>> <<withListCaseNominative>><<withListArtIndefinite>>";
     }
     showListSuffixWide(itemCount, pov, parent)
     {
-        ". <<withListCaseAccusative>><<withListArtIndefinitve>>";
+        "{*}. <<withListCaseAccusative>><<withListArtIndefinite>>";
     }
 ;
 
@@ -5259,9 +5227,9 @@ class SimpleAttachmentLister: Lister
         { /* say nothing when there are no attachments */ }
     
     showListPrefixWide(cnt, pov, parent)
-        { "<.p>\^<<parent.derName>> <<parent.verbZuSein>> mit <<withListCaseDative>><<withListArtIndefinitve>>"; }
+        { "<.p>\^<<parent.derName>> <<parent.verbZuSein>> mit <<withListCaseDative>><<withListArtIndefinite>>"; }
     showListSuffixWide(cnt, pov, parent)
-        { " verbunden. <<withListCaseAccusative>><<withListArtIndefinitve>>"; }
+        { " verbunden{*}. <<withListCaseAccusative>><<withListArtIndefinite>>"; }
 
     /* ask the parent if we should list each item */
     isListed(obj) { return parent_.isListedAsAttachedTo(obj); }
@@ -5280,12 +5248,12 @@ class SimpleAttachmentLister: Lister
  *   described as being attached to the parent.  
  */
 class MajorAttachmentLister: SimpleAttachmentLister
-    showListPrefixWide(cnt, pov, parent) { "<.p>\^<<withListCaseNominative>><<withListArtIndefinitve>>"; }
+    showListPrefixWide(cnt, pov, parent) { "<.p>\^<<withListCaseNominative>><<withListArtIndefinite>>"; }
     showListSuffixWide(cnt, pov, parent)
     {
-        " <<cnt == 1 ? tSel('ist', 'war')
-                     : tSel('sind', 'waren')>>
-        mit <<parent.demNameObj>> verbunden.<<withListCaseAccusative>><<withListArtIndefinitve>> ";
+        " <<cnt == 1 ? '{ist singular}'
+                     : '{ist plural}'>>
+        mit <<parent.demNameObj>> verbunden{*}.<<withListCaseAccusative>><<withListArtIndefinite>> ";
     }
 
     /* ask the parent if we should list each item */
@@ -5378,11 +5346,11 @@ class ExitLister: Lister
     showListPrefixWide(cnt, pov, parent)
     {
         if (cnt == 1)
-            "Der offenbar einzige Ausgang {führt|führte} ";
+            "Der offenbar einzige Ausgang {fuehrt singular} ";
         else
-            "Offensichtliche Ausgänge {führen|führten} ";
+            "Offensichtliche Ausgänge {fuehrt plural} ";
     }
-    showListSuffixWide(cnt, pov, parent) { ". "; }
+    showListSuffixWide(cnt, pov, parent) { "{*}. "; }
 
     isListed(obj) { return true; }
     listCardinality(obj) { return 1; }
@@ -5608,7 +5576,7 @@ lookAroundTerseExitLister: ExitLister
 explicitExitLister: ExitLister
     showListEmpty(pov, parent)
     {
-        "Da {sind|waren} offenbar keine Ausgänge. ";
+        "Da {ist plural} offenbar keine Ausgänge{*}. ";
     }
 ;
 
@@ -5797,12 +5765,12 @@ class SuggestedTopicLister: Lister
         gMessageParams(askingActor, targetActor);
 
         /* show the prefix; include a paren if not in explicit mode */
-        "<<isExplicit ? '' : '('>>{Du askingActor/er} {koennte} ";
+        "<<isExplicit ? '' : '('>>{Du askingActor/er} {koennt} ";
     }
     showListSuffixWide(cnt, pov, parent)
     {
         /* end the sentence; include a paren if not in explicit mode */
-        ".<<isExplicit? '' : ')'>> ";
+        "{*}.<<isExplicit? '' : ')'>> ";
     }
     showListEmpty(pov, parent)
     {
@@ -5814,8 +5782,8 @@ class SuggestedTopicLister: Lister
         {
             gMessageParams(askingActor, targetActor);
             "<<isExplicit ? '' : '('>>{Du askingActor/er} {hat} keine
-            Ahnung, über was {er askingActor/sie} im Augenblick mit
-            {dem targetActor/ihm} sprechen {koennte askingActor}.<<isExplicit ? '' : ')'>> ";
+            Ahnung{*}, worüber {er askingActor/sie} im Augenblick mit
+            {dem targetActor/ihm} sprechen {!*}{koennt askingActor}.<<isExplicit ? '' : ')'>> ";
         }
     }
 
@@ -5823,7 +5791,7 @@ class SuggestedTopicLister: Lister
     {
         /* use "or" as the conjunction */
         if (curItemNum + 1 == totalItems)
-            ", oder ";
+            " oder ";
         else
             inherited(options, curItemNum, totalItems);
     }
