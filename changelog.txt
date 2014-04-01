@@ -89,7 +89,7 @@ Version 1.0.N - 17.07.2012
 		- changeHim();
 		- changeHer();
 		- changePlural();
-	-- probeweise wurde eine Flagge namens "noTxt" in die gameMain Routine 
+	-- probeweise wurde eine Flagge namens "noTxt" in die gameMain Routine aufgenommen
 
 Version 1.0.P - 24.07.2012
 
@@ -128,7 +128,7 @@ Version 1.o.T - 12.11.2012
 	   ungekürzte, originale Token hinterlegt, für die Routine der Wiederherstellung der Token
 	   bei der UNDO message
 
-Version 1.1 -
+Version 1.1
 
 	-- Bereinigen des codes, Entfernen doppelter Funktionen in den "name" Routinen
 	-- Hinzufügen der Konstanten FourthPerson, FifthPerson, SixthPerson für actor.referralPerson
@@ -139,4 +139,64 @@ Version 1.1 -
 	-- Überarbeitung aller Standardmessages
 	-- Überarbeitung aller VerbRules (gibt nun exaktere Rückmeldung, welche Schablone
 	   verstanden wurde
+	-- Überarbeitung der "kein(txt)" Funktion, die noch einige Schwächen hatte
+
+Version 1.2 - 130528
+
+	-- schwerer VM Absturz bei nicht zugewiesener property gIobj behoben. Dies trat bei impliziten
+	   Aktionen auf, die zum Scheitern führen, also bspw. mit "failCheck('...')" abgefangen werden
+	   Die Routine wurde mit einem neuen Token für Verbphrases "auf|von" ersetzt
+	-- kleinere Verbesserungen der Standardantworten
+
+Version 1.3 - 130628
+
+	-- keinen(txt) und verwandte Routinen überarbeitet, damit auch eigens angefertigte Nounschablonen
+	   wie "Eis mit Sahne" zur korrekten Ausgabe führen. Falls mit einem miscWord begonnen wird erhält
+	   man nun ein: Du siehst hier so etwas ("(nicht verstandener Ausdruck") nicht. (Dank an Martin Oehm
+	   für den sinnvollen Vorschlag)
+	-- neuer DEBUG Befehl: VOCABlistet fürs Proofreading alle female, male, neuter und plural Einträge
+	   getrennt nach Geschlecht auf
+	-- "vague look actions" hinzugefügt: schau hinein / hindurch / hinaus etc ... mit gLastObj welches
+	   das Bezugsobjekt speichert
+
+Version 1.4 - 130909
+
+	-- kleiner Fehler in den Ausgabefunktionen für den unbestimmten Artikel behoben, der bei Pluralwörtern
+	   den bestimmten Artikel getriggert hat
+        -- kleinere Korrekturen in den Messages
+
+Version 1.4.1 - 130919
+
+	-- fehlende Verben 'gießen' und 'kippen' bei PourIntoAction ergänzt
+
+Version 1.5 - 131023
+
+        -- Ergänzung der fehlenden Verbeinträger für ("lege")
+	-- Entfernen von "am" in den Verbschablonen; "am" ist jetzt ein Ersetzungtoken wie "im" und darf nicht
+           als Wortschatz definiert werden
+        -- Ergänzung zweier Debug Befehle:
+           -- TOKEN: testet, ob die reservierten Ersetzungstoken definiert sind und weist auf Fehler hin
+           -- FINAL: geht alle Objekte Schritt für Schritt durch und dekliniert diese
+        -- Neue Macros für Verbdefinition (wie z.B. verbNounPrepNoun())
+
+Version 2.0 -
+
+	-- Überarbeitung der Verbschablonen, das Verb wird nun als solches erkannt und kann in den
+	   Parsernachfragen verwendet werden
+	-- Einführung zweier neuer Makros für Verbdefinition:
+           verbPattern(...) und verb(...), prep(...)
+	-- Einführung neuer Funktion für Erzählzeit pcReferralTense und Implementierung aller sechs
+	   Zeitformen: Present, Imperfect, Perfect, Pluperfect, Future1 und Future2
+	-- Implementierung der Partizipkonstruktion mit Ersetzungsstrings {*} {!*} {-*} {+*} und {**}
+	-- Einführung neuer Debug Verben: "vocab", "token" und "final"
+	-- Überarbeitung aller Standardantworten
+	-- Bereinigen des Codes, entfernen überflüssig gewordener (alter) Funktionen
+	-- Überarbeitung der Kurdokumentation im HTML Format
+	-- Einführung neuer Makros für Listen (withListCaseNominative, withListCaseGenitive, 
+	   withListCaseDative, withListCaseAccusative, withListArtDefinite, withListArtIndefinite)
+	-- Einführung eines Standard "singular" und "plural" Objekts, das für Ersetzungsstrings
+	   verwendet werden kann, wenn eine einfache Singular oder Pluraldeklination eines Verbs
+	   benötigt wird
+	-- Geringfügige Anpassungen der Ersetzungsstrings
+	-- Implementierung aller Verben in allen sechs Zeitformen für Standardantworten
 
