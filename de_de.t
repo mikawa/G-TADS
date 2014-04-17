@@ -2440,8 +2440,9 @@ modify Thing
      *   thing you need to do is change the preposition from 'in' to
      *   something else, you can just override objInPrep instead.
      */
-    childInNameGen(childName, myName)
-        { return childName + ' ' + objInPrep + ' ' + myName; }
+    childInNameGen(childName, myName) {
+        return gPlayerChar.keinenAsString(childName) + ' ' + objInPrep + ' ' + myName; 
+    }
 
     /*
      *   Get my name (in various forms) distinguished by my owner or
@@ -3604,7 +3605,10 @@ modify Thing
     
     printPartLong
     {
-        return ' ' + verbHelper.longParticiple;
+        if (verbHelper.longParticiple == '')
+            return '';
+        else
+            return ' ' + verbHelper.longParticiple;
     }
     
     // dummyPart sets our participle form to reverse output. This is needed in
@@ -14767,7 +14771,7 @@ VerbRule(About)
 ;
 
 VerbRule(Script)
-    'script' | 'script' 'on' | 'skript' | 'skript' ('an' | 'ein' | 'beginn') | 'beginn' 'skript'
+    'script' | 'script' 'on' | 'skript' | 'skript' ('an'|'ein')
     : ScriptAction 
     verbPhrase = 'das Skript zu starten/das Skript starten'
 ;
@@ -14779,39 +14783,39 @@ VerbRule(ScriptString)
 ;
 
 VerbRule(ScriptOff)
-    'script' 'off' | 'skript' ('aus' | 'ende') | 'beend' 'skript'
+    'script' 'off' | 'skript' 'aus'
     : ScriptOffAction
     verbPhrase = 'das Skript zu beenden/das Skript beenden'
 ;
 
 VerbRule(Record)
-    'record' | 'record' 'on' | 'aufnahme' | 'aufzeichnung' | ('aufnahme'|'aufzeichnung')('an' | 'ein')
+    'record' | 'record' 'on' | 'aufnahme' | 'aufnahme' ('an'|'ein')
     : RecordAction
     verbPhrase = 'die Befehlsaufzeichnung zu starten/die Befehlsaufzeichnung starten'
 ;
 
 VerbRule(RecordString)
-    ('record' | 'aufnahme' ) quotedStringPhrase->fname_
+    ('record' | 'aufnahme') quotedStringPhrase->fname_
     : RecordStringAction
-    verbPhrase = 'die Befehlsaufzeichnung zu starten/die Befehlsaufzeichnung starten'
+    verbPhrase = 'die Befehlsaufnahme zu starten/die Befehlsaufnahme starten'
 ;
 
 VerbRule(RecordEvents)
-    'record' 'events' | 'record' 'events' 'on' | 'ereignisaufnahme' | 'ereignisaufnahme' 'an'
+    'record' 'events' | 'record' 'events' 'on' | 'ereignisaufnahme' | 'ereignisaufnahme' ('an'|'ein')
     : RecordEventsAction
-    verbPhrase = 'die Ereignisaufzeichnung zu starten/die Ereignisaufzeichnung starten'
+    verbPhrase = 'die Ereignisaufnahme zu starten/die Ereignisaufnahme starten'
 ;
 
 VerbRule(RecordEventsString)
-    'record' 'events' quotedStringPhrase->fname_
+    ('record' 'events'|'ereignisaufnahme') quotedStringPhrase->fname_
     : RecordEventsStringAction
-    verbPhrase = 'die Ereignisaufzeichnung zu starten/die Ereignisaufzeichnung starten'
+    verbPhrase = 'die Ereignisaufnahme zu starten/die Ereignisaufnahme starten'
 ;
 
 VerbRule(RecordOff)
-    'record' 'off'
+    ('record' 'off' | 'aufnahme' 'aus')
     : RecordOffAction
-    verbPhrase = 'die Befehlsaufzeichnung zu beenden/die Befehlsaufzeichnung beenden'
+    verbPhrase = 'die Befehlsaufnahme zu beenden/die Befehlsaufnahme beenden'
 ;
 
 VerbRule(ReplayString)
@@ -15135,7 +15139,8 @@ VerbRule(TippAuf)
 // ***
 
 VerbRule(TippTextAuf)
-    verb('tipp','gib','geb') singleLiteral ('auf'|'in') singleDobj (|prep('ein'))
+    verb('tipp') singleLiteral ('auf'|'in') singleDobj
+    | verb('gib','geb') singleLiteral ('auf'|'in') singleDobj prep('ein')
     | verb('tipp','gib','geb') singleLiteral prep('ein') ('auf'|'in') singleDobj
     : TypeLiteralOnAction
     verbPattern('zu tippen/tippen','(was) (auf dativ was)')
@@ -15715,7 +15720,7 @@ VerbRule(LegDichHin)
 VerbRule(StellDichAuf)
     ('steh' | ('stell'|'stelle') ('dich'|'mich')) ('auf'|'in') singleDobj
     : StandOnAction
-    verbPhrase = 'zu stehen/stehen (auf was)'
+    verbPhrase = 'zu stellen/stellen (auf was)'
     askDobjResponseProd = singleNoun
 
     /* use the actorInPrep, if there's a direct object available */
@@ -17467,6 +17472,13 @@ modify Actor
         
     }
     
+    // return function for childInNameGen(
+    
+    returnName(txt) {
+        constructName(txt);
+        return strangeObj.name;
+    }
+    
     // ******
     // -- German: output - keinen <txt> case accusative
     // ******
@@ -17496,6 +17508,30 @@ modify Actor
         else
             "<<strangeObj.keinenName>>";
         return;
+    }
+    
+    keinenAsString(txt)
+    {
+        // -- if we decide to have simple answers, set gameMain.useNoTxt to nil
+        if (gameMain.useNoTxt == nil) {
+            return 'so etwas nicht';
+        }
+        
+        if (!cmdDict.isWordDefined(txt))
+            txt = strangeObj.testEndings(txt);
+        
+        if (cmdDict.findWord(txt, &adjective) != [])
+        {
+            return 'nichts \^<<txt>>es';
+        }
+        
+        local oldtxt = txt;
+        txt = constructName(txt);
+        
+        if (strangeObj.name == '')
+            return 'so etwas (<q><<oldtxt>></q>) nicht';
+        else
+            return '<<strangeObj.keinenName>>';
     }
     
     // ******

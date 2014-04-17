@@ -939,7 +939,7 @@ libMessages: MessageHelper
     restoreInvalidMatch()
     {
         "<.parser>Fehlgeschlagen: die Datei wurde nicht gespeichert 
-        (oder wurde mit einer anderen nicht-komplatiblen Version
+        (oder wurde mit einer anderen nicht-kompatiblen Version
         dieser Geschichte gespeichert).<./parser> ";
     }
 
@@ -990,8 +990,7 @@ libMessages: MessageHelper
     /* acknowledge starting an input script */
     inputScriptOkay(fname)
     {
-        "<.parser>Befehle einlesen von <q><<fname.htmlify()
-         >></q>...<./parser>\n ";
+        "<.parser>Befehle einlesen von <q><<File.getRootName(fname).htmlify()>></q>...<./parser>\n ";
     }
 
     /* error opening input script */
@@ -2004,14 +2003,14 @@ playerMessages: libMessages
     noMatchForLocation(actor, loc, txt)
     {
         "<.parser>\^<<actor.derName>> <<actor.verbZuSehen>>
-        kein <<loc.childInName(txt)>>.<./parser> ";
+        <<loc.childInName(txt)>>.<./parser> ";
     }
 
     /* nothing in a container whose contents are specifically requested */
     nothingInLocation(actor, loc)
     {
         "<.parser>\^<<actor.derName>> <<actor.verbZuSehen>>
-        <<loc.childInName('nichts Ungewöhnliches')>>.<./parser> ";
+        nichts Ungewöhnliches <<loc.objInPrep>> <<loc.demName>>.<./parser> ";
     }
 
     /* no match for the response to a disambiguation question */
