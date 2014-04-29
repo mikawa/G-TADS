@@ -17995,6 +17995,71 @@ modify TIAction
                 gTranscript.newIter();
         }
     }
+    
+    createForMissingIobj(orig, asker)
+    {
+        /* create the new action based on the original action */
+        local action = createForRetry(orig);
+
+        /* use an empty noun phrase for the new action's indirect object */
+        action.iobjMatch = new EmptyNounPhraseProd();
+
+        /* set our custom response production and ResolveAsker */
+        action.iobjMatch.setPrompt(action.askIobjResponseProd, asker);
+
+        /* copy what we've resolved so far */
+        action.initForMissingIobj(orig);
+        
+        // If we have already a valid verb_ or prep_ or misc_ property
+        // hand it over to our new action
+        
+        if (orig.verb_ != nil)
+            action.verb_ = orig.verb_;
+
+        if (orig.prep_ != nil)
+            action.prep_ = orig.prep_;
+        
+        if (orig.misc_ != nil)
+            action.misc_ = orig.misc_;
+        
+        /* return the action */
+        return action;
+    }
+    
+;
+
+modify TIAction
+
+    createForMissingDobj(orig, asker)
+    {
+        /* create the action for a retry */
+        local action = createForRetry(orig);
+
+        /* use an empty noun phrase for the new action's direct object */
+        action.dobjMatch = new EmptyNounPhraseProd();
+
+        /* set our custom response production and ResolveAsker */
+        action.dobjMatch.setPrompt(action.askDobjResponseProd, asker);
+
+        /* initialize the new action with any pre-resolved parts */
+        action.initForMissingDobj(orig);
+
+        // If we have already a valid verb_ or prep_ or misc_ property
+        // hand it over to our new action
+        
+        if (orig.verb_ != nil)
+            action.verb_ = orig.verb_;
+
+        if (orig.prep_ != nil)
+            action.prep_ = orig.prep_;
+        
+        if (orig.misc_ != nil)
+            action.misc_ = orig.misc_;
+        
+        /* return the new action */
+        return action;
+    }
+    
 ;
 
 modify Actor
