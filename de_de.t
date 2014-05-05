@@ -1,4 +1,4 @@
-#charset "Latin-1"
+#charset "iso-8859-1"
 
 /*
  *   Copyright 2000, 2006 Michael J. Roberts.  All Rights Reserved.
@@ -15803,8 +15803,12 @@ VerbRule(SteigIn)
     askDobjResponseProd = singleNoun
 ;
 
+// ***
+// -- SleepAction
+// ***
+
 VerbRule(Schlaf)
-    verb('schlaf') prep('aus','ein') 
+    verb('schlaf') (|prep('aus','ein')) 
     : SleepAction
     verbPhrase = 'zu schlafen/schlafen'
 ;
