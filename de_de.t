@@ -9033,6 +9033,7 @@ grammar indetSingularNounPhrase(basic):
  *   ("scissors", for example).  
  */
 grammar indetSingularNounPhrase(locational):
+    //[badness 200]
     nounPhrase->np_
     ('der'|'die'|'das'|)
     ('in'|'auf'|'an')
@@ -15763,6 +15764,10 @@ VerbRule(SteigAus)
     : GetOutOfAction
     verbPhrase = 'zu steigen/steigen (aus dativ was)'
     askDobjResponseProd = singleNoun
+    
+    adjustDefaultObjectPrep(prep, obj)
+        { return (obj != nil ? obj.actorOutOfPrep + ' ' : prep); }
+    
 ;
 
 // ***
@@ -15775,6 +15780,10 @@ VerbRule(SteigAb)
     : GetOffOfAction
     verbPhrase = 'zu steigen/steigen (von dativ was)'
     askDobjResponseProd = singleNoun
+
+    adjustDefaultObjectPrep(prep, obj)
+        { return (obj != nil ? obj.actorOutOfPrep + ' ' : prep); }
+
 ;
 
 // ***
