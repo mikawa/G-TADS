@@ -1,4 +1,4 @@
-#charset "iso-8859-1"
+#charset "latin1"
 
 /* 
  *   Copyright (c) 2000, 2006 Michael J. Roberts.  All Rights Reserved. 

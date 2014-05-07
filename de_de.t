@@ -1,4 +1,4 @@
-#charset "iso-8859-1"
+#charset "latin1"
 
 /*
  *   Copyright 2000, 2006 Michael J. Roberts.  All Rights Reserved.
@@ -15695,6 +15695,7 @@ VerbRule(SetzDichHin)
 
 VerbRule(LegDichAuf)
     (('lieg'|'liege')|('leg'|'lege')) ('dich'|'mich') ('auf'|'in') singleDobj ( | 'nieder'|'hin')
+    | ('lieg'|'liege') ('auf'|'in') singleDobj
     : LieOnAction
     verbPhrase = 'zu legen/legen (auf was)'
     askDobjResponseProd = singleNoun
@@ -16220,25 +16221,6 @@ modify Thing
                     self.discover();
         } 
     } 
-; 
-
-modify Fixture 
-  dobjFor(Purloin) 
-  { 
-        verify {illogical ('Das ist nichts für purloin - {Der dobj/er}  
-            {ist} fixiert.'); } 
-  } 
-; 
-
-modify Immovable 
-  dobjFor(Purloin) 
-  { 
-    check() 
-    { 
-        "{Du/er} {kann} {den dobj/ihn} nicht nehmen. "; 
-        exit; 
-    } 
-  } 
 ; 
 
 // ******
