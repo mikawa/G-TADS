@@ -1377,7 +1377,7 @@ libMessages: MessageHelper
     /* default description of the player character */
     pcDesc(actor)
     {
-        "\^<<actor.derName>> <<actor.verbZuSehen>> wie immer aus{-*}. ";
+        "\^<<actor.derName>> <<actor.verbZuSehen>> wie immer aus<<actor.dummyPartWithoutBlank>>. ";
     }
 
     /*

@@ -1,0 +1,13 @@
+IFID: 2c2f18d9-cd59-4425-8bef-f3232df9600b
+Name: beispiel
+Byline: by Your Name
+HtmlByline: by <a href="mailto:your-email@host.com"> Your Name</a>
+AuthorEmail: Your Name <your-email@host.com>
+Desc: Put a brief "blurb" about your game here
+HtmlDesc: Put a brief "blurb" about your game here
+Version: 1
+ReleaseDate: 2014-05-14
+Language: de-de
+LicenseType: Freeware
+CopyingRules: Nominal cost only; compilations allowed
+PresentationProfile: Default

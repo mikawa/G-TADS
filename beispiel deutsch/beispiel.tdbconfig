@@ -1,0 +1,313 @@
+# THIS FILE IS MACHINE GENERATED - DO NOT EDIT
+# TADS Workbench configuration settings
+
+DebugToolbar:rebarWidth:I:483
+build:ext resfile cnt:I:0
+build:defaults set:I:1
+watch win:vis:I:0
+watch win:pos:R:982,740,1647,879
+key bindings:Text Editor:S:0:Ctrl+F3 = Edit.SearchIncremental
+key bindings:Text Editor:S:1:Down = Edit.LineDown
+key bindings:Text Editor:S:2:Ctrl+Down = Edit.LineScrollDown
+key bindings:Text Editor:S:3:Shift+Down = Edit.LineDownExtend
+key bindings:Text Editor:S:4:Shift+Alt+Down = Edit.LineDownRectExtend
+key bindings:Text Editor:S:5:Up = Edit.LineUp
+key bindings:Text Editor:S:6:Ctrl+Up = Edit.LineScrollUp
+key bindings:Text Editor:S:7:Shift+Up = Edit.LineUpExtend
+key bindings:Text Editor:S:8:Shift+Alt+Up = Edit.LineUpRectExtend
+key bindings:Text Editor:S:9:Left = Edit.CharLeft
+key bindings:Text Editor:S:10:Shift+Left = Edit.CharLeftExtend
+key bindings:Text Editor:S:11:Ctrl+Left = Edit.WordLeft
+key bindings:Text Editor:S:12:Ctrl+Shift+Left = Edit.WordLeftExtend
+key bindings:Text Editor:S:13:Shift+Alt+Left = Edit.CharLeftRectExtend
+key bindings:Text Editor:S:14:Right = Edit.CharRight
+key bindings:Text Editor:S:15:Shift+Right = Edit.CharRightExtend
+key bindings:Text Editor:S:16:Ctrl+Right = Edit.WordRight
+key bindings:Text Editor:S:17:Ctrl+Shift+Right = Edit.WordRightExtend
+key bindings:Text Editor:S:18:Shift+Alt+Right = Edit.CharRightRectExtend
+key bindings:Text Editor:S:19:Home = Edit.Home
+key bindings:Text Editor:S:20:Ctrl+Home = Edit.DocumentStart
+key bindings:Text Editor:S:21:Shift+Home = Edit.HomeExtend
+key bindings:Text Editor:S:22:Shift+Alt+Home = Edit.IndentHomeRectExtend
+key bindings:Text Editor:S:23:Ctrl+Shift+Home = Edit.DocumentStartExtend
+key bindings:Text Editor:S:24:Alt+Home = Edit.HomeDisplay
+key bindings:Text Editor:S:25:End = Edit.LineEnd
+key bindings:Text Editor:S:26:Shift+End = Edit.LineEndExtend
+key bindings:Text Editor:S:27:Ctrl+End = Edit.DocumentEnd
+key bindings:Text Editor:S:28:Ctrl+Shift+End = Edit.DocumentEndExtend
+key bindings:Text Editor:S:29:Alt+End = Edit.LineEndDisplay
+key bindings:Text Editor:S:30:Shift+Alt+End = Edit.LineEndRectExtend
+key bindings:Text Editor:S:31:PageUp = Edit.StutteredPageUp
+key bindings:Text Editor:S:32:Shift+PageUp = Edit.StutteredPageUpExtend
+key bindings:Text Editor:S:33:Shift+Alt+PageUp = Edit.PageUpRectExtend
+key bindings:Text Editor:S:34:PageDown = Edit.StutteredPageDown
+key bindings:Text Editor:S:35:Shift+PageDown = Edit.StutteredPageDownExtend
+key bindings:Text Editor:S:36:Shift+Alt+PageDown = Edit.PageDownRectExtend
+key bindings:Text Editor:S:37:Delete = Edit.DeleteChar
+key bindings:Text Editor:S:38:Ctrl+Delete = Edit.DelWordRight
+key bindings:Text Editor:S:39:Ctrl+Shift+Delete = Edit.DelLineRight
+key bindings:Text Editor:S:40:Insert = Edit.ToggleOvertype
+key bindings:Text Editor:S:41:Backspace = Edit.DeleteBack
+key bindings:Text Editor:S:42:Shift+Backspace = Edit.DeleteBack
+key bindings:Text Editor:S:43:Ctrl+Backspace = Edit.DelWordLeft
+key bindings:Text Editor:S:44:Ctrl+Shift+Backspace = Edit.DelLineLeft
+key bindings:Text Editor:S:45:Shift+Delete = Edit.Cut
+key bindings:Text Editor:S:46:Tab = Edit.Tab
+key bindings:Text Editor:S:47:Shift+Tab = Edit.BackTab
+key bindings:Text Editor:S:48:Enter = Edit.Newline
+key bindings:Text Editor:S:49:Shift+Enter = Edit.Newline
+key bindings:Text Editor:S:50:Esc = Edit.Cancel
+key bindings:Text Editor:S:51:Ctrl+I = Ext.Edit.SyntaxIndent
+key bindings:Text Editor:S:52:Ctrl+U = Edit.RepeatCount
+key bindings:Text Editor:S:53:Ctrl+Q = Edit.QuoteKey
+key bindings:Text Editor:S:54:Alt+Q = Edit.FillParagraph
+key bindings:Text Editor:S:55:Alt+X = Edit.SwapMark
+key bindings:Text Editor:S:56:Shift+Alt+X = Edit.SelectToMark
+key bindings:Text Editor:S:57:Alt+/ = Edit.ToggleBookmark
+key bindings:Text Editor:S:58:Alt+? = Edit.SetNamedBookmark
+key bindings:Text Editor:S:59:Ctrl+8 = Edit.CommentRegion
+key bindings:Text Editor:S:60:F6 = Edit.FindDefinition
+build:c ops:I:0
+SearchToolbar:rebarNewLine:I:0
+MenuBar:rebarVis:I:1
+log win pos::R:239,275,1032,818
+log win vis::I:0
+DocToolbar:rebarIndex:I:4
+build:include_files-sys:S:0:system
+build:include_files-sys:S:1:system
+build:include_files-sys:S:2:system
+build:include_files-sys:S:3:system
+build:include_files-sys:S:4:system
+build:include_files-sys:S:5:system
+build:include_files-sys:S:6:system
+build:include_files-sys:S:7:system
+build:include_files-sys:S:8:system
+build:include_files-sys:S:9:system
+build:include_files-sys:S:10:system
+build:include_files-sys:S:11:system
+build:include_files-sys:S:12:system
+build:include_files-sys:S:13:system
+build:include_files-sys:S:14:system
+build:include_files-sys:S:15:system
+build:include_files-sys:S:16:lib
+build:include_files-sys:S:17:system
+build:include_files-sys:S:18:lib
+DocToolbar:rebarWidth:I:820
+DebugToolbar:rebarVis:I:1
+watch win:expression list 0:S:0:gAction.getCurrentObjects
+watch win:expression list 0:S:1:lastObjList_
+watch win:expression list 0:S:2:gPlayerChar
+build:zipfile:S:0:beispiel.zip
+watch win:sep xpos 0:I:77
+key bindings:Global:S:0:Ctrl+A = Edit.SelectAll
+key bindings:Global:S:1:Ctrl+Insert = Edit.Copy
+key bindings:Global:S:2:Ctrl+C = Edit.Copy
+key bindings:Global:S:3:Ctrl+E = Debug.Evaluate
+key bindings:Global:S:4:Ctrl+F = Edit.Find
+key bindings:Global:S:5:Ctrl+R = Edit.Replace
+key bindings:Global:S:6:Ctrl+Shift+F = Project.SearchFiles
+key bindings:Global:S:7:Ctrl+L = Edit.GoToLine
+key bindings:Global:S:8:Shift+Delete = Edit.Cut
+key bindings:Global:S:9:Ctrl+X = Edit.Cut
+key bindings:Global:S:10:Shift+Insert = Edit.Paste
+key bindings:Global:S:11:Ctrl+V = Edit.Paste
+key bindings:Global:S:12:Alt+Backspace = Edit.Undo
+key bindings:Global:S:13:Ctrl+Z = Edit.Undo
+key bindings:Global:S:14:Ctrl+Y = Edit.Redo
+key bindings:Global:S:15:Ctrl+O = File.Open
+key bindings:Global:S:16:Ctrl+P = File.Print
+key bindings:Global:S:17:Ctrl+Shift+O = File.OpenProject
+key bindings:Global:S:18:Ctrl+S = File.Save
+key bindings:Global:S:19:Ctrl+Shift+S = File.SaveAll
+key bindings:Global:S:20:Ctrl+W = File.Close
+key bindings:Global:S:21:F12 = File.SaveAs
+key bindings:Global:S:22:Ctrl+N = File.New
+key bindings:Global:S:23:Ctrl+Shift+N = File.NewProject
+key bindings:Global:S:24:Ctrl+T = File.SendToExternalEditor
+key bindings:Global:S:25:Alt+Num* = Debug.ShowNextStatement
+key bindings:Global:S:26:F1 = Help.Topics
+key bindings:Global:S:27:Ctrl+G = Edit.FindNext
+key bindings:Global:S:28:F3 = Edit.FindNext
+key bindings:Global:S:29:F4 = Debug.RunToCursor
+key bindings:Global:S:30:F5 = Debug.Go
+key bindings:Global:S:31:Ctrl+F5 = Build.CompileAndRun
+key bindings:Global:S:32:F7 = Build.CompileForDebug
+key bindings:Global:S:33:Alt+F7 = Build.Settings
+key bindings:Global:S:34:F9 = Debug.SetClearBreakpoint
+key bindings:Global:S:35:Alt+F9 = Debug.EditBreakpoints
+key bindings:Global:S:36:Ctrl+F9 = Debug.DisableBreakpoint
+key bindings:Global:S:37:F10 = Debug.StepOver
+key bindings:Global:S:38:F11 = Debug.StepInto
+key bindings:Global:S:39:Shift+F11 = Debug.StepOut
+key bindings:Global:S:40:Alt+J = Edit.PopBookmark
+key bindings:Global:S:41:Ctrl+Shift+J = Edit.JumpToNextBookmark
+key bindings:Global:S:42:Ctrl+J = Edit.JumpToNamedBookmark
+watch win:sep xpos 1:I:336
+watch win:sep xpos 2:I:336
+build:installer options:S:0:name=beispiel
+build:installer options:S:1:savext=beispiel
+watch win:sep xpos 3:I:336
+search:start at top:I:0
+src win split:%tads%lib\adv3\de_de\msg_neu.t:S:0:0.000000
+EditToolbar:rebarNewLine:I:1
+src win split:%tads%lib\adv3\de_de\de_de.t:S:0:0.000000
+src win split:beispiel.t:S:0:0.000000
+proj search:exact case:I:0
+DocToolbar:rebarVis:I:1
+auto-script:quit sequences:S:0:<nocase>[<]line[>]<space>*q(uit)?<space>*
+auto-script:quit sequences:S:1:<nocase>[<]line[>]<space>*y.*
+SearchToolbar:rebarIndex:I:2
+search:wrap:I:1
+auto-script:next-id:I:19
+SearchToolbar:rebarWidth:I:619
+docking config::S:0:CL
+docking config::S:1:W0,196,475,974,200,1182,935,D,L,project win
+docking config::S:2:CR
+docking config::S:3:W2,447,170,0,41,919,769,M,R,help win
+docking config::S:4:CB
+docking config::S:5:W4,701,170,449,672,1131,845,D,B,locals win
+docking config::S:6:W4,704,170,974,714,1655,887,D,B,watch win
+docking config::S:7:CT
+docking config::S:8:W7,170,203,20,20,923,727,M,T,docsearch win
+docking config::S:9:CT
+docking config::S:10:W9,333,106,660,581,1126,1110,D,T,script win
+docking config::S:11:W9,1146,106,150,207,1088,716,D,T,filesearch win
+docking config::S:12:W-1,170,170,22,50,674,464,M,R,stack win
+docking config::S:13:W-1,170,170,33,16,842,597,M,R,log win
+search:text:S:0:'-*'
+search:text:S:1:
+src win selrange:%tads%lib\adv3\de_de\msg_neu.t:S:0:0,0
+src win selrange:%tads%lib\adv3\de_de\msg_neu.t:S:1:51580,51580
+locals win:vis:I:0
+locals win:pos:R:457,698,1123,837
+src win selrange:%tads%lib\adv3\de_de\de_de.t:S:0:0,0
+src win selrange:%tads%lib\adv3\de_de\de_de.t:S:1:279041,279062
+main win max::I:1
+src win selrange:beispiel.t:S:0:0,0
+src win selrange:beispiel.t:S:1:4432,4432
+proj search:collapse spaces:I:0
+search:exact case:I:0
+build:webpage dir:S:0:web
+mdi win list::S:0:beispiel.t
+mdi win list::S:1:%tads%lib\adv3\de_de\msg_neu.t
+mdi win list::S:2:%tads%lib\adv3\de_de\de_de.t
+mdi win list::S:3::docsearch
+mdi win list::S:4::help
+build:srczipfile:S:0:beispielSource.zip
+main win pos::R:-8,-8,1288,768
+proj search:whole word:I:0
+help win pos::R:206,300,1109,990
+help win vis::I:1
+build:ignore case:I:0
+build:exe:S:0:beispiel.exe
+docsearch win pos::R:226,279,1113,948
+docsearch win vis::I:1
+script win:vis:I:1
+script win:pos:R:215,103,477,200
+src win edit mode:%tads%lib\adv3\de_de\msg_neu.t:S:0:TADS 3
+src win edit mode:%tads%lib\adv3\de_de\de_de.t:S:0:TADS 3
+build:use charmap:I:0
+src win edit mode:beispiel.t:S:0:TADS 3
+EditToolbar:rebarIndex:I:1
+hist win vis::I:0
+editor:cmdline:S:0:%f
+EditToolbar:rebarWidth:I:260
+build:include_files:S:0:tads.h
+build:include_files:S:1:t3.h
+build:include_files:S:2:lookup.h
+build:include_files:S:3:systype.h
+build:include_files:S:4:vector.h
+build:include_files:S:5:charset.h
+build:include_files:S:6:bytearr.h
+build:include_files:S:7:tadsgen.h
+build:include_files:S:8:tadsio.h
+build:include_files:S:9:reflect.h
+build:include_files:S:10:strbuf.h
+build:include_files:S:11:file.h
+build:include_files:S:12:filename.h
+build:include_files:S:13:dict.h
+build:include_files:S:14:tok.h
+build:include_files:S:15:gramprod.h
+build:include_files:S:16:adv3.h
+build:include_files:S:17:strcomp.h
+build:include_files:S:18:de_de.h
+SearchToolbar:rebarVis:I:1
+MenuBar:rebarNewLine:I:1
+proj search:regex:I:0
+locals win:sep xpos 0:I:80
+locals win:sep xpos 1:I:337
+search:whole word:I:0
+extensions dir::S:0:C:\Users\miba\Documents\TADS 3\Extensions
+build:debug_image_file:S:0:debug\beispiel.t3
+DebugToolbar:rebarNewLine:I:1
+search dlg:old searches:S:0:'-*'
+search dlg:old searches:S:1:wie immer aus
+search dlg:old searches:S:2:dummyVerb
+search dlg:old searches:S:3:verbhelper
+search dlg:old searches:S:4:verbhelper :
+search dlg:old searches:S:5:dummyPartWithoutBlank
+search dlg:old searches:S:6:gamemain:
+search dlg:old searches:S:7:gamemain :
+search dlg:old searches:S:8:notxt
+search dlg:old searches:S:9:isnotxt
+editor:program:S:0:Notepad.EXE
+find dialog:pos:R:586,155,1030,407
+search dlg:old search opts:S:0:
+search dlg:old search opts:S:1:
+search dlg:old search opts:S:2:
+search dlg:old search opts:S:3:
+search dlg:old search opts:S:4:
+search dlg:old search opts:S:5:
+search dlg:old search opts:S:6:
+search dlg:old search opts:S:7:
+search dlg:old search opts:S:8:
+search dlg:old search opts:S:9:
+search:regex:I:0
+mdi tab order::S:0:0,3,4,2,1
+build:rlsgam:S:0:beispiel.t3
+line wrap:%tads%lib\adv3\de_de\msg_neu.t:S:0:N
+EditToolbar:rebarVis:I:1
+key bindings:defaults loaded:I:1
+main win mdi max::I:1
+line wrap:%tads%lib\adv3\de_de\de_de.t:S:0:N
+auto-script:default quit sequences set:I:1
+line wrap:beispiel.t:S:0:N
+key bindings:Incremental Search:S:0:Ctrl+F = Edit.IncSearch.Next
+key bindings:Incremental Search:S:1:Ctrl+F3 = Edit.IncSearch.Next
+key bindings:Incremental Search:S:2:Ctrl+R = Edit.IncSearch.Prev
+key bindings:Incremental Search:S:3:Backspace = Edit.IncSearch.Backspace
+key bindings:Incremental Search:S:4:Ctrl+C = Edit.IncSearch.ToggleExactCase
+key bindings:Incremental Search:S:5:Ctrl+T = Edit.IncSearch.ToggleRegEx
+key bindings:Incremental Search:S:6:Ctrl+W = Edit.IncSearch.ToggleWord
+key bindings:Incremental Search:S:7:Ctrl+G = Edit.IncSearch.Cancel
+key bindings:Incremental Search:S:8:Esc = Edit.IncSearch.Exit
+searchbar history::S:0:passage
+searchbar history::S:1:gaction
+searchbar history::S:2:aftertravel
+searchbar history::S:3:has(
+searchbar history::S:4:setseen
+searchbar history::S:5:paperdragon
+searchbar history::S:6:posturedesc
+searchbar history::S:7:makeopen
+searchbar history::S:8:makepulled
+searchbar history::S:9:himitsu
+DocToolbar:rebarNewLine:I:0
+MenuBar:rebarIndex:I:0
+mdi win title::S:0:beispiel.t
+mdi win title::S:1:%tads%lib\adv3\de_de\msg_neu.t
+mdi win title::S:2:%tads%lib\adv3\de_de\de_de.t
+mdi win title::S:3:
+mdi win title::S:4:
+search:dir:I:1
+build:installer prog:S:0:beispiel_Setup.exe
+MenuBar:rebarWidth:I:431
+project win:vis:I:1
+project win:pos:R:2,120,189,735
+auto-script:dir:S:0:Scripts
+stack win vis::I:0
+filesearch win pos::R:503,103,1278,200
+filesearch win vis::I:1
+stack win pos::R:228,309,864,685
+DebugToolbar:rebarIndex:I:3
+searchMode::I:1
+
