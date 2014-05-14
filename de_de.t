@@ -3918,6 +3918,13 @@ class NameAsOther: object
     
     // -- German adjective endings
     adjEnding = (targetObj.adjEnding)
+    
+    dummyVerb = (targetObj.dummyVerb)
+    dummyPartWithoutBlank = (targetObj.dummyPartWithoutBlank)
+    dummyPart = (targetObj.dummyPart)
+    setPartLong = (targetObj.setPartLong)
+    printPartLong = (targetObj.printPartLong)
+
 ;
 
 /*
@@ -9035,9 +9042,9 @@ grammar indetSingularNounPhrase(basic):
 grammar indetSingularNounPhrase(locational):
     //[badness 200]
     nounPhrase->np_
-    ('der'|'die'|'das'|)
+    ('der'|'die'|'das')
     ('in'|'auf'|'an')
-    completeNounPhraseWithoutAll->cont_ ('ist'|'war'|'sind'|'waren'|)
+    completeNounPhraseWithoutAll->cont_ ('ist'|'war'|'sind'|'waren')
     | nounPhrase->np_ ('der'|'die'|'das') 'sich'
     ('in'|'auf'|'an')
     completeNounPhraseWithoutAll->cont_ ('befindet'|'befinden'|'befand'|'befanden')
@@ -13604,7 +13611,7 @@ modify TopicTAction
 
 VerbRule(Nimm)
     verb('nimm','nehm','pack','greif') (|'dir') dobjList
-    | verb('lies') dobjList prep('auf') 
+    | verb('lies','nimm','nehm') dobjList prep('auf','mit')
     | verb('steck') 'dir' dobjList prep('ein') 
     : TakeAction
     verbPattern('zu nehmen/nehmen', '(was)')
@@ -13617,8 +13624,8 @@ VerbRule(Nimm)
 
 // -- German: we say 'etwas AUS der Kiste nehmen', but 'etwas VON dem Tisch nehmen' ***
 VerbRule(NimmVon)
-    verb('nimm','nehm','pack','greif','entfern') dobjList prep('von','aus','in') singleIobj
-    | verb('nimm','nehm','pack','greif') 'dir' dobjList prep('von','aus','in') singleIobj
+    verb('nimm','nehm','pack','greif','entfern') dobjList prep('von','aus') singleIobj
+    | verb('nimm','nehm','pack','greif') 'dir' dobjList prep('von','aus') singleIobj
     : TakeFromAction
     verbPattern('zu nehmen/nehmen', '(was) (aus|von dativ was)')
 ;

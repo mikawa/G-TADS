@@ -2890,14 +2890,14 @@ playerActionMessages: MessageHelper
     /* a sound appears to be coming from a source */
     noiseSourceMsg(src)
     {
-        return '{Der dobj/er} {kommt} scheinbar ' + (gDobj.ofKind(Container) ? 'aus ' : 'von ')
+        return '{Der dobj/er} {kommt} anscheinend ' + (gDobj.ofKind(Container) ? 'aus ' : 'von ')
             + src.demNameObj + '{*}. ';
     }
 
     /* an odor appears to be coming from a source */
     odorSourceMsg(src)
     {
-        return '{Der dobj/er} {kommt} scheinbar ' + (gDobj.ofKind(Container) ? 'aus ' : 'von ')
+        return '{Der dobj/er} {kommt} anscheinend ' + (gDobj.ofKind(Container) ? 'aus ' : 'von ')
             + src.demNameObj + '{*}. ';
     }
 
@@ -3777,7 +3777,7 @@ playerActionMessages: MessageHelper
 
     /* flashlight is on but doesn't light up */
     flashlightOnButDarkMsg = '{Du/er} {schaltet} {den dobj/ihn} ein{-*}, 
-        aber es {passiert singular} scheinbar nichts{*}. '
+        aber es {passiert singular} anscheinend nichts{*}. '
 
     /* default acknowledgment for eating something */
     okayEatMsg = '{Du/er} {isst} {den dobj/ihn}{*}. '
@@ -3947,7 +3947,7 @@ playerActionMessages: MessageHelper
         '{Der dobj/er} {kann} nicht aufgesperrt werden{*}. '
     
     /* attempting to open a locked object */
-    cannotOpenLockedMsg = '{Der dobj/er} {ist} scheinbar abgesperrt{*}. '
+    cannotOpenLockedMsg = '{Der dobj/er} {ist} anscheinend abgesperrt{*}. '
 
     /* object requires a key to unlock */
     unlockRequiresKeyMsg =
@@ -3966,7 +3966,7 @@ playerActionMessages: MessageHelper
         'Es {ist singular} unklar{*}, wie man {den dobj/ihn} aufsperren kann. '
 
     /* the key (iobj) does not fit the lock (dobj) */
-    keyDoesNotFitLockMsg = '{Der iobj/er} {passt} scheinbar nicht{*}. '
+    keyDoesNotFitLockMsg = '{Der iobj/er} {passt} anscheinend nicht{*}. '
 
     /* found key on keyring */
     foundKeyOnKeyringMsg(ring, key)
@@ -4855,6 +4855,8 @@ thingContentsLister: ContentsLister, BaseThingContentsLister
 thingDescContentsLister: DescContentsLister, BaseThingContentsLister
     showListPrefixWide(itemCount, pov, parent)
         { "\^<<parent.itNom>> <<parent.verbZuEnthalten>><<withListCaseAccusative>><<withListArtIndefinite>> "; }
+    showListSuffixWide(itemCount, pov, parent)
+        { "<<parent.dummyVerb>>. "; }
 ;
   
 /*
@@ -4871,7 +4873,7 @@ openableDescContentsLister: thingContentsLister
         "\^<<parent.openStatus>>,<<withListCaseAccusative>><<withListArtIndefinite>> und {subj parent} {enthaelt} ";
     }
     showListSuffixWide(itemCount, pov, parent)
-        { "<<withListCaseAccusative>><<withListArtIndefinite>>{*} "; }
+        { "<<withListCaseAccusative>><<withListArtIndefinite>>{*}. "; }
 ;
 
 /*
