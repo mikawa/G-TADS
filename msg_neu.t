@@ -3589,7 +3589,7 @@ playerActionMessages: MessageHelper
         {bringt singular} wenig{*}. '
 
     /* can't ask yourself about anything */
-    cannotAskSelfMsg = '{Dirselbst} zu fragen,
+    cannotAskSelfMsg = '{Dichselbst} zu fragen,
         {bringt singular} wenig{*}. '
 
     /* can't ask yourself for anything */
