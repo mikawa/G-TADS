@@ -3691,7 +3691,7 @@ playerActionMessages: MessageHelper
     uselessToAttackMsg = '{Du/er} {kommt} hier mit Gewalt auch nicht weiter{*}. '
 
     /* pushing object has no effect */
-    pushNoEffectMsg = '{Den dobj/ihn} zu schieben {zeigt} keinerlei Wirkung{*}. '
+    pushNoEffectMsg = '{Den dobj/ihn} zu schieben {zeigt singular} keinerlei Wirkung{*}. '
 
     /* default 'push button' acknowledgment */
     okayPushButtonMsg = '<q>Klick.</q> '
@@ -3704,7 +3704,7 @@ playerActionMessages: MessageHelper
     okayPushLeverMsg = '{Du/er} {drueckt} {den dobj/ihn} soweit wie möglich hinein{*}. '
 
     /* pulling object has no effect */
-    pullNoEffectMsg = 'An {dem dobj/ihm} zu ziehen {zeigt} keinerlei Wirkung{*}. '
+    pullNoEffectMsg = 'An {dem dobj/ihm} zu ziehen {zeigt singular} keinerlei Wirkung{*}. '
 
     /* lever is already in pulled state */
     alreadyPulledMsg =
