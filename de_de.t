@@ -3982,20 +3982,20 @@ modify Surface
      */
     objInPrep = 'auf'
     actorInPrep = 'auf'
-    actorOutOfPrep = 'aus dativ'     // -- German: "kommt aus dem Bett heraus
+    actorOutOfPrep = 'aus'     // -- German: "kommt aus dem Bett heraus
     dobjFor(Climb) asDobjFor(StandOn)
 ;
 
 modify Underside
     objInPrep = 'unter'
     actorInPrep = 'unter'
-    actorOutOfPrep = 'unter dativ'   // -- German: "kommt unter dem Bett hervor
+    actorOutOfPrep = 'unter'   // -- German: "kommt unter dem Bett hervor
 ;
 
 modify RearContainer
     objInPrep = 'hinter'
     actorInPrep = 'hinter'
-    actorOutOfPrep = 'hinter dativ'  // -- German: "kommt hinter dem Schrank hervor
+    actorOutOfPrep = 'hinter'  // -- German: "kommt hinter dem Schrank hervor
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -5520,21 +5520,21 @@ modify BasicChair
     /* by default, one sits *on* a chair */
     objInPrep = 'auf'
     actorInPrep = 'auf'
-    actorOutOfPrep = 'aus dativ' //here: (aus dem Bett)
+    actorOutOfPrep = 'aus' //here: (aus dem Bett)
 ;
 
 modify BasicPlatform
     /* by default, one stands *on* a platform */
     objInPrep = 'auf'
     actorInPrep = 'auf'
-    actorOutOfPrep = 'von dativ' //here: (von dem Vorsprung)
+    actorOutOfPrep = 'von' //here: (von dem Vorsprung)
 ;
 
 modify Booth
     /* by default, one is *in* a booth */
     objInPrep = 'in'
     actorInPrep = 'in'
-    actorOutOfPrep = 'aus dativ' //here: (aus der Telefonzelle)
+    actorOutOfPrep = 'aus' //here: (aus der Telefonzelle)
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -15036,7 +15036,7 @@ VerbRule(Schieb)
 // ***
 
 VerbRule(Zieh)
-    verb('zieh') dobjList
+    verb('zieh') (|'an') dobjList
     : PullAction
     verbPhrase = 'zu ziehen/ziehen (was)'
 ;
