@@ -11645,10 +11645,10 @@ modify finishOptionRestart
 ;
 
 modify finishOptionUndo
-    desc = "den letzten Zug <<aHrefAlt('undo', 'ZURÜCK', '<b>U</b>NDO',
+    desc = "den letzten Zug <<aHrefAlt('zurück', 'ZURÜCK', '<b>Z</b>URÜCK',
             'Den letzten Zug zurück nehmen')>> nehmen "
-    responseKeyword = 'undo'
-    responseChar = 'u'
+    responseKeyword = 'zurück'
+    responseChar = 'z'
 ;
 
 modify finishOptionCredits
