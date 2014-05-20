@@ -1401,7 +1401,7 @@ libMessages: MessageHelper
     roomDarkName = 'Dunkelheit'
 
     /* generic long description of a dark room */
-    roomDarkDesc = "Es {ist singular} hier stockdunkel{*}. "
+    roomDarkDesc = "Es {ist singular} {hier|dort} stockdunkel{*}. "
 
     /*
      *   mention that an actor is here, without mentioning the enclosing
@@ -1410,7 +1410,7 @@ libMessages: MessageHelper
     roomActorHereDesc(actor)
     {
         "\^<<actor.derName>> <<buildSynthParam('subj', actor)>> 
-        <<actor.posture.msgVerbT>> hier{*}. ";
+        <<actor.posture.msgVerbT>> {hier|dort}{*}. ";
     }
 
     /*
@@ -1456,7 +1456,7 @@ libMessages: MessageHelper
     {
         if (actor.posture != standing)
             "\^<<actor.itNom>> <<buildSynthParam('subj', actor)>>
-            <<actor.posture.msgVerbT>> hier{*}. ";
+            <<actor.posture.msgVerbT>> {hier|dort}{*}. ";
     }
 
     /*
@@ -1544,7 +1544,7 @@ libMessages: MessageHelper
     actorHereGroupPrefix(posture, lst) { "\^<<withListCaseNominative>><<withListArtIndefinite>>"; }
     actorHereGroupSuffix(posture, lst)
     {
-        " <<lst.length() == 1 ? posture.msgVerbT : posture.msgVerbTPlural>> hier{*}. ";
+        " <<lst.length() == 1 ? posture.msgVerbT : posture.msgVerbTPlural>> {hier|dort}{*}. ";
     }
 
     /*
@@ -1655,7 +1655,7 @@ libMessages: MessageHelper
     }
 
     /* a shipboard direction was attempted while not onboard a ship */
-    notOnboardShip = "Diese Richtung {hat singular} hier keine Bedeutung{*}. "
+    notOnboardShip = "Diese Richtung {hat singular} {hier|dort} keine Bedeutung{*}. "
 
     /* a traveler is leaving via a passage */
     sayDepartingThroughPassage(traveler, passage)
@@ -1868,7 +1868,7 @@ playerMessages: libMessages
      *   is the default for most verbs. 
      */
     noMatchCannotSee(actor, txt) { 
-        "\^<<actor.derName>> <<actor.verbZuSehen>> hier <<actor.keinen(txt)>>. "; 
+        "\^<<actor.derName>> <<actor.verbZuSehen>> {hier|dort} <<actor.keinen(txt)>>. "; 
     }
 
     /*
@@ -1879,7 +1879,7 @@ playerMessages: libMessages
      *   be nonsensical. 
      */
     noMatchNotAware(actor, txt) {
-        "{Du/er} {bemerkt} hier <<actor.keinen(txt)>>{*}. "; 
+        "{Du/er} {bemerkt} {hier|dort} <<actor.keinen(txt)>>{*}. "; 
     }
 
     /* 'all' is not allowed with the attempted action */
@@ -1891,13 +1891,13 @@ playerMessages: libMessages
     /* no match for 'all' */
     noMatchForAll(actor)
     {
-        "<.parser>{Du/er} {sieht} hier nichts Passendes.<./parser> ";
+        "<.parser>{Du/er} {sieht} {hier|dort} nichts Passendes.<./parser> ";
     }
 
     /* nothing left for 'all' after removing 'except' items */
     noMatchForAllBut(actor)
     {
-        "<.parser>{Du/er} {sieht} hier sonst nichts.<./parser> ";
+        "<.parser>{Du/er} {sieht} {hier|dort} sonst nichts.<./parser> ";
     }
 
     /* nothing left in a plural phrase after removing 'except' items */
@@ -2039,14 +2039,14 @@ playerMessages: libMessages
     /* insufficient quantity to meet a command request ('take five books') */
     insufficientQuantity(actor, txt, matchList, requiredNum)
     {
-        "<.parser>\^<<actor.derName>> <<actor.verbZuSehen>> <<tSel('hier', 'dort')>>
+        "<.parser>\^<<actor.derName>> <<actor.verbZuSehen>> {hier|dort}
         nicht so <<actor.viele(txt)>>.<./parser> ";
     }
 
     /* a unique object is required, but multiple objects were specified */
     uniqueObjectRequired(actor, txt, matchList)
     {
-        "<.parser>Du kannst hier nicht mehrere Objekte angeben.<./parser> ";
+        "<.parser>Du kannst da nicht mehrere Objekte angeben.<./parser> ";
     }
 
     /* a single noun phrase is required, but a noun list was used */
@@ -2253,10 +2253,10 @@ npcMessages: playerMessages
 
     /* no match for a noun phrase */
     noMatchCannotSee(actor, txt) {
-        "\^<<actor.derName>> <<actor.verbZuSehen>> hier <<actor.keinen(txt)>>. "; 
+        "\^<<actor.derName>> <<actor.verbZuSehen>> {hier|dort} <<actor.keinen(txt)>>. "; 
     }
     noMatchNotAware(actor, txt) {
-        "\^<<actor.derName>> <<actor.verbZuKennen>> hier <<actor.keinen(txt)>>. ";  
+        "\^<<actor.derName>> <<actor.verbZuKennen>> {hier|dort} <<actor.keinen(txt)>>. ";  
     }
 
     /* no match for 'all' */
@@ -2666,16 +2666,14 @@ playerActionMessages: MessageHelper
     heardButNotSeenMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {koennt} zwar {einen obj/eine} hören{*}, aber {du/er}
-            {koennt} {ihn obj/sie} nicht sehen{*}. ';
+        return '{Du/er} {koennt} zwar {einen obj/eine} hören{*}, {ihn obj/sie} aber nicht sehen{*}. ';
     }
 
     /* object can be smelled but not seen */
     smelledButNotSeenMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {koennt} zwar {einen obj/eine} riechen{*}, aber {du/er}
-            {koennt} {ihn obj/sie} nicht sehen{*}. ';
+        return '{Du/er} {koennt} zwar {einen obj/eine} riechen{*}, {ihn obj/sie} aber nicht sehen{*}. ';
     }
 
     /* cannot hear object */
@@ -2786,7 +2784,7 @@ playerActionMessages: MessageHelper
     unthingNotHereMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {sieht} {den obj/ihn} hier nicht{*}. ';
+        return '{Du/er} {sieht} {den obj/ihn} {hier|dort} nicht{*}. ';
     }
 
     /* generic "that's too far away" message for Distant items */
@@ -2874,7 +2872,7 @@ playerActionMessages: MessageHelper
     cannotLookThroughMsg = '{Du/er} {koennt} nicht durch {den dobj/ihn} schauen{*}. '
 
     /* looking through an open passage */
-    nothingThroughPassageMsg = '{Du/er} {koennt} von hier nichts Besonderes erkennen{*}. '
+    nothingThroughPassageMsg = '{Du/er} {koennt} von {hier|dort} aus nichts Besonderes erkennen{*}. '
 
     /* there's nothing on the other side of a door we just opened */
     nothingBeyondDoorMsg = 'Das Öffnen {des dobj/dessen} {bringt singular} nichts
@@ -2882,10 +2880,10 @@ playerActionMessages: MessageHelper
 
     /* there's nothing here with a specific odor */
     nothingToSmellMsg =
-        '{Du/er} {riecht} hier nichts Besonderes{*}. '
+        '{Du/er} {riecht} {hier|dort} nichts Besonderes{*}. '
 
     /* there's nothing here with a specific noise */
-    nothingToHearMsg = '{Du/er} {hoert} hier nichts Besonderes{*}. '
+    nothingToHearMsg = '{Du/er} {hoert} {hier|dort} nichts Besonderes{*}. '
 
     /* a sound appears to be coming from a source */
     noiseSourceMsg(src)
@@ -2938,7 +2936,7 @@ playerActionMessages: MessageHelper
 
     /* not a digging implement */
     cannotDigWithMsg =
-        '{Du/er} {sieht} keine Möglichkeit{*}, {den iobj/ihn} dafür zu verwenden. '
+        '{Der iobj/er} {ist} fürs Graben nicht geeignet{*}. '
 
     /* taking something already being held */
     alreadyHoldingMsg = '{Du/er} {hat} {den dobj/ihn} schon{*}. '
@@ -3014,11 +3012,11 @@ playerActionMessages: MessageHelper
 
     /* specialized Immovable messages for TravelPushables */
     cannotTakePushableMsg = '{Du/er} {koennt} {den dobj/ihn} nicht nehmen,
-        {ihn dobj/sie} aber vielleicht schieben{*}. '
-    cannotMovePushableMsg = '{Du/er} {schiebt} {den dobj/ihn} herum{-*}, vielleicht {koennt actor} {du/er} 
-        {ihn dobj/sie} in eine bestimmte Richtung schieben{*}. '
+        {ihn dobj/sie} aber vielleicht herumschieben{*}. '
+    cannotMovePushableMsg = '{Du/er} {koennt} {den dobj/ihn} herumschieben{*}, vielleicht auch 
+        in eine bestimmte Richtung. '
     cannotPutPushableMsg = '{Du/er} {koennt} {den dobj/ihn} nicht irgendwo hinlegen,
-        {ihn dobj/sie} aber vielleicht schieben{*}.'
+        {ihn dobj/sie} aber vielleicht schieben{*}. '
 
     /* can't take something while occupying it */
     cannotTakeLocationMsg = '{Du/er} {koennt} {den dobj/ihn} nicht nehmen{*},
@@ -3122,7 +3120,7 @@ playerActionMessages: MessageHelper
     {
         gMessageParams(obj, cont);
         return '{Der obj/er} {ist} zu groß{*},
-            um {ihn obj/sie} aus {den cont/ihn} heraus zu bekommen. ';
+            um {ihn obj/sie} aus {dem cont/ihm} heraus zu bekommen. ';
     }
 
     /* actor 'obj' cannot reach in our out of container 'cont' */
@@ -3168,14 +3166,14 @@ playerActionMessages: MessageHelper
     handsTooFullForMsg(obj)
     {
         return '{Deine} Hände {ist plural} zu voll{*}, um '
-               + obj.denNameObj + ' zu halten. ';
+               + obj.denName + ' zu halten. ';
     }
 
     /* the object is becoming too large for the actor to hold */
     becomingTooLargeForActorMsg(obj)
     {
         gMessageParams(obj);
-        return '{Der obj/er} {ist} zu groß{*}, um {ihn/sie} in der Hand zu halten. ';
+        return '{Der obj/er} {ist} zu groß{*}, um {ihn obj/sie} in der Hand zu halten. ';
     }
 
     /* the object is becoming large enough that the actor's hands are full */
@@ -3214,14 +3212,14 @@ playerActionMessages: MessageHelper
     tooLargeForUndersideMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} zu groß{*}, um {ihn/sie} unter {den cont/ihn} zu legen. ';
+        return '{Der obj/er} {ist} zu groß{*}, um {ihn obj/sie} unter {den cont/ihn} zu legen. ';
     }
 
     /* object is too large to fit behind object */
     tooLargeForRearMsg(obj, cont)
     {
         gMessageParams(obj, cont);
-        return '{Der obj/er} {ist} zu groß{*}, um {ihn/sie} hinter {den cont/ihn} zu legen. ';
+        return '{Der obj/er} {ist} zu groß{*}, um {ihn obj/sie} hinter {den cont/ihn} zu legen. ';
     }
 
     /* container doesn't have room for object */
@@ -3413,10 +3411,10 @@ playerActionMessages: MessageHelper
         {koennt} nicht sehen{*}, wohin {du/er} {!*}{geht}. '
 
     /* we don't know the way back for a GO BACK */
-    cannotGoBackMsg = '{Du/er} {weiss} nicht{*} wie. '
+    cannotGoBackMsg = '{Du/er} {weiss} nicht{*}, wie. '
 
     /* cannot carry out a command from this location */
-    cannotDoFromHereMsg = '{Du/er} {koennt} das von hier aus nicht tun{*}. '
+    cannotDoFromHereMsg = '{Du/er} {koennt} das von {hier|dort} aus nicht tun{*}. '
 
     /* can't travel through a close door */
     cannotGoThroughClosedDoorMsg(door)
@@ -3436,7 +3434,7 @@ playerActionMessages: MessageHelper
     invalidStagingContainerActorMsg(cont, dest)
     {
         gMessageParams(cont, dest);
-        return 'Das {geht singular} nicht{*} solange {der cont/er} 
+        return 'Das {geht singular} nicht{*}, solange {der cont/er} 
             {den dest/ihn} in der Hand {!*}{hat cont}. ';
     }
     
@@ -3451,14 +3449,14 @@ playerActionMessages: MessageHelper
     nestedRoomTooHighMsg(obj)
     {
         gMessageParams(obj);
-        return '{Der obj/er} {ist} zu weit oben{*}, um {ihn/sie} von hier 
+        return '{Der obj/er} {ist} zu weit oben{*}, um {ihn/sie} von {hier|dort} 
             zu erreichen. ';
     }
 
     /* enclosing room is too high to reach by GETTING OUT OF here */
     nestedRoomTooHighToExitMsg(obj)
     {
-        return 'Dazu {geht singular} es von hier zu weit hinunter{*}. ';
+        return 'Dazu {subj actor} {ist} {du/er} {hier|dort} zu weit oben{*}. ';
     }
 
     /* cannot carry out a command from a nested room */
@@ -3501,7 +3499,7 @@ playerActionMessages: MessageHelper
     cannotEnterExitOnlyMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {koennt} {den obj/ihn} von hier nicht betreten{*}. ';
+        return '{Du/er} {koennt} {den obj/ihn} von {hier|dort} aus nicht betreten{*}. ';
     }
 
     /* must open door before going that way */
@@ -3519,8 +3517,8 @@ playerActionMessages: MessageHelper
     }
 
     /* the stairway does not go up/down */
-    stairwayNotUpMsg = '{Der dobj/er} {fuehrt} von hier nur nach unten{*}. '
-    stairwayNotDownMsg = '{Der dobj/er} {fuehrt} von hier nur nach oben{*}. '
+    stairwayNotUpMsg = '{Der dobj/er} {fuehrt} von {hier|dort} nur nach unten{*}. '
+    stairwayNotDownMsg = '{Der dobj/er} {fuehrt} von {hier|dort} nur nach oben{*}. '
 
     /* "wait" */
     timePassesMsg = 'Die Zeit {vergeht singular}{*}... '
@@ -3554,7 +3552,7 @@ playerActionMessages: MessageHelper
     cannotJumpOffMsg = '{Du/er} {koennt} nicht von {dem dobj/ihm} springen{*}. '
 
     /* cannnot jump off (with no direct object) from here */
-    cannotJumpOffHereMsg = 'Hier {koennt actor} {er actor/sie} nicht hinunter springen{*}. '
+    cannotJumpOffHereMsg = '{Hier|Dort} {koennt actor} {er actor/sie} nicht hinunter springen{*}. '
 
     /* failed to find a topic in a consultable object */
     cannotFindTopicMsg =
@@ -3593,28 +3591,28 @@ playerActionMessages: MessageHelper
         {bringt singular} wenig{*}. '
 
     /* can't ask yourself for anything */
-    cannotAskSelfForMsg = '{Dich} zu bitten,
+    cannotAskSelfForMsg = '{Dichselbst} zu bitten,
         {bringt singular} wenig{*}. '
 
     /* can't tell yourself about anything */
-    cannotTellSelfMsg = 'Mit {dir} zu reden,
+    cannotTellSelfMsg = 'Mit {dirselbst} zu reden,
         {bringt singular} wenig{*}. '
 
     /* can't give yourself something */
-    cannotGiveToSelfMsg = '{Den dobj/ihn} {dir} zu geben,
+    cannotGiveToSelfMsg = '{Dirselbst} {den dobj/ihn} zu geben,
         {bringt singular} wenig{*}. '
     
     /* can't give something to itself */
-    cannotGiveToItselfMsg = '{Den dobj/ihn} sich selbst zu geben,
-        {bringt} wenig{*}. '
+    cannotGiveToItselfMsg = '{Dem dobj/ihm} {den dobj/ihn} zu geben,
+        {bringt singular} wenig{*}. '
 
     /* can't show yourself something */
-    cannotShowToSelfMsg = '{Den dobj/ihn} {dir} zu zeigen,
-        {bringt} wenig{*}. '
+    cannotShowToSelfMsg = '{Dirselbst} {den dobj/ihn} zu zeigen,
+        {bringt singular} wenig{*}. '
 
     /* can't show something to itself */
-    cannotShowToItselfMsg = '{Den dobj/ihn} sich selbst zu zeigen,
-        {bringt} wenig{*}. '
+    cannotShowToItselfMsg = '{Dem dobj/ihm} {den dobj/ihn} zu zeigen,
+        {bringt singular} wenig{*}. '
 
     /* can't give/show something to a non-actor */
     cannotGiveToMsg = '{Du/er} {koennt} {dem iobj/ihm} nichts geben{*}. '
@@ -3653,7 +3651,7 @@ playerActionMessages: MessageHelper
     cannotFollowSelfMsg = '{Du/er} {koennt} schlecht {dirselbst} folgen{*}. '
 
     /* following an object that's in the same location as the actor */
-    followAlreadyHereMsg = '{Der dobj/er} {ist} schon hier{*}. '
+    followAlreadyHereMsg = '{Der dobj/er} {ist} schon {hier|dort}{*}. '
 
     /*
      *   following an object that we *think* is in our same location (in
@@ -3665,7 +3663,7 @@ playerActionMessages: MessageHelper
 
     /* trying to follow an object, but don't know where it went from here */
     followUnknownMsg = '{Du/er} {ist} {dir} nicht sicher{*}, wohin {der dobj/er} 
-        von hier gegangen {!*}{ist}. '
+        von {hier|dort} aus gegangen {!*}{ist}. '
 
     /*
      *   we're trying to follow an actor, but we last saw the actor in the
@@ -3673,14 +3671,14 @@ playerActionMessages: MessageHelper
      */
     cannotFollowFromHereMsg(srcLoc)
     {
-        return 'Der letzte Ort, an dem {du/er} {den dobj/ihn} gesehen {!*}{hat actor}, 
-            {ist singular} ' + srcLoc.getDestName(gActor, gActor.location) + '{*}. ';
+        return 'Der letzte Ort, an dem {du/er} {den dobj/ihn} gesehen {!*}{hat}, 
+            {ist singular}<<withCaseNominative>> ' + srcLoc.getDestName(gActor, gActor.location) + '{*}. ';
     }
 
     /* acknowledge a 'follow' for a target that was in sight */
     okayFollowInSightMsg(loc)
     {
-        return '{Du/er} {folgt} {dem dobj/ihm} in '
+        return '{Du/er} {folgt} {dem dobj/ihm} '
             + loc.actorIntoName + '{*}. ';
     }
 
@@ -3688,7 +3686,7 @@ playerActionMessages: MessageHelper
     notAWeaponMsg = '{Der iobj/er} {ist} dafür nicht zu gebrauchen{*}. '
 
     /* no effect attacking obj */
-    uselessToAttackMsg = '{Du/er} {kommt} hier mit Gewalt auch nicht weiter{*}. '
+    uselessToAttackMsg = '{Du/er} {kommt} {hier|dort} mit Gewalt auch nicht weiter{*}. '
 
     /* pushing object has no effect */
     pushNoEffectMsg = '{Den dobj/ihn} zu schieben {zeigt singular} keinerlei Wirkung{*}. '
@@ -3715,12 +3713,12 @@ playerActionMessages: MessageHelper
         möglich heraus{*}. '
 
     /* default acknowledgment to pulling a spring-loaded lever */
-    okayPullSpringLeverMsg = '{Du/er} {zieht} {den dobj/ihn} und {er/sie}
+    okayPullSpringLeverMsg = '{Du/er} {zieht} {den dobj/ihn}{*} und {er/sie}
         {springt} zurück in die Ausgangsposition{*}, sobald {du/er} 
-        {es dobj/ihn} los {!*}{laesst}. '
+        {ihn dobj/sie} los {!*}{laesst}. '
 
     /* moving object has no effect */
-    moveNoEffectMsg = '{Den dobj/ihn} zu bewegen {macht} wenig Sinn{*}. '
+    moveNoEffectMsg = '{Den dobj/ihn} zu bewegen {macht singular} wenig Sinn{*}. '
 
     /* cannot move object to other object */
     moveToNoEffectMsg = 'Das {macht singular} wenig Sinn{*}. '
@@ -3732,7 +3730,7 @@ playerActionMessages: MessageHelper
     okayPushTravelMsg(obj)
     {
         return '<.p>{Du/er} {schiebt} ' + obj.denNameObj
-            + ' hierher{*}. ';
+            + ' {hierher|dorthin}{*}. ';
     }
 
     /* cannot use object as an implement to move something */
@@ -3754,7 +3752,7 @@ playerActionMessages: MessageHelper
 
     /* must specify setting to turn object to */
     mustSpecifyTurnToMsg = 'Sag bitte genauer, worauf {du/er} 
-        {den dobj/ihn} einstellen {!*}{will actor}. '
+        {den dobj/ihn} einstellen {will actor}{*}. '
 
     /* cannot turn anything with object */
     cannotTurnWithMsg =
@@ -3805,7 +3803,7 @@ playerActionMessages: MessageHelper
         '{Der dobj/er} {ist} heruntergebrannt und {koennt} nicht mehr angezündet werden{*}. '
 
     /* lighting a kanndle */
-    okayBurnCandleMsg = '{Du/er} {zündet} {den dobj/ihn} an{-*}. '
+    okayBurnCandleMsg = '{Du/er} {zuendet} {den dobj/ihn} an{-*}. '
 
     /* extinguishing a kanndle that isn't lit */
     candleNotLitMsg = '{Der dobj/er} {ist} nicht angezündet{*}. '
@@ -3922,12 +3920,12 @@ playerActionMessages: MessageHelper
 
     /* cannot climb object */
     cannotClimbMsg =
-        'Auf {den dobj/ihn} {kann} nicht geklettert werden{*}. '
+        'Auf {den dobj/ihn} {koennt singular} nicht geklettert werden{*}. '
 
     /* object is not openable/closable */
-    cannotOpenMsg = '{Der dobj/er} {kann} nicht geöffnet werden{*}. '
+    cannotOpenMsg = '{Der dobj/er} {koennt} nicht geöffnet werden{*}. '
     cannotCloseMsg =
-        '{Der dobj/er} {kann} nicht geschlossen werden{*}. '
+        '{Der dobj/er} {koennt} nicht geschlossen werden{*}. '
 
     /* already open/closed */
     alreadyOpenMsg = '{Der dobj/er} {ist} schon offen{*}. '
@@ -3942,9 +3940,9 @@ playerActionMessages: MessageHelper
 
     /* object is not lockable/unlockable */
     cannotLockMsg =
-        '{Der dobj/er} {kann} nicht abgesperrt werden{*}. '
+        '{Der dobj/er} {koennt} nicht abgesperrt werden{*}. '
     cannotUnlockMsg =
-        '{Der dobj/er} {kann} nicht aufgesperrt werden{*}. '
+        '{Der dobj/er} {koennt} nicht aufgesperrt werden{*}. '
     
     /* attempting to open a locked object */
     cannotOpenLockedMsg = '{Der dobj/er} {ist} anscheinend abgesperrt{*}. '
@@ -3979,7 +3977,7 @@ playerActionMessages: MessageHelper
     foundNoKeyOnKeyringMsg(ring)
     {
         gMessageParams(ring);
-        return '{Du/er} {probiert} alle Schlüssel an {dem ring/ihm}{*} aber keiner davon {passt singular}{*}. ';
+        return '{Du/er} {probiert} alle Schlüssel an {dem ring/ihm}{*}, aber keiner davon {passt singular}{*}. ';
     }
 
     /* not edible/drinkable */
@@ -4001,13 +3999,13 @@ playerActionMessages: MessageHelper
 
     /* cannot sit/lie/stand/get on/get out of */
     cannotSitOnMsg =
-        '{Du/er} {kann} nicht {aufdem dobj} sitzen{*}. '
+        '{Du/er} {koennt} nicht {aufdem dobj} sitzen{*}. '
     cannotLieOnMsg =
-        '{Du/er} {kann} nicht {aufdem dobj} liegen{*}. '
-    cannotStandOnMsg = '{Du/er} {kann} nicht {aufdem dobj} stehen{*}. '
-    cannotBoardMsg = '{Du/er} {kann} nicht {aufden dobj} steigen{*}. '
-    cannotUnboardMsg = '{Du/er} {kann} {den dobj/ihn} nicht verlassen{*}. '
-    cannotGetOffOfMsg = '{Du/er} {kann} nicht von {dem dobj/ihm} steigen{*}. '
+        '{Du/er} {koennt} nicht {aufdem dobj} liegen{*}. '
+    cannotStandOnMsg = '{Du/er} {koennt} nicht {aufdem dobj} stehen{*}. '
+    cannotBoardMsg = '{Du/er} {koennt} nicht {aufden dobj} steigen{*}. '
+    cannotUnboardMsg = '{Du/er} {koennt} {den dobj/ihn} nicht verlassen{*}. '
+    cannotGetOffOfMsg = '{Du/er} {koennt} nicht von {dem dobj/ihm} steigen{*}. '
 
     /* standing on a PathPassage */
     cannotStandOnPathMsg = 'Wenn {du/er} {dem dobj/ihm} folgen {will}{*},
@@ -4015,10 +4013,10 @@ playerActionMessages: MessageHelper
 
     /* cannot sit/lie/stand on something being held */
     cannotEnterHeldMsg =
-        'Das geht nicht, solange {du/er} {den dobj/ihn} in der Hand {hat}{*}. '
+        'Das geht nicht, solange {du/er} {den dobj/ihn} in der Hand {!*}{hat}. '
 
     /* cannot get out (of current location) */
-    cannotGetOutMsg = 'Hier {ist singular} nichts zu verlassen{*}. '
+    cannotGetOutMsg = '{Hier|Dort} {gibt singular} es nichts zu verlassen{*}. '
 
     /* actor is already in a location */
     alreadyInLocMsg = '{Du/er} {ist} schon {in dobj}{*}. '
@@ -4143,8 +4141,8 @@ playerActionMessages: MessageHelper
     throwFallShortMsg(projectile, target, dest)
     {
         gMessageParams(projectile, target);
-        return '{Der projectile/er} {faellt} ' + dest.putInName
-            + ' vor {dem target/ihm} auf den Boden{*}. ';
+        return '{Der projectile/er} {faellt} vor {dem target/ihm} auf den Boden ' 
+            + dest.desName + '{*}. ';
     }
 
     /* target catches object */
@@ -4161,13 +4159,13 @@ playerActionMessages: MessageHelper
     /* target does not want to catch anything */
     willNotCatchMsg(catcher)
     {
-        return '\^' + catcher.derName
-            + ' {sieht} nicht so aus{-*}, als ob ' + catcher.itNom 
-            + ' etwas fangen will.';
+        return '\^' + catcher.derName + ' ' 
+            + catcher.verbZuSehen + ' nicht so aus{-*}, als ob ' + catcher.itNom 
+            + ' etwas fangen will. ';
     }
 
     /* cannot kiss something */
-    cannotKissMsg = '{Den dobj/ihn} zu küssen {bringt} nichts{*}. '
+    cannotKissMsg = '{Den dobj/ihn} zu küssen {bringt singular} nichts{*}. '
 
     /* person uninterested in being kissed */
     cannotKissActorMsg
@@ -4177,7 +4175,7 @@ playerActionMessages: MessageHelper
     cannotKissSelfMsg = '{Du/er} {koennt} {dich} nicht küssen{*}. '
 
     /* it is now dark at actor's location */
-    newlyDarkMsg = 'Es {ist singular} nun stockdunkel{*}. '
+    newlyDarkMsg = 'Es {ist singular} {jetzt|daraufhin} stockdunkel{*}. '
 ;
 
 /*
@@ -4306,7 +4304,7 @@ npcActionMessages: playerActionMessages
     takeFromNotBehindMsg = 'Aber {der dobj/er} {ist} gar nicht hinter {dem iobj/ihm}{*}. '
 
     /* cannot jump off (with no direct object) from here */
-    cannotJumpOffHereMsg = 'Hier {koennt dobj} {der dobj/er} nicht hinunter springen{*}. '
+    cannotJumpOffHereMsg = '{Hier|Dort} {koennt dobj} {der dobj/er} nicht hinunter springen{*}. '
 
     /* should not break object */
     shouldNotBreakMsg = '{Du/er} {will} {den dobj/ihn} nicht beschädigen{*}. '
@@ -4432,7 +4430,7 @@ undoTip: Tip
  */
 roomLister: Lister
     /* show the prefix/suffix in wide mode */
-    showListPrefixWide(itemCount, pov, parent) { "{Du/er} {sieht}{+*} hier <<withListCaseAccusative>><<withListArtIndefinite>>"; }
+    showListPrefixWide(itemCount, pov, parent) { "{Du/er} {sieht}{+*} {hier|dort} <<withListCaseAccusative>><<withListArtIndefinite>>"; }
     showListSuffixWide(itemCount, pov, parent) { "{**}. "; }
 
     /* show the tall prefix */

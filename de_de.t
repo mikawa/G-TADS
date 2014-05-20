@@ -5612,7 +5612,7 @@ modify Room
      *   we're elsewhere, we might want to use a destName like "the
      *   basement hallway" or "the hallway outside the operating room".
      */
-    destName = (curcase.isDat ? demName : denName)
+    destName = (curcase.isDat ? demName : curcase.isAkk ? denName : curcase.isGen ? desName : derName)
     // destInName = (denName) // TEST: we use nominative e.g. zurück in das Wohnzimmer
       
     /*
@@ -6544,78 +6544,78 @@ langMessageBuilder: MessageBuilder
         
         // -- German: german verbs for "mesaage parameter substitutions"
         
-        ['ist', &verbZuSein, nil, nil, true],
-        ['kann', &verbZuKann, nil, nil, true],
-        ['hat', &verbZuHaben, nil, nil, true],
-        ['scheint', &verbZuScheinen, nil, nil, true],
-        ['erscheint', &verbZuErscheinen, nil, nil, true],
-        ['bezweckt', &verbZuBezwecken, nil, nil, true],
-        ['gefaellt', &verbZuGefallen, nil, nil, true],
-        ['bekommt', &verbZuBekommen, nil, nil, true],
-        ['sieht', &verbZuSehen, nil, nil, true],
-        ['hoert', &verbZuHoeren, nil, nil, true],
-        ['spricht', &verbZuSprechen, nil, nil, true],
-        ['betritt', &verbZuBetreten, nil, nil, true],
-        ['bemerkt', &verbZuBemerken, nil, nil, true],
-        ['sagt', &verbZuSagen, nil, nil, true],
-        ['antwortet', &verbZuAntworten, nil, nil, true],
-        ['muss', &verbZuMuessen, nil, nil, true],
-        ['riecht', &verbZuRiechen, nil, nil, true],
-        ['nimmt', &verbZuNehmen, nil, nil, true],
-        ['gibt', &verbZuGeben, nil, nil, true],
-        ['faellt', &verbZuFallen, nil, nil, true],
-        ['will', &verbZuWollen, nil, nil, true],
-        ['befindet', &verbZuBefinden, nil, nil, true],
-        ['zieht', &verbZuZiehen, nil, nil, true],
-        ['drueckt', &verbZuDruecken, nil, nil, true],
-        ['brennt', &verbZuBrennen, nil, nil, true],
-        ['schliesst', &verbZuSchliessen, nil, nil, true],
-        ['geht', &verbZuGehen, nil, nil, true],
-        ['vergeht', &verbZuVergehen, nil, nil, true],
-        ['fuehrt', &verbZuFuehren, nil, nil, true],
-        ['weiss', &verbZuWissen, nil, nil, true],
-        ['schreit', &verbZuSchreien, nil, nil, true],
-        ['springt', &verbZuSpringen, nil, nil, true],
-        ['schiebt', &verbZuSchieben, nil, nil, true],
-        ['passt', &verbZuPassen, nil, nil, true],
-        ['steht', &verbZuStehen, nil, nil, true],
-        ['liegt', &verbZuLiegen, nil, nil, true],
-        ['sitzt', &verbZuSitzen, nil, nil, true],
-        ['trifft', &verbZuTreffen, nil, nil, true],
-        ['faengt', &verbZuFangen, nil, nil, true],
-        ['enthaelt', &verbZuEnthalten, nil, nil, true],
-        ['entscheidet', &verbZuEntscheiden, nil, nil, true],
-        ['fragt', &verbZuFragen, nil, nil, true],
-        ['verlaesst', &verbZuVerlassen, nil, nil, true],
-        ['kommt', &verbZuKommen, nil, nil, true],
-        ['wird', &verbZuWerden, nil, nil, true],
-        ['laesst', &verbZuLassen, nil, nil, true],
-        ['koennt', &verbZuKannKon, nil, nil, true],
-        ['wuerde-waere', &verbWuerdeWaere, nil, nil, true],
-        ['moechte-soll', &verbMoechteSoll, nil, nil, true],
-        ['weigert', &verbZuWeigern, nil, nil, true],
-        ['bringt', &verbZuBringen, nil, nil, true],
-        ['folgt', &verbZuFolgen, nil, nil, true],
-        ['zeigt', &verbZuZeigen, nil, nil, true],
-        ['macht', &verbZuMachen, nil, nil, true],
-        ['isst', &verbZuEssen, nil, nil, true],
-        ['schaltet', &verbZuSchalten, nil, nil, true],
-        ['passiert', &verbZuPassieren, nil, nil, true],
-        ['zuendet', &verbZuZuenden, nil, nil, true],
-        ['loest', &verbZuLoesen, nil, nil, true],
-        ['braucht', &verbZuBrauchen, nil, nil, true],
-        ['legt', &verbZuLegen, nil, nil, true],
-        ['haengt', &verbZuHaengen, nil, nil, true],
-        ['probiert', &verbZuProbieren, nil, nil, true],
-        ['benoetigt', &verbZuBenoetigen, nil, nil, true],
-        ['oeffnet', &verbZuOeffnen, nil, nil, true],
-        ['wartet', &verbZuWarten, nil, nil, true],
-        ['versucht', &verbZuVersuchen, nil, nil, true],
-        ['stellt', &verbZuStellen, nil, nil, true],
-        ['loescht', &verbZuLoeschen, nil, nil, true],
-        ['verbindet', &verbZuVerbinden, nil, nil, true],
-        ['fuehlt', &verbZuFuehlen, nil, nil, true],
-        ['schmeckt', &verbZuSchmecken, nil, nil, true],
+        ['ist', &verbZuSein, 'verb', nil, nil],
+        ['kann', &verbZuKann, 'verb', nil, nil],
+        ['hat', &verbZuHaben, 'verb', nil, nil],
+        ['scheint', &verbZuScheinen, 'verb', nil, nil],
+        ['erscheint', &verbZuErscheinen, 'verb', nil, nil],
+        ['bezweckt', &verbZuBezwecken, 'verb', nil, nil],
+        ['gefaellt', &verbZuGefallen, 'verb', nil, nil],
+        ['bekommt', &verbZuBekommen, 'verb', nil, nil],
+        ['sieht', &verbZuSehen, 'verb', nil, nil],
+        ['hoert', &verbZuHoeren, 'verb', nil, nil],
+        ['spricht', &verbZuSprechen, 'verb', nil, nil],
+        ['betritt', &verbZuBetreten, 'verb', nil, nil],
+        ['bemerkt', &verbZuBemerken, 'verb', nil, nil],
+        ['sagt', &verbZuSagen, 'verb', nil, nil],
+        ['antwortet', &verbZuAntworten, 'verb', nil, nil],
+        ['muss', &verbZuMuessen, 'verb', nil, nil],
+        ['riecht', &verbZuRiechen, 'verb', nil, nil],
+        ['nimmt', &verbZuNehmen, 'verb', nil, nil],
+        ['gibt', &verbZuGeben, 'verb', nil, nil],
+        ['faellt', &verbZuFallen, 'verb', nil, nil],
+        ['will', &verbZuWollen, 'verb', nil, nil],
+        ['befindet', &verbZuBefinden, 'verb', nil, nil],
+        ['zieht', &verbZuZiehen, 'verb', nil, nil],
+        ['drueckt', &verbZuDruecken, 'verb', nil, nil],
+        ['brennt', &verbZuBrennen, 'verb', nil, nil],
+        ['schliesst', &verbZuSchliessen, 'verb', nil, nil],
+        ['geht', &verbZuGehen, 'verb', nil, nil],
+        ['vergeht', &verbZuVergehen, 'verb', nil, nil],
+        ['fuehrt', &verbZuFuehren, 'verb', nil, nil],
+        ['weiss', &verbZuWissen, 'verb', nil, nil],
+        ['schreit', &verbZuSchreien, 'verb', nil, nil],
+        ['springt', &verbZuSpringen, 'verb', nil, nil],
+        ['schiebt', &verbZuSchieben, 'verb', nil, nil],
+        ['passt', &verbZuPassen, 'verb', nil, nil],
+        ['steht', &verbZuStehen, 'verb', nil, nil],
+        ['liegt', &verbZuLiegen, 'verb', nil, nil],
+        ['sitzt', &verbZuSitzen, 'verb', nil, nil],
+        ['trifft', &verbZuTreffen, 'verb', nil, nil],
+        ['faengt', &verbZuFangen, 'verb', nil, nil],
+        ['enthaelt', &verbZuEnthalten, 'verb', nil, nil],
+        ['entscheidet', &verbZuEntscheiden, 'verb', nil, nil],
+        ['fragt', &verbZuFragen, 'verb', nil, nil],
+        ['verlaesst', &verbZuVerlassen, 'verb', nil, nil],
+        ['kommt', &verbZuKommen, 'verb', nil, nil],
+        ['wird', &verbZuWerden, 'verb', nil, nil],
+        ['laesst', &verbZuLassen, 'verb', nil, nil],
+        ['koennt', &verbZuKannKon, 'verb', nil, nil],
+        ['wuerde-waere', &verbWuerdeWaere, 'verb', nil, nil],
+        ['moechte-soll', &verbMoechteSoll, 'verb', nil, nil],
+        ['weigert', &verbZuWeigern, 'verb', nil, nil],
+        ['bringt', &verbZuBringen, 'verb', nil, nil],
+        ['folgt', &verbZuFolgen, 'verb', nil, nil],
+        ['zeigt', &verbZuZeigen, 'verb', nil, nil],
+        ['macht', &verbZuMachen, 'verb', nil, nil],
+        ['isst', &verbZuEssen, 'verb', nil, nil],
+        ['schaltet', &verbZuSchalten, 'verb', nil, nil],
+        ['passiert', &verbZuPassieren, 'verb', nil, nil],
+        ['zuendet', &verbZuZuenden, 'verb', nil, nil],
+        ['loest', &verbZuLoesen, 'verb', nil, nil],
+        ['braucht', &verbZuBrauchen, 'verb', nil, nil],
+        ['legt', &verbZuLegen, 'verb', nil, nil],
+        ['haengt', &verbZuHaengen, 'verb', nil, nil],
+        ['probiert', &verbZuProbieren, 'verb', nil, nil],
+        ['benoetigt', &verbZuBenoetigen, 'verb', nil, nil],
+        ['oeffnet', &verbZuOeffnen, 'verb', nil, nil],
+        ['wartet', &verbZuWarten, 'verb', nil, nil],
+        ['versucht', &verbZuVersuchen, 'verb', nil, nil],
+        ['stellt', &verbZuStellen, 'verb', nil, nil],
+        ['loescht', &verbZuLoeschen, 'verb', nil, nil],
+        ['verbindet', &verbZuVerbinden, 'verb', nil, nil],
+        ['fuehlt', &verbZuFuehlen, 'verb', nil, nil],
+        ['schmeckt', &verbZuSchmecken, 'verb', nil, nil],
         
         ['ein/eine', &einName, nil, nil, true],
         ['einer/er', &itNom, nil, nil, true],
@@ -6638,7 +6638,7 @@ langMessageBuilder: MessageBuilder
         ['dich/ihn', &itAkk, nil, &itReflexive, nil],
         ['dir/ihm', &itDat, nil, &itReflexiveDat, nil],
         ['sich', &itReflexiveDatWithoutSelf, nil, &itReflexiveDat, nil],
-        ['dich', &itAkk, nil, &itReflexiveDat, nil],
+        ['dich', &itAkk, nil, &itReflexive, nil],
         ['dir', &itDat, nil, &itReflexiveDat, nil],
 
         ['du/er', &derName, 'actor', nil, true],
@@ -6784,7 +6784,11 @@ langMessageBuilder: MessageBuilder
              *   Extract either the first or the second embedded string,
              *   depending on the current narrative tense.
              */
-            match = rexGroup(tSel(1, 2));
+            //match = rexGroup(tSel(1, 2));
+            
+            // ########## TIME SELECTOR LETS US CHOOSE {<WORD TO USE IN PRESENT TENSE>|<OTHER TENSES>} ###########
+            
+            match = rexGroup(timeSelector(1, 2));
             replStr = match[3];
 
             /*
@@ -6865,6 +6869,35 @@ langMessageBuilder: MessageBuilder
      *   the tag, we'll return a property returning a fixed-tense form of
      *   the property for the tag.
      */
+    
+    // #####################################################################
+    // GTADS replaces this routine from output.t because we need a reference
+    // to the current subj for our verb forms
+    // #####################################################################
+    
+    execute()
+    {
+        /* create a lookup table for our parameter names */
+        paramTable_ = new LookupTable();
+
+        /* add each element of our list to the table */
+        foreach (local cur in paramList_)
+            paramTable_[cur[1]] = cur;
+
+        /* create a lookup table for our global names */
+        nameTable_ = new LookupTable();
+
+        /* 
+         *   Add an entry for 'actor', which resolves to gActor if there is
+         *   a gActor when evaluated, or the current player character if
+         *   not.  Note that using a function ensures that we evaluate the
+         *   current gActor or gPlayerChar each time we need the 'actor'
+         *   value.  
+         */
+        nameTable_['actor'] = {: gActor != nil ? gActor : gPlayerChar };
+        nameTable_['verb'] = {: lastSubject_ != nil ? lastSubject_ : gActor != nil ? gActor : gPlayerChar};
+    }
+
     getTargetProp(targetObj, paramObj, info)
     {
         local ret;
@@ -6881,6 +6914,7 @@ langMessageBuilder: MessageBuilder
          *   going in that these two objects are structurally the same,
          *   they want the exact usage they wrote.
          */
+
         if (targetObj == lastSubject_
             && paramObj != lastSubjectName_
             && info[4] != nil)
@@ -6900,7 +6934,7 @@ langMessageBuilder: MessageBuilder
             lastSubject_ = targetObj;
             lastSubjectName_ = paramObj;
         }
-
+        
         /*
          *   If there was an exclamation mark at the end of any word in the
          *   parameter string (which we remember via the fixedTenseProp_
@@ -13646,7 +13680,7 @@ VerbRule(Entfern)
 // ***
 
 VerbRule(LegAb)
-    verb('leg','lege','stell') dobjList prep('ab','hin','weg')
+    verb('leg','lege','stell','stelle') dobjList prep('ab','hin','weg')
     | verb('lass') dobjList prep('fallen','hier')    
     : DropAction
     verbPattern('abzulegen/ablegen', '(was)')
@@ -14099,7 +14133,7 @@ VerbRule(LegIn)
 // ***
 
 VerbRule(LegAuf)
-    verb('leg','lege','platzier','pack','stell','stelle') dobjList 'auf' singleIobj    
+    verb('leg','lege','platzier','pack','stell','stelle') dobjList 'auf' singleIobj
     : PutOnAction
     verbPattern('zu legen/legen', '(was) (auf was)')
     askIobjResponseProd = aufSingleNoun
@@ -16576,7 +16610,7 @@ modify Thing
             unknownHowToLockMsg: <q><b><<playerActionMessages.unknownHowToLockMsg>></b></q>\n
             unknownHowToUnlockMsg: <q><b><<playerActionMessages.unknownHowToUnlockMsg>></b></q>\n
             keyDoesNotFitLockMsg: <q><b><<playerActionMessages.keyDoesNotFitLockMsg>></b></q>\n
-            foundKeyOnKeyringMsg(ring,key): <q><b><<playerActionMessages.circularlyInMsg(gDobj,gIobj)>></b></q>\n
+            foundKeyOnKeyringMsg(ring,key): <q><b><<playerActionMessages.foundKeyOnKeyringMsg(gDobj,gIobj)>></b></q>\n
             foundNoKeyOnKeyringMsg(ring): <q><b><<playerActionMessages.foundNoKeyOnKeyringMsg(gDobj)>></b></q>\n
             cannotEatMsg: <q><b><<playerActionMessages.cannotEatMsg>></b></q>\n
             cannotDrinkMsg: <q><b><<playerActionMessages.cannotDrinkMsg>></b></q>\n
@@ -17012,7 +17046,7 @@ VerbRule(Nachrichten)
     'zeig' 'pcnachricht' 'mit' singleDobj
     | 'pcnachricht' 'mit' singleDobj
     : MessageAction
-    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben (mit dativ was)'
+    verbPhrase = 'auszugeben/Nachrichten ausgeben (mit dativ was)'
 ;
 
 DefineTIAction(MessageWith)
@@ -17022,7 +17056,7 @@ VerbRule(NachrichtenMit)
     'zeig' 'pcnachricht' 'mit' singleDobj 'und' singleIobj
     | 'pcnachricht' 'mit' singleDobj 'und' singleIobj
     : MessageWithAction
-    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben (mit dativ was) (mit noch dativ was)'
+    verbPhrase = 'auszugeben/Nachrichten ausgeben (mit dativ was) (mit noch dativ was)'
 ;
 
 DefineTAction(NPCMessage)
@@ -17032,7 +17066,7 @@ VerbRule(NPCNachrichten)
     'zeig' 'npcnachricht' 'mit' singleDobj
     | 'npcnachricht' 'mit' singleDobj
     : NPCMessageAction
-    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben (mit dativ was)'
+    verbPhrase = 'auszugeben/Nachrichten ausgeben (mit dativ was)'
 ;
 
 DefineTIAction(NPCMessageWith)
@@ -17042,7 +17076,7 @@ VerbRule(NPCNachrichtenMit)
     'zeig' 'npcnachricht' 'mit' singleDobj 'und' singleIobj
     | 'npcnachricht' 'mit' singleDobj 'und' singleIobj
     : NPCMessageWithAction
-    verbPhrase = 'Nachrichten auszugeben/Nachrichten ausgeben (mit dativ was) (mit noch dativ was)'
+    verbPhrase = 'auszugeben/Nachrichten ausgeben (mit dativ was) (mit noch dativ was)'
 ;
 
 DefineIAction(NPCdeferred)

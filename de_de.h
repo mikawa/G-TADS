@@ -137,8 +137,6 @@ Unthing template 'vocabWords' 'name' @location? 'notHereMsg'?;
 /* ThingState objects */
 ThingState template 'listName_' +listingOrder?;
 
-
-
 /* ------------------------------------------------------------------------ */
 /*
  *   Convenience macros for defining command grammar.
@@ -272,6 +270,9 @@ ThingState template 'listName_' +listingOrder?;
 
 #define tSel(presVal, pastVal) \
     (gameMain.usePastTense ? (pastVal) : (presVal))
+
+#define timeSelector(presVal, pastVal) \
+    ((gPlayerChar.pcReferralTense == Present) ? (presVal) : (pastVal))
 
 /*
  *   Temporarily override the current narrative tense and invoke a callback
