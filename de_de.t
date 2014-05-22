@@ -51,7 +51,7 @@
 // -- setup of version info for Library
 
 libraryInfo: object
-    version = '2.0 - 140327'
+    version = '2.0 - 140521'
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -86,7 +86,7 @@ yesOrNo()
     /* switch back to mid-command mode */
     "<.commandmid>";
 
-    /*   -- German:
+    /*   ##### 'J' instead if 'y' #####
      *   If they answered with something starting with 'J', it's
      *   affirmative, otherwise it's negative.  In reading the response,
      *   ignore any leading whitespace.
@@ -144,7 +144,7 @@ languageGlobals: object
      *   BigNumber formatting routines.
      */
     
-    // German: Changed into period ***
+    // ##### Changed into period #####
     digitGroupSeparator = '.'
 
     /*
@@ -155,7 +155,7 @@ languageGlobals: object
      *   formatting, but this information can be passed when calling
      *   BigNumber formatting routines.
      */
-    // German: Changed into comma ***
+    // ##### Changed into comma #####
     decimalPointCharacter = ','
 
     /* the main dictionary's string comparator */
@@ -200,8 +200,11 @@ modify GameMainDef
      *   StringComparator object with the new truncation setting, and call
      *   languageGlobals.setStringComparator() to select the new object.  
      */
-    parserTruncLength = 16 // -- German: modified (standard = 6) because of many 
-    // rather "long" words like 'schlüsselbund' in German
+    // #################################################
+    // ## modified (standard = 6) because of rather   ##
+    // ## "long" words like 'Schlüsselbund' in German ##
+    // #################################################
+    parserTruncLength = 16 
 
     /*
      *   Option: are we currently using a past tense narrative?  By
@@ -400,12 +403,12 @@ modify VocabObject
         addToDictionary(&plural);
         addToDictionary(&adjApostS);
         addToDictionary(&literalAdjective);
-        addToDictionary(&maleSyn);   // -- German: new dictionary property for changing gender
-        addToDictionary(&femaleSyn); // -- German: new dictionary property for changing gender
-        addToDictionary(&neuterSyn); // -- German: new dictionary property for changing gender
-        addToDictionary(&pluralSyn); // -- German: new dictionary property for changing gender
+        addToDictionary(&maleSyn);   // ##### new dictionary property for changing gender #####
+        addToDictionary(&femaleSyn); // ##### new dictionary property for changing gender #####
+        addToDictionary(&neuterSyn); // ##### new dictionary property for changing gender #####
+        addToDictionary(&pluralSyn); // ##### new dictionary property for changing gender #####
         
-        addToDictionary(&irregularNWord); // -- German: new dictionary property for keinen(txt)
+        addToDictionary(&irregularNWord); // ##### new dictionary property for keinen(txt) #####
     }
 
     /* add the words from a dictionary property to the global dictionary */
@@ -572,26 +575,23 @@ modify VocabObject
                         weakTokens += cur;
                     }
 
-                    // -- German: new dictionary property &irregularNWord
-                    // -- we use this for synonyms with a -n accusative ending, as
-                    // -- in "affe[-n]" for keinen(txt) and viele(txt)
-                    // -- "Du siehst hier keinen Affen. "
+                    // ##################################################
+                    // ## new dictionary property &irregularNWord      ##
+                    // ## for synonyms with a -n accusative ending, as ##
+                    // ## in "affe[-n]" for keinen(txt) and viele(txt) ##
+                    // ## "Du siehst hier keinen Affen. "              ##
+                    // ##################################################
                     
                     if (cur.endsWith('[-n]'))
                     {
-                    /*
-                         *   It's a word with irregular accusative ending -n, 
-                         *   like "der Affe", "den Affen"
-                         */
 
                         /* change the part of speech to 'irregularNWord' */
                         wordPart = &irregularNWord;
-                        // -- "IRREGULAR N WORD FOUND"; uncomment for testing
 
                         /* remove the '[-n]' suffix from the string */
                         cur = cur.substr(1, cur.length() - 4);
                         
-                        // -- remove possible changing genders before adding it
+                        // ##### remove possible changing genders before adding it #####
                         
                         if (cur.endsWith('[m]') || cur.endsWith('[f]') || cur.endsWith('[n]') ||cur.endsWith('[p]'))
                             cut = cur.substr(1, cur.length() - 3);
@@ -707,9 +707,11 @@ modify VocabObject
                         cur = cur.substr(1, cur.length() - 3);
                     }
                     
-                    // TESTCODE 1.2
-                    // german -- we put all vocabWords in ...Syn because
-                    // we need this for correct disambiguation
+                    // #############################################
+                    // ## we put all vocabWords in ...Syn because ##
+                    // ## we need this for correct disambiguation ##
+                    // #############################################
+                    
                     if (wordPart == &noun) {
                         if (self.isHim)
                             wordPart = &maleSyn;
@@ -720,7 +722,6 @@ modify VocabObject
                         else
                             wordPart = &neuterSyn;
                     }
-                    // END TESTCODE 1.2
                     
                     /* add the word to our own list for this part of speech */
                     if (self.(wordPart) == nil)
@@ -838,13 +839,13 @@ modify Thing
      *   can be useful when creating collective objects that represent
      *   more than one individual, for example.
      */
-    isHim = nil    // -- German: we use it for masculine nouns
-    isHer = nil    // -- German: we use it for feminine nouns
-    isYours = nil  // -- German: new property for yours, this adds a "dein/mein/sein" before derName etc., 
-                   // -- but does not(!) set the owner property, do this by owner = ...
-                   // -- Anm: In the original library this is obsolete, as they use name = 'your cat'
-    isDefinite = nil    // -- German: we use it for thing that have only the definite article
-                        // -- like "Der junge Werther"
+    isHim = nil    // ##### for masculine nouns #####
+    isHer = nil    // ##### for feminine nouns  #####
+    isYours = nil  // ##### new property for yours, this adds a "dein/mein/sein" before derName, etc. #####
+                   // ##### but does not(!) set the owner property, do this by owner = ...            #####
+                   // ##### In the original library this is obsolete, as they use name = 'your cat'   #####
+    isDefinite = nil    // ##### for thing that have only the definite #####
+                        // ##### article like "Der junge Werther"      #####
     
     /*
      *   Flag indicating that the object can be referred to with a neuter
@@ -854,9 +855,9 @@ modify Thing
      *   can be useful for collective objects, as well as for cases where
      *   gendered usage varies by speaker or situation, such as animals.
      */
-    isIt // -- German: we use it for neuter nouns
+    isIt // ##### for neuter nouns #####
     {
-        /* by default, we're an 'it' if we're not a 'him' or a 'her' or -- German: a pluralword */
+        /* by default, we're an 'it' if we're not a 'him' or a 'her' or a pluralword */
         return !(isHim || isHer || isPlural);
     }
 
@@ -871,9 +872,12 @@ modify Thing
     canMatchIt = (isIt)
     canMatchThem = (isPlural)
     
-    // -- German: special flag which is used to check if the player refers
-    // -- to an synonym word, which has another gender as the object itself
-    // -- e.g: 'die Jacke', but 'der Anorak'
+    // ####################################################################
+    // ## special flag which is used to check if the player refers to    ##
+    // ## an synonym word, which has another gender as the object itself ##
+    // ## e.g: 'die Jacke', but 'der Anorak'                             ##
+    // ####################################################################
+    
     maleSynFlag = nil
     femaleSynFlag = nil
     neuterSynFlag = nil
@@ -1050,12 +1054,12 @@ modify Thing
      *   the same logic here as in theDisambigName.
      */
 
-    // -- German: we use accusative (indefinite arcticle) for disambiguation questions, so ...  
+    // ##### we use accusative (indefinite arcticle) for disambiguation questions, so ... #####
     
     einenDisambigName = (name == disambigName
                        ? einenName : einenNameFrom(disambigName))
     
-    // -- German: or dative for disambiguation questions, so ...
+    // ##### or dative for disambiguation questions, so ... #####
        
     einemDisambigName = (name == disambigName
                        ? einemName : einemNameFrom(disambigName))
@@ -1110,9 +1114,11 @@ modify Thing
      *   item when it appears as a single (non-grouped) item in a list.
      *   By default, we just show the indefinite article description.
      */
-    // -- German: names in lists: the curlistcase object holds the key to
-    // -- the different list cases, so return the appropriate case here
-    // -- artSelector selects indefinite/definite article
+    // ##############################################################
+    // ## names in lists: the curlistcase object holds the key to  ##
+    // ## the different list cases, so return the appropriate case ##
+    // ## here artSelector selects indefinite/definite article     ##
+    // ##############################################################
     
     artSelector = (curlistart.isIndef ? 1 : 2)
     
@@ -1165,20 +1171,24 @@ modify Thing
             + ' ' + pluralStr;
     }
     
-    // -- German: central function, which might by convenient in some cases
-    // -- removes all special endings
+    // ##############################################
+    // ## central function, which is convenient in ##
+    // ## some cases: removes all special endings  ##
+    // ##############################################
     
     cutEndings(txt) {
-        txt = txt.findReplace('[-s]', '', ReplaceAll);   // -- remove noun genitive endings
-        txt = txt.findReplace('[-es]', '', ReplaceAll); // -- remove noun genitive endings
-        txt = txt.findReplace('[-ses]', '', ReplaceAll); // -- remove noun genitive endings
-        txt = txt.findReplace('[-n]', '', ReplaceAll);    // -- remove noun accusative/dative endings
-        txt = txt.findReplace('[-en]', '', ReplaceAll); // -- remove noun genitive endings
+        txt = txt.findReplace('[-s]', '', ReplaceAll);   // ##### remove noun genitive endings
+        txt = txt.findReplace('[-es]', '', ReplaceAll);  // ##### remove noun genitive endings
+        txt = txt.findReplace('[-ses]', '', ReplaceAll); // ##### remove noun genitive endings
+        txt = txt.findReplace('[-n]', '', ReplaceAll);   // ##### remove noun accusative/dative endings
+        txt = txt.findReplace('[-en]', '', ReplaceAll);  // ##### remove noun genitive endings
         return txt;
     }
     
-    // -- German: central function to replace all the special snippets properly,
-    // -- like 'groß[^]' or 'Schal[-s]' etc.
+    // #################################################
+    // ## central function to replace all the special ##
+    // ## endings, like 'groß[^]' or 'Schal[-s]' etc. ##
+    // #################################################
     
     replaceEndings(txt) {
         txt = txt.findReplace('[^]', self.adjEnding, ReplaceAll); // -- replace adjective endings
@@ -1205,6 +1215,11 @@ modify Thing
         }
         return txt;
     }
+    
+    // #################################################
+    // ## central function to replace all the special ##
+    // ## endings, like 'groß[^]' or 'Schal[-s]' etc. ##
+    // #################################################
 
     replacePluralEndings(txt) {
         txt = txt.findReplace('[^]', self.adjPluralEnding, ReplaceAll); // -- replace adjective endings
@@ -1236,7 +1251,7 @@ modify Thing
     }
     
     
-    // -- German: countEinNameFrom(str) case = nominative, as in 'vier Bonbons'
+    // ##### countEinNameFrom(str) case = nominative, as in 'vier Bonbons' #####
     countEinNameFrom(str) {
         withCaseNominative;
         curcase.r_flag = true;
@@ -1248,7 +1263,7 @@ modify Thing
         return str; 
     }
     
-     // -- German: countEinesNameFrom(str) case = genitive
+     // ##### countEinesNameFrom(str) case = genitive #####
     countEinesNameFrom(str) 
     {
         withCaseGenitive;
@@ -1260,7 +1275,7 @@ modify Thing
         return str; 
     }
     
-    // -- German: countEinemNameFrom(str) case = dative
+    // ##### countEinemNameFrom(str) case = dative #####
     countEinemNameFrom(str) 
     {
         withCaseDative;
@@ -1272,7 +1287,7 @@ modify Thing
         return str; 
     }
     
-    // -- German: countEinenNameFrom(str) case = accusative
+    // ##### countEinenNameFrom(str) case = accusative #####
     countEinenNameFrom(str) 
     {
         withCaseAccusative;
@@ -1284,25 +1299,18 @@ modify Thing
         }
         return str; 
     }    
-        
-    // -- In some cases, we have a singular noun which is grouped via equivalent = true, so we have a plural
-    // -- phrase like 'Du siehst hier sieben rote Gummibärchen.'
+    
+    // ######################################################
+    // ## In some cases, a singular noun which is grouped  ##
+    // ## via equivalent = true, so we get a plural phrase ##
+    // ## like 'Du siehst hier sieben rote Gummibärchen.'  ##
+    // ######################################################
     
     countEinPluralNameFrom(str) {
         withCaseNominative;
         curcase.r_flag = true;
         str = replacePluralEndings(str);
-        /*
-         *   if (isYours) { if (gPlayerChar.referralPerson == FirstPerson) str =
-         *   (isHer ? 'meine ' : isHim || isIt ? 'mein ' : 'meine ') + str; if
-         *   (gPlayerChar.referralPerson == SecondPerson) str = (isHer ? 'deine
-         *   ' : isHim || isIt ? 'dein ' : 'deine ') + str; if
-         *   (gPlayerChar.referralPerson == ThirdPerson && gPlayerChar.isHim)
-         *   str = (isHer ? 'seine ' : isHim || isIt ? 'sein ' : 'seine ') +
-         *   str; if (gPlayerChar.referralPerson == ThirdPerson &&
-         *   !gPlayerChar.isHim) str = (isHer ? 'ihre ' : isHim || isIt ? 'ihr '
-         *   : 'ihre ') + str; }
-         */
+        
         return str; 
     }
 
@@ -1310,17 +1318,7 @@ modify Thing
     {
         withCaseGenitive;
         str = replacePluralEndings(str);
-        /*
-         *   if (isYours) { if (gPlayerChar.referralPerson == FirstPerson) str =
-         *   (isHer ? 'meiner ' : isHim || isIt ? 'meines ' : 'meiner ') + str;
-         *   if (gPlayerChar.referralPerson == SecondPerson) str = (isHer ?
-         *   'deiner ' : isHim || isIt ? 'deines ' : 'deiner ') + str; if
-         *   (gPlayerChar.referralPerson == ThirdPerson && gPlayerChar.isHim)
-         *   str = (isHer ? 'seiner ' : isHim || isIt ? 'seines ' : 'seiner ') +
-         *   str; if (gPlayerChar.referralPerson == ThirdPerson &&
-         *   !gPlayerChar.isHim) str = (isHer ? 'ihrer ' : isHim || isIt ?
-         *   'ihres ' : 'ihrer ') + str; }
-         */
+
         return str; 
     }
 
@@ -1328,17 +1326,7 @@ modify Thing
     {
         withCaseDative;
         str = replacePluralEndings(str);
-        /*
-         *   if (isYours) { if (gPlayerChar.referralPerson == FirstPerson) str =
-         *   (isHer ? 'meiner ' : isHim || isIt ? 'meinem ' : 'meinen ') + str;
-         *   if (gPlayerChar.referralPerson == SecondPerson) str = (isHer ?
-         *   'deiner ' : isHim || isIt ? 'deinem ' : 'deinen ') + str; if
-         *   (gPlayerChar.referralPerson == ThirdPerson && gPlayerChar.isHim)
-         *   str = (isHer ? 'seiner ' : isHim || isIt ? 'seinem ' : 'seinen ') +
-         *   str; if (gPlayerChar.referralPerson == ThirdPerson &&
-         *   !gPlayerChar.isHim) str = (isHer ? 'ihrer ' : isHim || isIt ?
-         *   'ihrem ' : 'ihren ') + str; }
-         */
+
         return str; 
     }
     
@@ -1347,17 +1335,7 @@ modify Thing
         withCaseAccusative;
         curcase.r_flag = true;
         str = replacePluralEndings(str);
-        /*
-         *   if (isYours) { if (gPlayerChar.referralPerson == FirstPerson) str =
-         *   (isHer ? 'meiner ' : isHim || isIt ? 'meinem ' : 'meinen ') + str;
-         *   if (gPlayerChar.referralPerson == SecondPerson) str = (isHer ?
-         *   'deiner ' : isHim || isIt ? 'deinem ' : 'deinen ') + str; if
-         *   (gPlayerChar.referralPerson == ThirdPerson && gPlayerChar.isHim)
-         *   str = (isHer ? 'seiner ' : isHim || isIt ? 'seinem ' : 'seinen ') +
-         *   str; if (gPlayerChar.referralPerson == ThirdPerson &&
-         *   !gPlayerChar.isHim) str = (isHer ? 'ihrer ' : isHim || isIt ?
-         *   'ihrem ' : 'ihren ') + str; }
-         */
+
         return str; 
     }    
     
@@ -1383,9 +1361,10 @@ modify Thing
     itAkk { return ['es', 'ihn', 'sie', 'sie'][pronounSelector]; }
     itObj { return ['es', 'ihm', 'ihr', 'ihnen'][pronounSelector]; }
     
-    //itPossAdj { return ['seine', 'ihre', 'seine', 'ihre'][pronounSelector]; }
-    //itPossNoun { return ['seine', 'ihre', 'seine', 'ihre'][pronounSelector]; }
-    //esPossAdj { return ['seiner', 'ihrer', 'seiner', 'ihre'][pronounSelector]; }
+    // ######################################
+    // ## sometimes it is convenient just  ##
+    // ## to have the direct article alone ##
+    // ######################################
     
     dArt { return curcase.isNom ? ['das', 'der', 'die', 'die'][pronounSelector]
             : curcase.isGen ? ['des', 'des', 'der', 'der'][pronounSelector]
@@ -1404,13 +1383,19 @@ modify Thing
                [pronounSelector] + ' selbst';
     }
 
+    itReflexiveWithoutSelf
+    {
+        return ['sich', 'sich', 'sich', 'sich']
+               [pronounSelector];
+    }
+    
     itReflexiveDatWithoutSelf
     {
         return ['sich', 'sich', 'sich', 'sich']
-               [pronounSelector] + ' selbst';
+               [pronounSelector];
     }
     
-    // German -- get our correct possessive pronoun (for distinguisher's use)
+    // ##### get our correct possessive pronoun (for distinguisher's use) #####
     
     yourNomPossAdj
     {
@@ -1706,7 +1691,7 @@ modify Thing
     }
     
     /* demonstrative pronouns ('that' or 'those') */
-    // -- German: we have derObj instead
+    // ##### we have derObj instead #####
     
     derObj { return ['das', 'der', 'die', 'die'][pronounSelector]; }
 
@@ -1717,7 +1702,7 @@ modify Thing
     itIs { return itNom + ' ' + verbZuSein; }
 
     /* get a pronoun plus a 'to be' contraction */
-    // -- German: we have esIstContraction instead
+    //##### we have esIstContraction instead #####
     
     esIstContraction
     {
@@ -1768,6 +1753,12 @@ modify Thing
      *   depending on the number of the object named "thing" and on the
      *   current narrative tense.
      */
+    
+    // ###################################################
+    // ## from version 2.0 on this is obsolete, because ##
+    // ## we use pcReferralTense in the player object   ##
+    // ###################################################
+    
     conjugateRegularVerb(verb)
     {
         /*
@@ -1775,48 +1766,19 @@ modify Thing
          */
         if (gameMain.usePastTense)
         {
-            // -- German: there are only a few regular verbs in German, for
-            // -- completeness we use here:
-            // -- streck-ten | streck-te
             if (isPlural)
                 return verb + 'ten';
-            // -- else only -te
             else return verb + 'te';
         }
         else
         {
-            // -- German: there are only a few regular verbs in German, for
-            // -- completeness we use here:
-            // -- streck-en | streck-t
             if (isPlural)
             {
                 return verb + 'en';
             }
-            // -- else only -t
             else return verb + 't';            
         }
     }
-
-    /* verb-ending patterns for figuring out which '-s' ending to add */
-    // iesEndingPat = static new RexPattern('.*[^aeiou]y$')
-    // esEndingPat = static new RexPattern('.*(o|ch|sh)$')
-
-    // -- German: endings above are obsolete in German
-    
-    // -- Noun endings genitive with '-S' obsolete
-    
-    /*
-     *   Get the name with a definite article ("the box").  By default, we
-     *   use our standard definite article algorithm to apply an article
-     *   to self.name.
-     *
-     *   The name returned must be in the nominative case (which makes no
-     *   difference unless the name is a pronoun, since in English
-     *   ordinary nouns don't vary according to how they're used in a
-     *   sentence).
-     */
-    //    theName = (theNameFrom(name))
-    // -- German: theName obsolete in German
     
     derName = (derNameFrom(name))
     desName = (desNameFrom(name))
@@ -1847,16 +1809,6 @@ modify Thing
     pureAkkName = (pureAkkNameFrom(name))
     pureDatName = (pureDatNameFrom(name))
     
-    /*
-     *   theName in objective case.  In most cases, this is identical to
-     *   the normal theName, so we use that by default.  This must be
-     *   overridden if theName is a pronoun (which is usually only the
-     *   case for player character actors; see our language-specific Actor
-     *   modifications for information on that case).
-     */
-    //    theNameObj { return theName; }
-    // -- German: theNameObj obsolete in German
-    
     derNameObj { return derName; }
     desNameObj { return desName; }
     demNameObj { return demName; }
@@ -1872,17 +1824,14 @@ modify Thing
     einemNameObj { return einemName; }
     einenNameObj { return einenName; }
     
-    pureNameObj { return pureName; }
-    // -- German: pureName is our name without any endings
+    pureNameObj { return pureName; } // #### pureName is our name without any endings ####
     
     /*
      *   Generate the definite-article name from the given name string.
      *   If my name is already qualified, don't add an article; otherwise,
      *   add a 'the' as the prefixed definite article.
      */
-    // theNameFrom(str) { return (isQualifiedName ? '' : 'the ') + str; }
-    // -- German: theNameFrom(str) obsolete in German
-    // -- German: derNameFrom(str) case = nominative, article is direct
+
     derNameFrom(str) 
     {
         withCaseNominative;
@@ -1901,7 +1850,7 @@ modify Thing
                 isHer ? 'die ' : 'das ') + str; 
     }
     
-    // -- German: desNameFrom(str) case = genitive, article is direct
+    // ##### desNameFrom(str) case = genitive, article is direct #####
     desNameFrom(str) 
     {
         withCaseGenitive;
@@ -1919,7 +1868,7 @@ modify Thing
         isHim ? 'des ' : isHer ? 'der ' : 'des ' ) + str; 
     }
     
-    // -- German: demNameFrom(str) case = dative, article is direct
+    // ##### demNameFrom(str) case = dative, article is direct #####
     demNameFrom(str) 
     {
         withCaseDative;
@@ -1937,7 +1886,7 @@ modify Thing
         isHim ? 'dem ' : isHer ? 'der ' : 'dem ' ) + str; 
     }
     
-    // -- German: denNameFrom(str) case = accusative, article is direct
+    // ##### denNameFrom(str) case = accusative, article is direct #####
     denNameFrom(str) 
     {
         withCaseAccusative;
@@ -1956,10 +1905,12 @@ modify Thing
         isHim ? 'den ' : isHer ? 'die ' : 'das ' ) + str; 
     }
     
-    // -- we have a irregular adjective ending when placed after a possessive pronoun
-    // -- e.g.: "der schöne Hut", but "mein schöneR Hut" ... so we add
+    // ###################################################################################
+    // ## we have a irregular adjective ending when placed after a possessive pronoun   ##
+    // ## "der schöne Hut", but "mein schöneR Hut" ... this is stored in curcase.r_flag ##
+    // ###################################################################################
     
-    // -- German: derPossNameFrom(str) case = accusative
+    // ##### derPossNameFrom(str) case = accusative #####
     derPossNameFrom(str) 
     {
         withCaseNominative;
@@ -1974,7 +1925,7 @@ modify Thing
         return str; 
     }
     
-    // -- German: desPossNameFrom(str) case = genitive
+    // ##### desPossNameFrom(str) case = genitive #####
     desPossNameFrom(str) 
     {
         withCaseGenitive;
@@ -1988,7 +1939,7 @@ modify Thing
         return str; 
     }
     
-    // -- German: demPossNameFrom(str) case = dative
+    // ##### demPossNameFrom(str) case = dative #####
     demPossNameFrom(str) 
     {
         withCaseDative;
@@ -2002,8 +1953,8 @@ modify Thing
         return str; 
     }
     
-    // -- German: denPossNameFrom(str) case = accusative
-    denPossNameFrom(str) 
+    // ##### denPossNameFrom(str) case = accusative #####
+    denPossNameFrom(str)
     {
         withCaseAccusative;
         curcase.r_flag = true;
@@ -2017,7 +1968,7 @@ modify Thing
         return str; 
     }
     
-    // -- German: derPossPluralNameFrom(str) case = accusative
+    // ##### derPossPluralNameFrom(str) case = accusative #####
     derPossPluralNameFrom(str) 
     {
         withCaseNominative;
@@ -2027,7 +1978,7 @@ modify Thing
         return str; 
     }
     
-    // -- German: desPossPluralNameFrom(str) case = genitive
+    // ##### desPossPluralNameFrom(str) case = genitive #####
     desPossPluralNameFrom(str) 
     {
         withCaseGenitive;
@@ -2036,7 +1987,7 @@ modify Thing
         return str; 
     }
     
-    // -- German: demPossPluralNameFrom(str) case = dative
+    // ##### demPossPluralNameFrom(str) case = dative #####
     demPossPluralNameFrom(str) 
     {
         withCaseDative;
@@ -2045,17 +1996,16 @@ modify Thing
         return str; 
     }
     
-    // -- German: denPossPluralNameFrom(str) case = accusative
+    // ##### denPossPluralNameFrom(str) case = accusative #####
     denPossPluralNameFrom(str) 
     {
         withCaseAccusative;
-        //curcase.r_flag = true;
         str = replacePluralEndings(str);
         
         return str; 
     }
     
-    // -- German: einNameFrom(str) case = nominative, article is indirect
+    // ##### einNameFrom(str) case = nominative, article is indirect #####
     einNameFrom(str) 
     {
         withCaseNominative;
@@ -2074,7 +2024,7 @@ modify Thing
         isHim ? 'ein ' : isHer ? 'eine ' : 'ein ' ) + str; 
     }
     
-    // -- German: einesNameFrom(str) case = genitive, article is indirect
+    // ##### einesNameFrom(str) case = genitive, article is indirect #####
     einesNameFrom(str) 
     {
         withCaseGenitive;
@@ -2092,7 +2042,7 @@ modify Thing
         isHim ? 'eines ' : isHer ? 'einer ' : 'eines ' ) + str; 
     }
     
-    // -- German: einemNameFrom(str) case = dative, article is indirect
+    // ##### einemNameFrom(str) case = dative, article is indirect #####
     einemNameFrom(str) 
     {
         withCaseDative;
@@ -2110,7 +2060,7 @@ modify Thing
         isHim ? 'einem ' : isHer ? 'einer ' : 'einem ' ) + str; 
     }
     
-    // -- German: einenNameFrom(str) case = accusative, article is indirect
+    // ##### einenNameFrom(str) case = accusative, article is indirect #####
     einenNameFrom(str) 
     {
         withCaseAccusative;
@@ -2129,7 +2079,7 @@ modify Thing
         isHim ? 'einen ' : isHer ? 'eine ' : 'ein ' ) + str; 
     }
     
-    // -- German: pureNameFrom(str) case = nominative, article is NOARTICLE
+    // ##### pureNameFrom(str) case = nominative, article is NOARTICLE #####
     pureNameFrom(str) 
     {
         withCaseNominative;
@@ -2208,11 +2158,11 @@ modify Thing
      *   must override this method for the individual object.
      */
     
-    theNamePossAdj // -- German: we use this only in case isProperName == true
-                   // -- for "Janes Mantel" and so on.
+    theNamePossAdj // ##### we use this only when isProperName is true #####
+                   // ##### for "Janes Mantel" and so on.              #####
     {
         /* add apostrophe-S, unless it's a plural ending with 's' */
-        // -- German: if the name ends with "s", we have "Klaus'" else we have "Susannes"
+        // ##### if the name ends with "s", we have "Klaus'" else we have "Susannes" #####
         return desName
             + (derName.endsWith('s') ? '&rsquo' : 's');
     }
@@ -2230,10 +2180,8 @@ modify Thing
      *   nominal owner: "your backpack," "Bob's flashlight."  If we have
      *   no nominal owner, this is simply my theName.
      */
-
-    //    theNameWithOwner()
-    // -- German: derNameWithOwner
     
+    // ##### derNameWithOwner #####
     derNameWithOwner()
     {
         local owner;
@@ -2257,8 +2205,7 @@ modify Thing
             return derName;
     }
 
-    // -- German: desNameWithOwner
-    
+    // ##### desNameWithOwner #####
     desNameWithOwner()
     {
         local owner;
@@ -2282,8 +2229,7 @@ modify Thing
             return desName;
     }
        
-    // -- German: demNameWithOwner
-    
+    // ##### demNameWithOwner #####
     demNameWithOwner()
     {
         local owner;
@@ -2308,8 +2254,7 @@ modify Thing
             return demName;
     }
 
-    // -- German: we have denNameWithOwner, accusative case
-    
+    // ##### we have denNameWithOwner, accusative case #####
     denNameWithOwner()
     {
         local owner;
@@ -2350,26 +2295,19 @@ modify Thing
 
     /* preposition to use when an actor is being removed from this location */
     actorOutOfPrep = 'aus'
-
-    /* preposition to use when an actor is being moved into this location */
     
-    // German: we never us actorIntoPrep
-    // actorIntoPrep
+    // ##### we never us actorIntoPrep #####
 
     /*
      *   describe an actor as being in/being removed from/being moved into
      *   this location
      */
     
-    //
-    // -- German: set the appopriate cases
-    //
-    // actorInName = (actorInPrep + ' ' + demNameObj)
     actorInAName = (actorInPrep + ' ' + einemNameObj)
     actorOutOfName = (actorOutOfPrep + ' ' + demNameObj)
     actorIntoName = (actorInPrep + ' ' + denNameObj)
 
-    // -- german: we use 'im' instead of 'in' 'dem' and so on ...
+    // ##### we use 'im' instead of 'in' 'dem' #####
     actorInName = (
         ((self.isHim || self.isIt) && actorInPrep == 'in' && !self.isProperName) ? 'im' + ' ' + pureDatName 
         : ((self.isHim || self.isIt) && actorInPrep == 'an' && !self.isProperName) ? 'am' + ' ' + pureDatName 
@@ -2467,10 +2405,8 @@ modify Thing
      *   won't worry about cases like "Bob's Bill".  This leaves us free
      *   to use appropriate articles in all cases.
      */
-    
-    //    aNameOwnerLoc(ownerPriority)    
-    // -- German: einenNameOwnerLoc - accusative
-    
+     
+    // ##### einenNameOwnerLoc - accusative #####
     einenNameOwnerLoc(ownerPriority)
     {
         local owner;
@@ -2501,7 +2437,6 @@ modify Thing
                 retDat = demName + ' ' + owner.desName;
             }
             
-            //ret = owner.theNamePossAdj + ' ' + denPossPluralName;
             if (!isMassNoun && !isPlural) {
                 if (isHer) {
                     ret = 'eine von ' + retDat;
@@ -2523,8 +2458,7 @@ modify Thing
         }
     }
 
-    // -- German: einemNameOwnerLoc - dative (only for completeness sake)
-    
+    // ##### einemNameOwnerLoc - dative (only for completeness sake) #####
     einemNameOwnerLoc(ownerPriority)
     {     
         local owner;
@@ -2550,7 +2484,6 @@ modify Thing
                 ret = demName + ' ' + owner.desName;
             }
             
-            //ret = owner.theNamePossAdj + ' ' + denPossPluralName;
             if (!isMassNoun && !isPlural) {
                 if (isHer) {
                     ret = 'einer von ' + ret;
@@ -2569,9 +2502,7 @@ modify Thing
         }
     }
     
-    //    theNameOwnerLoc(ownerPriority)
-    // -- German: denNameOwnerLoc - accusative
-    
+    // ##### denNameOwnerLoc - accusative #####
     denNameOwnerLoc(ownerPriority)
     {
         local owner;
@@ -2598,8 +2529,7 @@ modify Thing
         }
     }
 
-    // -- German: demNameOwnerLoc - dative
-    
+    // ##### demNameOwnerLoc - dative #####
     demNameOwnerLoc(ownerPriority)
     {
         local owner;
@@ -2678,58 +2608,6 @@ modify Thing
             gPlayerChar.setHer(self);
     }
 
-    /*
-     *   My name with an indefinite article.  By default, we figure out
-     *   which article to use (a, an, some) automatically.
-     *
-     *   In rare cases, the automatic determination might get it wrong,
-     *   since some English spellings defy all of the standard
-     *   orthographic rules and must simply be handled as special cases;
-     *   for example, the algorithmic determination doesn't know about
-     *   silent-h words like "hour".  When the automatic determination
-     *   gets it wrong, simply override this routine to specify the
-     *   correct article explicitly.
-     */
-//    aName = (aNameFrom(name))
-    
-    /* the indefinite-article name in the objective case */
-//    aNameObj { return aName; }
-
-    /*
-     *   Apply an indefinite article ("a box", "an orange", "some lint")
-     *   to the given name.  We'll try to figure out which indefinite
-     *   article to use based on what kind of noun phrase we use for our
-     *   name (singular, plural, or a "mass noun" like "lint"), and our
-     *   spelling.
-     *
-     *   By default, we'll use the article "a" if the name starts with a
-     *   consonant, or "an" if it starts with a vowel.
-     *
-     *   If the name starts with a "y", we'll look at the second letter;
-     *   if it's a consonant, we'll use "an", otherwise "a" (hence "an
-     *   yttrium block" but "a yellow brick").
-     *
-     *   If the object is marked as having plural usage, we will use
-     *   "some" as the article ("some pants" or "some shrubs").
-     *
-     *   Some objects will want to override the default behavior, because
-     *   the lexical rules about when to use "a" and "an" are not without
-     *   exception.  For example, silent-"h" words ("honor") are written
-     *   with "an", and "h" words with a pronounced but weakly stressed
-     *   initial "h" are sometimes used with "an" ("an historian").  Also,
-     *   some 'y' words might not follow the generic 'y' rule.
-     *
-     *   'U' words are especially likely not to follow any lexical rule -
-     *   any 'u' word that sounds like it starts with 'y' should use 'a'
-     *   rather than 'an', but there's no good way to figure that out just
-     *   looking at the spelling (consider "a universal symbol" and "an
-     *   unimportant word", or "a unanimous decision" and "an unassuming
-     *   man").  We simply always use 'an' for a word starting with 'u',
-     *   but this will have to be overridden when the 'u' sounds like 'y'.
-     */
-
-    //    aNameFrom(str) -- we never use this
-
     /* pre-compile some regular expressions for aName */
     patTagOrQuoteChar = static new RexPattern('[<"\']')
     patLeadingTagOrQuote = static new RexPattern(
@@ -2752,8 +2630,7 @@ modify Thing
      */
     pluralName = (pluralNameFrom(name))
 
-    // -- German: denPluralName + denPluralNameFrom(str)
-    
+    // ##### denPluralName + denPluralNameFrom(str) #####
     denPluralName = (denPluralNameFrom(name))
 
     denPluralNameFrom(str) {
@@ -2857,13 +2734,11 @@ modify Thing
          *   -> "surveys", "essay" -> "essays", "day" -> "days".)
          */
         
-        // -- German: In most cases, the author has to define the pluralName, because
-        // -- we have many irregular forms, like 'das Haus', 'die Häuser'
-        // -- but we provide a default mechanism, which may be right sometimes ...
-        
-        // -- German: If we have a masculin or neutrum there are two cases
-        // -- If it ends with -el, -en, -er, we do normally nothing
-        // -- Else we add 'e'
+        // ####################################################################
+        // ## In most cases, the author has to define the pluralName, we     ##
+        // ## have many irregular forms, like 'das Haus', 'die Häuser', but  ##
+        // ## we provide a default mechanism, which may be right (sometimes) ##
+        // ####################################################################
         
         if (!isHer && (rexMatch(patEandLNR, lastPair) == true))
             return str;
@@ -2871,9 +2746,11 @@ modify Thing
         if (!isHer && (rexMatch(patEandLNR, lastPair) != true))
             return str + 'e';
         
-        // -- German: If we have a feminin, there a two cases
-        // -- If it ends with a vowel, add 'n' as in 'die Blume', 'die Blumen'
-        // -- Else add 'en' as in 'die Antwort', 'die Antworten'
+        // ################################################################
+        // ## German: If we have a feminin, there a two cases; if it     ##
+        // ## ends with a vowel, add 'n' as in 'die Blume', 'die Blumen' ##
+        // ## Else add 'en' as in 'die Antwort', 'die Antworten'         ##
+        // ################################################################
         
         if (isHer && (rexMatch(patLastVowel, lastChar) == true))
             return str + 'n';
@@ -2895,7 +2772,6 @@ modify Thing
         '<nocase>(.+?)(<space>+of<space>+.+)')
     
     /* get my name plus a being verb ("the box is") */
-    // -- nameIs { return theName + ' ' + verbToBe; }
 
     derNameIs { return derName + ' ' + verbZuSein; }
     desNameIs { return desName + ' ' + verbZuSein; }
@@ -2903,7 +2779,6 @@ modify Thing
     denNameIs { return denName + ' ' + verbZuSein; }
     
     /* get my name plus a negative being verb ("the box isn't") */
-    // -- nameIsnt { return nameIs + 'n&rsquo;t'; }
 
     derNameIsnt { return derNameIs + ' nicht'; }
     desNameIsnt { return desNameIs + ' nicht'; }
@@ -2919,16 +2794,16 @@ modify Thing
      *   such as "deter".
      */
 
-    // -- German: obsolete, use
-    // -- output depending on the case
     derNameVerb(verb) { return derName + ' ' + conjugateRegularVerb(verb); }
     desNameVerb(verb) { return desName + ' ' + conjugateRegularVerb(verb); }
     demNameVerb(verb) { return demName + ' ' + conjugateRegularVerb(verb); }
     denNameVerb(verb) { return denName + ' ' + conjugateRegularVerb(verb); }
     
-    // -- German: German verbs for things, used in msd_neu.t for the standard responses
-    // -- which means we have olny third person, either singular or plural --
-
+    // #######################################################################
+    // ## German: German verbs used in msd_neu.t for the standard responses ##
+    // ## which means we have all three persons, either singular or plural  ##
+    // #######################################################################
+    
     verbZuSein
     {
         conjugateVerb(['','','gewesen','gewesen','sein','gewesen sein'][tenseSelector],        
@@ -3578,8 +3453,12 @@ modify Thing
                       ['wird', 'werden'])[pluralSelector]);
     }
     
-    // dummyVerb returns our participle form or our (in some rare cases needed)
-    // reversed form in side sentences like "wie du {gekonnt hast}"
+    // ################################# NEW IN 2.0 #################################
+    
+    // ##############################################################################
+    // ## dummyVerb returns our participle form or our (in some rare cases needed) ##
+    // ## reversed form in side sentences like "wie du {gekonnt hast}"             ##
+    // ##############################################################################
     
     dummyVerb
     {
@@ -3595,8 +3474,10 @@ modify Thing
         }
     }
     
-    // we store a long participle for lists with nested parts like:
-    // "Ich habe hier einen Bottich (darin ist Wasser gewesen) gesehen. "
+    // ########################################################################
+    // ## we store a long participle for lists with nested parts like:       ##
+    // ## "Ich habe hier einen Bottich (darin ist Wasser gewesen) gesehen. " ##
+    // ########################################################################
     
     setPartLong {
         verbHelper.longParticiple = verbHelper.participle;
@@ -3611,9 +3492,11 @@ modify Thing
             return ' ' + verbHelper.longParticiple;
     }
     
-    // dummyPart sets our participle form to reverse output. This is needed in
-    // rare cases (mostly side sentences) when the helping verb and the participle
-    // change their position.
+    // ##############################################################################
+    // ## dummyPart sets our participle form to reverse output. This is needed in  ##
+    // ## rare cases (mostly side sentences) when the helping verb and the         ##
+    // ## participle change their position.                                        ##
+    // ##############################################################################
     
     dummyPart
     {
@@ -3621,8 +3504,11 @@ modify Thing
         return '';
     }
     
-    // dummyPartWithoutBlank is needed when out pariciple form is tied against an
-    // adjective. This is useful in sentences like "Du {hast} den Fernseher an{-geschaltet}"
+    // ##############################################################################
+    // ## dummyPartWithoutBlank is needed when out pariciple form is tied against  ##
+    // ## an adjective. This is useful in sentences like                           ## 
+    // ## "Du {hast} den Fernseher an{-geschaltet}"                                ##
+    // ##############################################################################
     
     dummyPartWithoutBlank
     {
@@ -3688,13 +3574,6 @@ modify Thing
         return propWithPresent(langMessageBuilder.fixedTenseProp_);
     }
 
-    /*
-     *   For the most part, "strike" has the same meaning as "hit", so
-     *   define this as a synonym for "attack" most objects.  There are a
-     *   few English idioms where "strike" means something different, as
-     *   in "strike match" or "strike tent."
-     */
-    //    dobjFor(Strike) asDobjFor(Attack)
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -3728,10 +3607,8 @@ class NameAsOther: object
 
     /* map the derived name properties as well, in case any are overridden */
     disambigName = (targetObj.disambigName)
-    //    theDisambigName = (targetObj.theDisambigName)
     denDisambigName = (targetObj.denDisambigName)
     demDisambigName = (targetObj.demDisambigName)
-    //    aDisambigName = (targetObj.aDisambigName)
     einenDisambigName = (targetObj.einenDisambigName)
     einemDisambigName = (targetObj.einemDisambigName)
     countDisambigName(cnt) { return targetObj.countDisambigName(cnt); }
@@ -3739,8 +3616,7 @@ class NameAsOther: object
     listName = (targetObj.listName)
     countName(cnt) { return targetObj.countName(cnt); }
     
-    // -- German: we provide all new name functions here, too
-
+    // ##### we provide all new name functions here, too #####
     einName = (targetObj.einName)
     einesName = (targetObj.einesName)
     einemName = (targetObj.einemName)
@@ -3786,30 +3662,25 @@ class NameAsOther: object
     itReflexive = (targetObj.itReflexive)
     itReflexiveAkk = (targetObj.itReflexiveAkk)
     itReflexiveDat = (targetObj.itReflexiveDat)
+    itReflexiveWithoutSelf = (targetObj.itReflexiveWithoutSelf)
     itReflexiveDatWithoutSelf = (targetObj.itReflexiveDatWithoutSelf)
     
-    //    thatNom = (targetObj.thatNom)
-    //    thatObj = (targetObj.thatObj)
-    //    thatIsContraction = (targetObj.thatIsContraction)
     itIs = (targetObj.itIs)
     itIsContraction = (targetObj.itIsContraction)
     itVerb(verb) { return targetObj.itVerb(verb); }
     conjugateRegularVerb(verb)
         { return targetObj.conjugateRegularVerb(verb); }
-    //  theName = (targetObj.theName)
-    //  theNameObj = (targetObj.theNameObj)
+
     theNamePossAdj = (targetObj.theNamePossAdj)
     
     theNamePossNoun = (targetObj.theNamePossNoun)
     theNameWithOwner = (targetObj.theNameWithOwner)
-    //    aNameOwnerLoc(ownerPri)
-    //        { return targetObj.aNameOwnerLoc(ownerPri); }
+
     einenNameOwnerLoc(ownerPri)
         { return targetObj.einenNameOwnerLoc(ownerPri); }
     einemNameOwnerLoc(ownerPri)
         { return targetObj.einemNameOwnerLoc(ownerPri); }
-    //  theNameOwnerLoc(ownerPri)
-    //    { return targetObj.theNameOwnerLoc(ownerPri); }
+
     denNameOwnerLoc(ownerPri)
         { return targetObj.denNameOwnerLoc(ownerPri); }
     demNameOwnerLoc(ownerPri)
@@ -3916,7 +3787,7 @@ class NameAsOther: object
     verbZuFuehlen = (targetObj.verbZuFuehlen)
     verbZuSchmecken = (targetObj.verbZuSchmecken)
     
-    // -- German adjective endings
+    // ##### adjective endings #####
     adjEnding = (targetObj.adjEnding)
     
     dummyVerb = (targetObj.dummyVerb)
@@ -3957,8 +3828,7 @@ class ChildNameAsOther: object
     objInPrep = (targetObj.objInPrep)
     actorInPrep = (targetObj.actorInPrep)
     actorOutOfPrep = (targetObj.actorOutOfPrep)
-    // -- German: we never use actorIntoPrep
-    // -- actorIntoPrep = (targetObj.actorIntoPrep)
+
     childInName(childName) { return targetObj.childInName(childName); }
     childInNameWithOwner(childName)
         { return targetObj.childInNameWithOwner(childName); }
@@ -3982,20 +3852,20 @@ modify Surface
      */
     objInPrep = 'auf'
     actorInPrep = 'auf'
-    actorOutOfPrep = 'aus'     // -- German: "kommt aus dem Bett heraus
+    actorOutOfPrep = 'aus' 
     dobjFor(Climb) asDobjFor(StandOn)
 ;
 
 modify Underside
     objInPrep = 'unter'
     actorInPrep = 'unter'
-    actorOutOfPrep = 'unter'   // -- German: "kommt unter dem Bett hervor
+    actorOutOfPrep = 'unter'  
 ;
 
 modify RearContainer
     objInPrep = 'hinter'
     actorInPrep = 'hinter'
-    actorOutOfPrep = 'hinter'  // -- German: "kommt hinter dem Schrank hervor
+    actorOutOfPrep = 'hinter'
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -4078,7 +3948,7 @@ modify Actor
             'sie', 'sie', 'sie', 'sie'][pronounSelector];
     }
         
-    // -- German: the different cases
+    // ##### the different cases #####
     
     itGen
     {
@@ -4153,6 +4023,17 @@ modify Actor
             'ihr', 'ihr', 'ihr', 'ihr'][pronounSelector] + ' selbst';
     }
     
+    itReflexiveWithoutSelf
+    {
+        return ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') +
+            ['mich', 'mich', 'mich', 'mich',
+            'dich', 'dich', 'dich', 'dich',
+            'sich', 'sich', 'sich', 'sich',
+            'uns', 'uns', 'uns', 'uns',
+            'euch', 'euch', 'euch', 'euch',
+            'ihr', 'ihr', 'ihr', 'ihr'][pronounSelector];
+    }
+    
     itReflexiveDatWithoutSelf
     {
         return ((gameMain.useCapitalizedAdress && gPlayerChar == self) ? '\^' : '') +
@@ -4209,7 +4090,7 @@ modify Actor
      *   pronoun rather than the short description.
      */
 
-    // indefinite article
+    // ##### indefinite article #####
     
     einName
         { return (referralPerson == ThirdPerson ? inherited : itNom); }
@@ -4223,7 +4104,7 @@ modify Actor
     einenName
         { return (referralPerson == ThirdPerson ? inherited : itAkk); }
 
-    // definite article
+    // ##### definite article #####
     
     derName
         { return (referralPerson == ThirdPerson ? inherited : itNom); }
@@ -4238,8 +4119,6 @@ modify Actor
         { return (referralPerson == ThirdPerson ? inherited : itAkk); }
     
     /* theName in objective case */
-    //    theNameObj
-    //        { return (referralPerson == ThirdPerson ? inherited : itObj); }
 
     derNameObj
         { return (referralPerson == ThirdPerson ? inherited : itNom); }
@@ -4260,19 +4139,9 @@ modify Actor
     /* theName as a possessive noun */
     theNamePossNoun
     { return (referralPerson == ThirdPerson ? inherited : itPossNoun); }
-    
-    /*
-     *   Get the name with an indefinite article.  Use the same rules of
-     *   referral person as for definite articles.
-     */
-    //    aName { return (referralPerson == ThirdPerson ? inherited : itNom); }
-
-    /* aName in objective case */
-    //    aNameObj { return (referralPerson == ThirdPerson ? inherited : itObj); }
 
     /* being verb agreeing with this object as subject */
-
-    // -- German verbs for actors, which means we have all six persons --
+    // ##### verbs for actors, which means we have all six persons #####
 
     verbZuSein
     {
@@ -4986,7 +4855,7 @@ modify Actor
             /* it's 'them' */
             setThem(objs);
             setHer(objs); //before only setThem, because sie(female) und sie(plural)
-            // cannot be disambiguated in german
+            // ##### cannot be disambiguated in german #####
 
             /* forget any 'it' */
             setIt(nil);
@@ -5173,33 +5042,30 @@ modify Actor
 modify standing
     msgVerbI = '{steht} auf' 
     msgVerbT = '{steht}'
-    // We build the plural forms explicitly, because multiple objects mentioned
-    // require the plural form, independent from the noun itself
+
     msgVerbIPlural = '{steht plural} auf'  
     msgVerbTPlural = '{steht plural}'
-    // ***
+
     participle = 'stehend'
 ;
 
 modify sitting
     msgVerbI = '{sitzt} auf'
     msgVerbT = '{sitzt}'
-    // We build the plural forms explicitly, because multiple objects mentioned
-    // require the plural form, independent from the noun itself
+
     msgVerbIPlural = '{sitzt plural} auf'  
     msgVerbTPlural = '{sitzt plural}'
-    // ***
+
     participle = 'sitzend'
 ;
 
 modify lying
     msgVerbI = '{liegt} auf'
     msgVerbT = '{liegt}'
-    // We build the plural forms explicitly, because multiple objects mentioned
-    // require the plural form, independent from the noun itself
+
     msgVerbIPlural = '{liegt plural} auf'  
     msgVerbTPlural = '{liegt plural}'
-    // ***
+
     participle = 'liegend'
 ;
 
@@ -5483,7 +5349,7 @@ modify PathPassage
 ;
 
 modify OnOffControl
-    //  -- treat "stell onoffcontrol ab" the same as "schalt onoffcontrol ab" 
+    //  ##### treat "stell onoffcontrol ab" the same as "schalt onoffcontrol ab" #####
     dobjFor(Drop) maybeRemapTo(
         (gAction.getEnteredVerbPhrase() == 'stell (dobj) ab' 
          || gAction.getEnteredVerbPhrase() == 'stelle (dobj) ab'), TurnOff, self)
@@ -5491,13 +5357,17 @@ modify OnOffControl
 
 modify Thing
     
-    // -- we remap PlugIn as TakeAction, unless the author
-    // -- has an object of Attachable class
+    // ##################################################
+    // ## we remap PlugIn as TakeAction, unless the we ##
+    // ## have an object of Attachable class           ##
+    // ##################################################
 
     dobjFor(PlugIn) maybeRemapTo (!self.ofKind(Attachable), Take, self) 
     
-    // -- we remap PlugInto as PutInAction, overridden by remapping
-    // -- in Attachable class
+    // #####################################################
+    // ## we remap PlugInto as PutInAction, overridden by ##
+    // ## remapping in Attachable class                   ##
+    // #####################################################
     
     dobjFor(PlugInto) remapTo (PutIn, self, IndirectObject)
     
@@ -5509,7 +5379,7 @@ modify AskConnector
      *   questions for this travel connector: "Which *one* do you want to
      *   enter..."
      */
-    travelObjsPhrase = '' // -- German: we have no which 'one'
+    travelObjsPhrase = '' // ##### German: we have no which 'one' #####
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -5520,21 +5390,21 @@ modify BasicChair
     /* by default, one sits *on* a chair */
     objInPrep = 'auf'
     actorInPrep = 'auf'
-    actorOutOfPrep = 'aus' //here: (aus dem Bett)
+    actorOutOfPrep = 'von' //here: (von dem Stuhl steigen)
 ;
 
 modify BasicPlatform
     /* by default, one stands *on* a platform */
     objInPrep = 'auf'
     actorInPrep = 'auf'
-    actorOutOfPrep = 'von' //here: (von dem Vorsprung)
+    actorOutOfPrep = 'von' //here: (von dem Vorsprung steigen)
 ;
 
 modify Booth
     /* by default, one is *in* a booth */
     objInPrep = 'in'
     actorInPrep = 'in'
-    actorOutOfPrep = 'aus' //here: (aus der Telefonzelle)
+    actorOutOfPrep = 'aus' //here: (aus der Telefonzelle steigen)
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -5542,8 +5412,6 @@ modify Booth
  *   Language modifications for Matchstick
  */
 modify Matchstick
-    /* "strike match" means "light match" */
-    //    dobjFor(Strike) asDobjFor(Burn)
 
     /* "light match" means "burn match" */
     dobjFor(Light) asDobjFor(Burn)
@@ -5587,7 +5455,7 @@ modify Room
      *   the ordinary name: "You can't eat the Hall of the Ancient Kings."
      *   These cases need to be customized as well.
      */
-    name = (roomName) // German: without To lower ...
+    name = (roomName) // ##### without To lower ... #####
 
     /*
      *   The "destination name" of the room.  This is primarily intended
@@ -5612,8 +5480,8 @@ modify Room
      *   we're elsewhere, we might want to use a destName like "the
      *   basement hallway" or "the hallway outside the operating room".
      */
+    // ##### depends on current case ... #####
     destName = (curcase.isDat ? demName : curcase.isAkk ? denName : curcase.isGen ? desName : derName)
-    // destInName = (denName) // TEST: we use nominative e.g. zurück in das Wohnzimmer
       
     /*
      *   For top-level rooms, describe an object as being in the room by
@@ -5666,13 +5534,13 @@ modify Floor
 modify defaultFloor
     noun = 'fußboden' 'boden'
     name = 'Fußboden[-s]'
-    isHim = true // Füge Kasus hinzu
+    isHim = true 
 ;
 
 modify defaultGround
     noun = 'erdboden' 'boden' 'grund' 'untergrund'
     name = 'Boden[-s]'
-    isHim = true // Füge Kasus hinzu
+    isHim = true 
 ;
 
 modify DefaultWall noun='wand' plural='wände' name='Wand' isHer = true;
@@ -6229,15 +6097,14 @@ modify nullDistinguisher
     canDistinguish(a, b) { return a.name != b.name; }
 
     name(obj) { return obj.name; }
-//    aName(obj) { return obj.aName; }
+
     einenName(obj) { return obj.einenName; }
     einemName(obj) { return obj.einemName; }
-//    theName(obj) { return obj.theName; }
+
     denName(obj) { return obj.denName; }
     demName(obj) { return obj.demName; }
     countName(obj, cnt) { return obj.countName(cnt); }
 ;
-
 
 /*
  *   The basic distinguisher can tell apart objects that are not "basic
@@ -6246,10 +6113,10 @@ modify nullDistinguisher
  */
 modify basicDistinguisher
     name(obj) { return obj.disambigName; }
-//    aName(obj) { return obj.aDisambigName; }
+
     einenName(obj) { return obj.einenName; }
     einemName(obj) { return obj.einemName; }
-//    theName(obj) { return obj.theDisambigName; }
+
     denName(obj) { return obj.denDisambigName; }
     demName(obj) { return obj.demDisambigName; }
     countName(obj, cnt) { return obj.countDisambigName(cnt); }
@@ -6260,11 +6127,9 @@ modify basicDistinguisher
  *   them, so it shows the owner or location name when listing the object. 
  */
 modify ownershipDistinguisher
-    // name(obj) { return obj.theNameOwnerLoc(true); }
-//    aName(obj) { return obj.aNameOwnerLoc(true); }
     einenName(obj) { return obj.einenNameOwnerLoc(true); }
     einemName(obj) { return obj.einemNameOwnerLoc(true); }
-//    theName(obj) { return obj.theNameOwnerLoc(true); }
+
     denName(obj) { return obj.denNameOwnerLoc(true); }
     demName(obj) { return obj.demNameOwnerLoc(true); }
     countName(obj, cnt) { return obj.countNameOwnerLoc(cnt, true); }
@@ -6286,11 +6151,9 @@ modify ownershipDistinguisher
  *   containers, so it shows the location name when listing the object. 
  */
 modify locationDistinguisher
-    // name(obj) { return obj.theNameOwnerLoc(nil); }
-//    aName(obj) { return obj.aNameOwnerLoc(nil); }
     einenName(obj) { return obj.einenNameOwnerLoc(nil); }
     einemName(obj) { return obj.einemNameOwnerLoc(nil); }
-//    theName(obj) { return obj.theNameOwnerLoc(nil); }
+
     denName(obj) { return obj.denNameOwnerLoc(nil); }
     demName(obj) { return obj.demNameOwnerLoc(nil); }
     countName(obj, cnt) { return obj.countNameOwnerLoc(cnt, nil); }
@@ -6310,10 +6173,10 @@ modify locationDistinguisher
  */
 modify litUnlitDistinguisher
     name(obj) { return obj.nameLit; }
-//    aName(obj) { return obj.aNameLit; }
+
     einenName(obj) {return obj.einenNameLit;}
     einemName(obj) {return obj.einemNameLit;}
-//    theName(obj) { return obj.theNameLit; }
+
     denName(obj) {return obj.denNameLit;}
     demName(obj) {return obj.demNameLit;}
     countName(obj, cnt) { return obj.denPluralNameLit; }
@@ -6326,30 +6189,24 @@ modify litUnlitDistinguisher
 modify LightSource
     /* provide lit/unlit names for litUnlitDistinguisher */
     nameLit = ((isLit ? 'leuchtend[^] ' : 'erloschen[^] ') + name)
-//    aNameLit()
-//    {
-//        /*
-//         *   if this is a mass noun or a plural name, just use the name
-//         *   with lit/unlit; otherwise, add "a"
-//         */
-//        if (isPlural || isMassNoun)
-//            return (isLit ? 'lit ' : 'unlit ') + name;
-//        else
-//            return (isLit ? 'a lit ' : 'an unlit ') + name;
-//    }
+
+    // ##### indirect article #####
     einenNameLit() {
         return einenNameFrom((isLit ? 'leuchtend[^] ' : 'erloschen[^] ') + name);
     }
     einemNameLit() {
         return einemNameFrom((isLit ? 'leuchtend[^] ' : 'erloschen[^] ') + name);
     }
-//    theNameLit = ((isLit ? 'the lit ' : 'the unlit ') + name)
+
+    // ##### direct article #####
     denNameLit() {
         return denNameFrom((isLit ? 'leuchtend[^] ' : 'erloschen[^] ') + name);
     }
     demNameLit() {
         return demNameFrom((isLit ? 'leuchtend[^] ' : 'erloschen[^] ') + name);
     }
+    
+    // ##### plural #####
     pluralNameLit = ((isLit ? 'lit ' : 'unlit ') + pluralName)
     denPluralNameLit() {
         return denPluralNameFrom((isLit ? 'leuchtend[^] ' : 'erloschen[^] ') + name);
@@ -6633,13 +6490,15 @@ langMessageBuilder: MessageBuilder
         
         ['er/es', &itNom, nil, nil, true],
         ['er/sie', &itNom, nil, nil, true],
-        ['ihn/sie', &itAkk, nil, &itReflexive, nil],
-        ['ihm/ihr', &itDat, nil, &itReflexiveDat, nil],
-        ['dich/ihn', &itAkk, nil, &itReflexive, nil],
-        ['dir/ihm', &itDat, nil, &itReflexiveDat, nil],
-        ['sich', &itReflexiveDatWithoutSelf, nil, &itReflexiveDat, nil],
+        
+        ['ihn/sie', &itAkk, nil, nil, nil],
+        ['ihm/ihr', &itDat, nil, nil, nil],
+        
         ['dich', &itAkk, nil, &itReflexive, nil],
         ['dir', &itDat, nil, &itReflexiveDat, nil],
+        
+        ['dich/sich', &itReflexiveWithoutSelf, nil, nil, nil],
+        ['dir/sich', &itReflexiveDatWithoutSelf, nil, nil, nil],
 
         ['du/er', &derName, 'actor', nil, true],
         
@@ -6649,6 +6508,7 @@ langMessageBuilder: MessageBuilder
         ['dichselbst', &itReflexive, 'actor', nil, nil],
         ['dirselbst', &itReflexiveDat, 'actor', nil, nil],
         
+        ['sich', &itReflexiveWithoutSelf, nil, nil, nil],
         ['sichselbst', &itReflexive, nil, nil, nil],
         
         ['der', &dArt, nil, nil, nil],
@@ -6692,7 +6552,14 @@ langMessageBuilder: MessageBuilder
          */
         ['subj', &dummyName, nil, nil, true],
         
-        // This is a test for out verbmarker
+        // #################################################################################
+        // ## These are for the participle used in perfect, pluperfect and future1 and 2  ##
+        // ## {*}  normal usage at the end of a sentence like "Du bist im Stall gewesen"  ## 
+        // ## {!*} changes partciple and verb in side sentences like: "Hans hat den Stuhl ##
+        // ##       nicht nehmen können, solange du ihn in Beschlag *genommen hast*.      ##
+        // ## {-*} verb and partizip as single word: "Du hast den Ofen *angeschaltet*."   ##
+        // #################################################################################
+        
         ['*', &dummyVerb, nil, nil, nil],
         ['-*', &dummyPartWithoutBlank, nil, nil, nil],
         ['!*', &dummyPart, nil, nil, nil],
@@ -6784,10 +6651,8 @@ langMessageBuilder: MessageBuilder
              *   Extract either the first or the second embedded string,
              *   depending on the current narrative tense.
              */
-            //match = rexGroup(tSel(1, 2));
             
             // ########## TIME SELECTOR LETS US CHOOSE {<WORD TO USE IN PRESENT TENSE>|<OTHER TENSES>} ###########
-            
             match = rexGroup(timeSelector(1, 2));
             replStr = match[3];
 
@@ -6870,10 +6735,10 @@ langMessageBuilder: MessageBuilder
      *   the property for the tag.
      */
     
-    // #####################################################################
-    // GTADS replaces this routine from output.t because we need a reference
-    // to the current subj for our verb forms
-    // #####################################################################
+    // ###############################################################
+    // ## GTADS replaces this routine from output.t because we need ##
+    // ## a reference to the current subj for our verb forms        ##
+    // ###############################################################
     
     execute()
     {
@@ -6981,7 +6846,7 @@ langMessageBuilder: MessageBuilder
              */
             lastSubject_ = nil;
             lastSubjectName_ = nil;
-            // German : additionally we reset our participle
+            // ##### we reset our participle #####
             verbHelper.lastVerb = 'undefined';
         }
 
@@ -7085,6 +6950,9 @@ langMessageBuilder: MessageBuilder
     fixedTenseProp_ = nil
 ;
 
+// ####################################################
+// ## this callback function is from 2.0 on obsolete ##
+// ####################################################
 
 /* ------------------------------------------------------------------------ */
 /*
@@ -7595,7 +7463,7 @@ enum token tokAbbrPeriod;
 /* special "#nnn" numeric token */
 enum token tokPoundInt;
 
-// -- German: we add a StringPreParser to do some work for spelled numbers ...
+// ##### we add a StringPreParser for spelled numbers ... #####
 
 extractNumbers : StringPreParser
     doParsing(str, which) {
@@ -7606,13 +7474,15 @@ extractNumbers : StringPreParser
         local nt; // a thousand number
         local nh; // a hundred number
         
-        // -- German: it is common to write numbers without spaces
-        // -- like 'zweihundertmillionenvierhundertvierundfünfzigtausend'
-        // -- This would cause over 50 phrases for the tokenizer, so we
-        // -- add spaces between million(en) und tausend.The Result is:
-        // -- 'zweihundert millionen vierhundertvierundfünfzig tausend'
-        // -- These smaller parts can be handled by the standard phrases 
-        // -- in the tokenizer
+        // ################################################################
+        // ## it is common to write numbers without spaces like          ##
+        // ## 'zweihundertmillionenvierhundertvierundfünfzigtausend'     ##
+        // ## This would cause over 50 phrases for the tokenizer, so we  ##
+        // ## add spaces between million(en) und tausend. The result is: ##
+        // ## 'zweihundert millionen vierhundertvierundfünfzig tausend'  ##
+        // ## These smaller parts can be handled by the standard phrases ##
+        // ## in the tokenizer                                           ##
+        // ################################################################
         
         nm = rexMatch('<nocase>(.*)million(.*)', str);
         if (nm != nil) {
@@ -7656,7 +7526,7 @@ extractNumbers : StringPreParser
     }
 ;
 
-// -- Our German infinitve counter:
+// ##### German infinitve counter: #####
 
 infinitive: object
     count = 0
@@ -7668,11 +7538,12 @@ infinitive: object
     }
 ;
 
-/*
- *   -- Command tokenizer for German (DE).  Other language modules should
- *   -- provide their own tokenizers to allow for differences in punctuation
- *   -- and other lexical elements.
- */
+/*   ##########################################################################
+ *   ## Command tokenizer for German (DE).  Other language modules should    ##
+ *   ## provide their own tokenizers to allow for differences in punctuation ##
+ *   ## and other lexical elements.                                          ##
+ *   ##########################################################################
+ */  
 
 cmdTokenizer: Tokenizer
     rules_ = static
@@ -7689,14 +7560,8 @@ cmdTokenizer: Tokenizer
          *   digits word, we'll pull out the tens word, the hyphen, and
          *   the digits word as separate tokens.
          */
-        //['spelled number',
-        // new RexPattern('<NoCase>(twenty|thirty|forty|fifty|sixty|'
-        //                + 'seventy|eighty|ninety)-'
-        //                + '(one|two|three|four|five|six|seven|eight|nine)'
-        //                + '(?!<AlphaNum>)'),
-        // tokWord, &tokCvtSpelledNumber, nil],
-        
-        // -- German: new spelled number pattern
+
+        // ##### German spelled number pattern #####
         ['spelled number',
          new RexPattern('<NoCase>(ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun)'
                         + 'und'
@@ -7705,7 +7570,7 @@ cmdTokenizer: Tokenizer
                         + '(?!<AlphaNum>)'),
          tokWord, &tokCvtSpelledNumber, nil],
         
-        // -- German: Spelled hundreds "einhundert"
+        // ##### Spelled hundreds "einhundert" #####
         
         ['spelled number hundred',
          new RexPattern('<NoCase>(ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun)'
@@ -7713,7 +7578,7 @@ cmdTokenizer: Tokenizer
                         + '(?!<AlphaNum>)'),
          tokWord, &tokCvtSpelledNumberHundred, nil],
         
-        // -- German: Spelled number hundred number "einhundertzwei"
+        // ##### Spelled number hundred number "einhundertzwei" #####
         
         ['spelled number hundred number',
          new RexPattern('<NoCase>(ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun)'
@@ -7724,7 +7589,7 @@ cmdTokenizer: Tokenizer
                         + '(?!<AlphaNum>)'),
          tokWord, &tokCvtSpelledNumberHundredNumber, nil],
 
-        // -- German: Spelled number hundred number and number "einhundertdreiundzwanzig"
+        // ##### Spelled number hundred number and number "einhundertdreiundzwanzig" #####
         
         ['spelled number hundred number and number',
          new RexPattern('<NoCase>(ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun)'
@@ -7780,8 +7645,6 @@ cmdTokenizer: Tokenizer
          new RexPattern('<Alpha|-|&><AlphaNum|-|&|squote>*<squote>[sS]'),
          tokWord, &tokCvtApostropheS, nil],
        		
-		 // -- German: test plural possessive words
-
         /*
          *   A plural word ending in an apostrophe.  We parse this as two
          *   separate tokens: one for the word and one for the apostrophe. 
@@ -7900,8 +7763,10 @@ cmdTokenizer: Tokenizer
         toks.append([s, tokPluralApostrophe, s]);
     }
 
-    // -- truncate every word to its root
-    // -- if an unknown word occurs
+    // #####################################
+    // ## truncate every word to its root ##
+    // ## when an unknown word is found   ##
+    // #####################################
 
     tokCvtEnding(txt, typ, toks)
     {
@@ -7913,26 +7778,26 @@ cmdTokenizer: Tokenizer
         local cvtFlag = nil;
         local apostFlag = nil;
 
-        // -- German: we store the original value in orig - 
-        // -- when we have an unknown word, we set txt back to orig
+        // ###################################################
+        // ## we store the original value in orig - when we ##
+        // ## have an unknown word, we set txt back to orig ##
+        // ###################################################
         
         local orig = txt;
         temp = txt.toLower;
         
-        // -- German: old umlauts replace mechanism, this must be active until TADS 3.1.1 is published --
-        // -- obsolete in 3.1.1
-        // -- end of old umlauts replace mechanism
-        
         len = temp.length();
         testVocab = cmdDict.isWordDefined(temp);
-        w = temp; // -- new string with corrected Umlauts
+        w = temp; // ##### new string with corrected Umlauts #####
         
-        // -- German replace Tokens mechanism: replace all compressed prepositions like 
-        // -- durchs = durch / ins = in / aufs = auf etc ...
-        // -- the author must not(!) define the follwing tokens as a vocabulary word, because
-        // -- this would break our replacement mechanism ...
+        // ###################################################################
+        // ## replace Tokens mechanism: replace all compressed prepositions ##
+        // ## like durchs = durch / ins = in / aufs = auf etc ... the       ##
+        // ## author must not(!) define the follwing tokens as a vocabulary ##
+        // ## word, because this would break our replacement mechanism ...  ##
+        // ###################################################################
         
-        if (testVocab == nil) { // -- precond: we've found an unknown word ... and if our word can be truncate to its root
+        if (testVocab == nil) { // ##### precond: we've found an unknown word ... #####
             
             local tokTest = tokHelper.checkForValidTokens(w);
             if (tokTest != w && tokTest != 'undefined') {
@@ -7942,26 +7807,24 @@ cmdTokenizer: Tokenizer
             }        
         }
               
-        // -- German: check whether we have a noun or an adjective or infinitive - then truncate the word to its root
+        // ##### check whether we have a noun or an adjective or infinitive #####
         if (testVocab == nil && len > 3 && cvtFlag == nil)
         {
-            // -- German: Genitiv-s as in 'Mariels Gesicht'
+            // ##### Genitiv-s as in 'Mariels Gesicht' #####
             if (temp.endsWith('s') == true)
             {
-                // -- "Endung -s gefunden!" - we assume it's genitive!";
                 s = temp.substr(1, temp.length() - 1);
                 if (cmdDict.isWordDefined(s) == true && cvtFlag == nil)
                 {
                     w = s;
-                    // -- we add an apostrophe-S and want to interpret it as a possessive phrase
+                    // ##### we add an apostrophe-S and want to interpret it as a possessive phrase #####
                     apostFlag = true;
                     cvtFlag = true;
                 }
             }
-            // -- German: ending -es
+            // -- ##### ending -es #####
             if (temp.endsWith('es') == true)
             {
-                //"Endung -es gefunden!";
                 s = temp.substr(1, temp.length() - 2);
                 if (cmdDict.isWordDefined(s) == true && cvtFlag == nil)
                 {
@@ -7969,10 +7832,9 @@ cmdTokenizer: Tokenizer
                     cvtFlag = true;
                 }
             }
-            // -- German: ending -er
+            // ##### ending -er #####
             if (temp.endsWith('er') == true && cvtFlag == nil)
             {
-                //"Endung -er gefunden!";
                 s = temp.substr(1, temp.length() - 2);
                 if (cmdDict.isWordDefined(s) == true && cvtFlag == nil)
                 {
@@ -7980,10 +7842,9 @@ cmdTokenizer: Tokenizer
                     cvtFlag = true;
                 }
             }
-            // -- German: ending -en
+            // ##### ending -en #####
             if (txt.endsWith('en') == true && cvtFlag == nil)
             {
-                //"Endung -en gefunden!";
                 s = temp.substr(1, temp.length() - 2);
                 if (cmdDict.isWordDefined(s) == true && cvtFlag == nil)
                 {
@@ -7991,10 +7852,9 @@ cmdTokenizer: Tokenizer
                     cvtFlag = true;
                 }
             }
-            // -- German: ending -em
+            // ##### ending -em #####
             if (txt.endsWith('em') == true && cvtFlag == nil)
             {
-                //"Endung -em gefunden!";
                 s = temp.substr(1, temp.length() - 2);
                 if (cmdDict.isWordDefined(s) == true && cvtFlag == nil)
                 {
@@ -8002,10 +7862,9 @@ cmdTokenizer: Tokenizer
                     cvtFlag = true;
                 }
             }
-            // -- German: ending -e (for verbs)e.g. nehme = nehm
+            // ##### ending -e (for verbs)e.g. nehme = nehm #####
             if (txt.endsWith('e') == true && cvtFlag == nil)
             {
-                //"Endung -e gefunden!";
                 s = temp.substr(1, temp.length() - 1);
                 if (cmdDict.isWordDefined(s) == true && cvtFlag == nil)
                 {
@@ -8013,10 +7872,9 @@ cmdTokenizer: Tokenizer
                     cvtFlag = true;
                 }
             }
-            // -- German: ending -n
+            // ##### ending -n #####
             if (txt.endsWith('n') == true && cvtFlag == nil)
             {
-                //"Endung -n gefunden!";
                 s = temp.substr(1, temp.length() - 1);
                 if (cmdDict.isWordDefined(s) == true && cvtFlag == nil)
                 {
@@ -8025,15 +7883,15 @@ cmdTokenizer: Tokenizer
                 }
             }
         }
-        // -- we test whether we were successfull
+        // ##### we test whether we were successfull #####
         if (!cmdDict.isWordDefined(w) && w != '')
             w = orig;
         
-        if (w != '') // -- if we have an infinitive verb form, do not add any token
-            toks.append([w, typ, orig]);    // -- else add the original token, "schönen" instead of "schön" 
+        if (w != '') // ##### if we have an infinitive verb form, do not add any token #####
+            toks.append([w, typ, orig]);    // ##### else add the original token #####
         
-        // -- if we have an apostFlag (Genitive) add apostrophe-s and handle it as possessive phrase ...
-        // -- we do not store the apostrophe-s in the origin part of the token tok[3]
+        // ##### if we have an apostFlag (Genitive) add apostrophe-s and handle it as possessive phrase ... #####
+        // ##### we do not store the apostrophe-s in the origin part of the token tok[3] #####
         if (apostFlag)
             toks.append(['&rsquos', tokApostropheS, '']);
     }
@@ -8059,7 +7917,7 @@ cmdTokenizer: Tokenizer
     }
     patAlphaDashAlpha = static new RexPattern('(<alpha>+)und(<alpha>+)')
 
-    // -- handle out a spelled number and hundred as in 'zweihundert'
+    // ##### handle out a spelled number and hundred as in 'zweihundert' #####
     
     tokCvtSpelledNumberHundred(txt, typ, toks)
     {
@@ -8080,7 +7938,7 @@ cmdTokenizer: Tokenizer
         toks.append([s, tokApostropheS, s]);
     }
 
-    // -- handle out a spelled number and hundred and number as in 'zweihundertvier'
+    // ##### handle out a spelled number and hundred and number as in 'zweihundertvier' #####
     
     tokCvtSpelledNumberHundredNumber(txt, typ, toks)
     {
@@ -8098,7 +7956,7 @@ cmdTokenizer: Tokenizer
     }
     patAlphaHundredAlpha = static new RexPattern('(<alpha>+)hundert(<alpha>+)')
 
-    // -- handle out a spelled number and hundred and number and number as in 'zweihundertvierundfünfzig'
+    // ##### handle out a spelled number and hundred and number and number as in 'zweihundertvierundfünfzig' #####
     
     tokCvtSpelledNumberHundredNumberAndNumber(txt, typ, toks)
     {
@@ -8650,8 +8508,10 @@ class PrepSingleTopicProd: TopicProd
     }
 ;
 
-// -- German grammar definitions
-// -- we define adequate german prepositions
+// ############################################
+// ## German grammar definitions             ##
+// ## we define adequate german prepositions ##
+// ############################################
 
 grammar inSingleNoun(main):
      singleNoun->np_ | 'in' singleNoun->np_
@@ -8718,7 +8578,7 @@ grammar anSingleNoun(main):
     : PrepSingleNounProd
 ;
 
-// -- and the topic phrases ...
+// ##### and the topic phrases ... #####
 
 grammar aboutTopicPhrase(main):
    topicPhrase->np_ | ('von'|'nach'|'über'|'um') topicPhrase->np_
@@ -8779,10 +8639,10 @@ grammar completeNounPhraseWithoutAll(qualified): qualifiedNounPhrase->np_
  *   Pronoun rules.  A pronoun is a complete noun phrase; it does not allow
  *   further qualification.  
  */
-grammar completeNounPhraseWithoutAll(it):   'es' | 'ihm' : ItProd;      // -- German neuter singular
-grammar completeNounPhraseWithoutAll(them): 'ihnen' : ThemProd;         // -- German plural
-grammar completeNounPhraseWithoutAll(him):  'ihn' | 'ihm' : HimProd;    // -- German male singular
-grammar completeNounPhraseWithoutAll(her):  'sie' | 'ihr' : HerProd;    // -- German female singular
+grammar completeNounPhraseWithoutAll(it):   'es' | 'ihm' : ItProd;      // ##### German neuter singular
+grammar completeNounPhraseWithoutAll(them): 'ihnen' : ThemProd;         // ##### German plural
+grammar completeNounPhraseWithoutAll(him):  'ihn' | 'ihm' : HimProd;    // ##### German male singular
+grammar completeNounPhraseWithoutAll(her):  'sie' | 'ihr' : HerProd;    // ##### German female singular
 
 /*
  *   Reflexive second-person pronoun, for things like "bob, look at
@@ -10032,7 +9892,7 @@ class NounWordProd: NounPhraseWithVocab
     getNounText() { return noun_; }
 ;
 
-// -- German: new MALE SYN WORD PROD
+// ##### new MALE SYN WORD PROD #####
 
 class MaleSynWordProd: NounPhraseWithVocab
     getVocabMatchList(resolver, results, extraFlags)
@@ -10052,7 +9912,6 @@ class MaleSynWordProd: NounPhraseWithVocab
         
         if (nLst.length() > 0)
         {
-            //"... Male Syn found ...";
             for (i = 1; i <= nLst.length(); i++)
             {
                 match = getNounText();
@@ -10112,7 +9971,7 @@ class MaleSynWordProd: NounPhraseWithVocab
     getNounText() { return noun_; }
 ;
 
-// -- German: new FEMALE SYN WORD PROD
+// ##### new FEMALE SYN WORD PROD #####
 
 class FemaleSynWordProd: NounPhraseWithVocab
     getVocabMatchList(resolver, results, extraFlags)
@@ -10132,7 +9991,6 @@ class FemaleSynWordProd: NounPhraseWithVocab
         
         if (nLst.length() > 0)
         {
-            //"... Female Syn found ...";
             for (i = 1; i <= nLst.length(); i++)
             {
                 match = getNounText();
@@ -10145,30 +10003,6 @@ class FemaleSynWordProd: NounPhraseWithVocab
 
         }
             
-        /*
-         *   If the resolver indicates that we're in a "global" scope,
-         *   *also* include any additional matches as adjectives.
-         *
-         *   Normally, when we're operating in limited, local scopes, we
-         *   use the structure of the phrasing to determine whether to
-         *   match a noun or adjective; if we have a match for a given word
-         *   as a noun, we'll treat it only as a noun.  This allows us to
-         *   take PIZZA to refer to the pizza (for which 'pizza' is defined
-         *   as a noun) rather than to the PIZZA BOX (for which 'pizza' is
-         *   a mere adjective) when both are in scope.  It's obvious which
-         *   the player means in such cases, so we can be smart about
-         *   choosing the stronger match.
-         *
-         *   In cases of global scope, though, it's much harder to guess
-         *   about the player's intentions.  When the player types PIZZA,
-         *   they might be thinking of the box even though there's a pizza
-         *   somewhere else in the game.  Since the two objects might be in
-         *   entirely different locations, both out of view, we can't
-         *   assume that one or the other is more likely on the basis of
-         *   which is closer to the player's senses.  So, it's better to
-         *   allow both to match for now, and decide later, based on the
-         *   context of the command, which was actually meant.
-         */
         if (resolver.isGlobalScope)
         {
             /* get the list of matching adjectives */
@@ -10192,7 +10026,7 @@ class FemaleSynWordProd: NounPhraseWithVocab
     getNounText() { return noun_; }
 ;
 
-// -- German: new NEUTER SYN WORD PROD
+// -- ##### new NEUTER SYN WORD PROD #####
 
 class NeuterSynWordProd: NounPhraseWithVocab
     getVocabMatchList(resolver, results, extraFlags)
@@ -10224,31 +10058,7 @@ class NeuterSynWordProd: NounPhraseWithVocab
             }
 
         }
-            
-        /*
-         *   If the resolver indicates that we're in a "global" scope,
-         *   *also* include any additional matches as adjectives.
-         *
-         *   Normally, when we're operating in limited, local scopes, we
-         *   use the structure of the phrasing to determine whether to
-         *   match a noun or adjective; if we have a match for a given word
-         *   as a noun, we'll treat it only as a noun.  This allows us to
-         *   take PIZZA to refer to the pizza (for which 'pizza' is defined
-         *   as a noun) rather than to the PIZZA BOX (for which 'pizza' is
-         *   a mere adjective) when both are in scope.  It's obvious which
-         *   the player means in such cases, so we can be smart about
-         *   choosing the stronger match.
-         *
-         *   In cases of global scope, though, it's much harder to guess
-         *   about the player's intentions.  When the player types PIZZA,
-         *   they might be thinking of the box even though there's a pizza
-         *   somewhere else in the game.  Since the two objects might be in
-         *   entirely different locations, both out of view, we can't
-         *   assume that one or the other is more likely on the basis of
-         *   which is closer to the player's senses.  So, it's better to
-         *   allow both to match for now, and decide later, based on the
-         *   context of the command, which was actually meant.
-         */
+
         if (resolver.isGlobalScope)
         {
             /* get the list of matching adjectives */
@@ -10272,7 +10082,7 @@ class NeuterSynWordProd: NounPhraseWithVocab
     getNounText() { return noun_; }
 ;
 
-// -- German: new PLURAL SYN WORD PROD
+// ##### new PLURAL SYN WORD PROD #####
 
 class PluralSynWordProd: NounPhraseWithVocab
     getVocabMatchList(resolver, results, extraFlags)
@@ -10304,30 +10114,6 @@ class PluralSynWordProd: NounPhraseWithVocab
             }
         }
             
-        /*
-         *   If the resolver indicates that we're in a "global" scope,
-         *   *also* include any additional matches as adjectives.
-         *
-         *   Normally, when we're operating in limited, local scopes, we
-         *   use the structure of the phrasing to determine whether to
-         *   match a noun or adjective; if we have a match for a given word
-         *   as a noun, we'll treat it only as a noun.  This allows us to
-         *   take PIZZA to refer to the pizza (for which 'pizza' is defined
-         *   as a noun) rather than to the PIZZA BOX (for which 'pizza' is
-         *   a mere adjective) when both are in scope.  It's obvious which
-         *   the player means in such cases, so we can be smart about
-         *   choosing the stronger match.
-         *
-         *   In cases of global scope, though, it's much harder to guess
-         *   about the player's intentions.  When the player types PIZZA,
-         *   they might be thinking of the box even though there's a pizza
-         *   somewhere else in the game.  Since the two objects might be in
-         *   entirely different locations, both out of view, we can't
-         *   assume that one or the other is more likely on the basis of
-         *   which is closer to the player's senses.  So, it's better to
-         *   allow both to match for now, and decide later, based on the
-         *   context of the command, which was actually meant.
-         */
         if (resolver.isGlobalScope)
         {
             /* get the list of matching adjectives */
@@ -10351,7 +10137,9 @@ class PluralSynWordProd: NounPhraseWithVocab
     getNounText() { return noun_; }
 ;
 
-// -- German: GRAMMAR RULES FOR ALL SYNONYMS (Changing gender)
+// ######################################################
+// ## GRAMMAR RULES FOR ALL SYNONYMS (Changing gender) ##
+// ######################################################
 
 grammar nounWord(maleSyn): maleSyn->noun_ : MaleSynWordProd
 ;
@@ -10469,8 +10257,10 @@ grammar possessiveAdjPhrase(my): ('mein'|'meine'|'meinen'|'meinem') : MyAdjProd
     checkAnaphorAgreement(lst) { return nil; }
 ;
 
+// ################################################################################
 // Note that in German we have Klaus' Schuhe also in any singular possessive phrase
 // which has an owner's name ending in 's'
+// ################################################################################
 
 grammar possessiveAdjPhrase(npApostropheS):
     ('den'|'die'|'das'| ) nounPhrase->np_ 
@@ -10543,8 +10333,10 @@ grammar possessiveNounPhrase(npApostropheS):
     }
 ;
 
+// #################################
 // Meinst du Jane's oder Jim's Nase?
 // >die von Jim
+// #################################
 
 grammar possessiveNounPhrase(fromNp):
     ('den'|'die'|'das') ('von'|'an') nounPhrase->np_ 
@@ -10558,8 +10350,10 @@ grammar possessiveNounPhrase(fromNp):
     }
 ;
 
+// ########################################
 // Meinst du den schönen Hut des Müllmanns? 
 // >den des Müllmanns
+// ########################################
 
 grammar possessiveNounPhrase(desNp):
     ('den'|'die'|'das'|) ('der'|'des') nounPhrase->np_ (tokApostropheS->apost_ | tokPluralApostrophe->apost_)
@@ -10684,24 +10478,6 @@ grammar simplePluralPhrase(poundNum):
 ;
 
 /*
- *   A simple plural phrase can end with an adjective and "ones," as in
- *   "the red ones."
- */
-//grammar simplePluralPhrase(adjAndOnes): adjective->adj_ 'ones'
-//    : NounPhraseWithVocab
-//    getVocabMatchList(resolver, results, extraFlags)
-//    {
-//        /* generate a list of objects matching the adjective */
-//        return getWordMatches(adj_, &adjective, resolver,
-//                              extraFlags | EndsWithAdj, VocabTruncated);
-//    }
-//    getAdjustedTokens()
-//    {
-//        return [adj_, &adjective];
-//    }
-//;
-//
-/*
  *   If the command has qualifiers that require a plural, but omits
  *   everything else, we can have an empty simple noun phrase.
  */
@@ -10742,7 +10518,6 @@ grammar simplePluralPhrase(misc):
         return lst_.getAdjustedTokens();
     }
 ;
-
 
 /* ------------------------------------------------------------------------ */
 /*
@@ -11950,7 +11725,7 @@ modify Action
      *   a list of object matches, with the given resolved cardinality.
      *   This list is a list of ResolveInfo objects.
      */
-    objListPronoun(objList) // ÜBERARBEITUNG FÜR KORREKTE AUSGABE DER PARSERNACHFRAGEN: womit soll bartimäus -> in ihm graben?
+    objListPronoun(objList) // ##### "womit soll bartimäus -> in ihm graben?" #####
     {
         local himCnt, herCnt, themCnt;
         local FirstPersonCnt, SecondPersonCnt, FourthPersonCnt, FifthPersonCnt, SixthPersonCnt;
@@ -12171,8 +11946,9 @@ modify Action
          *   parse the verbPhrase into the parts before and after the
          *   slash, and any additional text following the slash part
          */
-        rexMatch('(.*)/(<alphanum|-|squote>+)(.*)', verbPhrase);
-
+        //rexMatch('(.*)/(<alphanum|-|squote>+)(.*)', verbPhrase);
+        rexMatch('(.*)/(.*)', verbPhrase);
+        
         /* return the appropriate parts */
         if (!inf) // vorher (inf), ÄNDERUNG ZUM TESTEN BEI (erst aufstehen)
         {
@@ -12180,12 +11956,12 @@ modify Action
              *   infinitive - we want the part before the slash, plus the
              *   extra prepositions (or whatever) after the switched part
              */
-            return rexGroup(2)[3] + rexGroup(3)[3];
+            return rexGroup(2)[3];
         }
         else
         {
             /* participle - it's the part after the slash */
-            return rexGroup(1)[3] + rexGroup(3)[3];
+            return rexGroup(1)[3];
         }
     }
 
@@ -12237,7 +12013,7 @@ modify TAction
         rexSearch('<lparen>(.*<space>+)?<alpha>+<rparen>', verbPhrase);
         prep = (rexGroup(1) == nil ? '' : rexGroup(1)[3]);
 
-        // den Stuhl verlassen)
+        // ##### "(den Stuhl verlassen)" #####
         
         rexSearch('(.*)/(.*?)<space>+'
                   + '<lparen>(.*?)<space>*?<alpha>+<rparen>',
@@ -12263,8 +12039,12 @@ modify TAction
         /* do any verb-specific adjustment of the preposition */
         if (prep != nil)
             prep = adjustDefaultObjectPrep(prep, obj);
-        // German: check again, if the prep has a dative flag
-        // If true, set dative and go on like above
+       
+        // ################################################
+        // ## check again, if the prep has a dative flag ##
+        // ## If true, set dative and go on like above   ##
+        // ################################################
+        
         if (prep.endsWith('dativ '))
         {
             prep = prep.substr(1 ,prep.length() - 6);
@@ -12312,11 +12092,13 @@ modify TAction
         return rexGroup(1)[3] + spPrefix(rexGroup(2)[3])
             + spPrefix(rexGroup(3)[3]);
     }
-    // -- TACTION
-    // -- implementing the German parser questions - part 1: "WOMIT WODURCH ETC ..."
+    
+    // ################################################################
+    // ## TACTION: parser questions - part 1: "WOMIT WODURCH ETC ... ##
+    // ################################################################
+    
     getQuestionWord(which)
     {
-        // -- "... TACTION ..."; -> uncomment for testing purposes
         local dprep;
         local ddativ;
         /*
@@ -12332,7 +12114,7 @@ modify TAction
         dprep = dprep.toLower();
         ddativ = nil;
         
-        // -- German: replace aus|von depending on the kind of dobj  
+        // ##### replace aus|von depending on the kind of dobj #####
         if (dprep.startsWith('aus|von')) {
             local obj = getDobj();
             if (obj.ofKind(Container))
@@ -12341,7 +12123,7 @@ modify TAction
                 dprep = dprep.findReplace('aus|von', 'von', ReplaceAll);
         }
         
-        // -- looking for dative flag ...
+        // ##### looking for dative flag ... #####
         if (dprep.endsWith('dativ'))
         {
             dprep = dprep.substr(1 ,dprep.length() - 5);
@@ -12365,8 +12147,11 @@ modify TAction
             return 'Wo' + dprep;
     }
     
-    // -- part 2: extracting the verb
-    // -- in German it's easier to flip sides: "zu geben/geben (was)" 
+    // ################################################################
+    // ## part 2: extracting the verb                                ##
+    // ## we write the infinitve form first : "zu geben/geben (was)" ## 
+    // ################################################################
+    
     getQuestionVerb(which)
     {
         /*
@@ -12381,8 +12166,12 @@ modify TAction
                   verbPhrase);
         return rexGroup(2)[3];
     }
-    // -- return nullstring
-    // -- else look into TIACTION ...
+    
+    // #################################
+    // ## return nullstring           ##
+    // ## else look into TIACTION ... ##
+    // #################################
+    
     getQuestionObject(which)
     {
         return '';
@@ -12447,7 +12236,7 @@ modify TAction
          *   object placeholder, and any preposition within the '(what)'
          *   specifier
          */
-        rexMatch('(.*)/(<alphanum|-|squote>+)(.*) '
+        rexMatch('(.*)/(.*) '
                  + '<lparen>(.*?)<space>*?<alpha>+<rparen>(.*)',
                  vp);
         
@@ -12458,10 +12247,10 @@ modify TAction
             ret = rexGroup(2)[3];
 
         /* get the prepositional complementizer */
-        vcomp = rexGroup(3)[3];
+        vcomp = '';
 
         /* get the direct object preposition */
-        dprep = rexGroup(4)[3];
+        dprep = rexGroup(3)[3];
 
         // -- German: replace aus|von depending on the kind of dobj  
         if (dprep.startsWith('aus|von')) {
@@ -12504,10 +12293,11 @@ modify TAction
         }
              
         /* add the direct object, using the pronoun form if applicable */
-        // -- ret = dobjText + ' ' + ret; // STELLE DIE ZEILE UM, DAMIT 
-        // DAS OBJEKT VOR DEM VERB KOMMT - (erst den apfel nehmen) oder (erst in die Dusche steigen) etc.
-
-        // In case of a pronoun, we use in german the same phrase (erst den Apfel nehmen / erst ihn nehmen)
+        
+        // ############################################################################
+        // ## 1object 2verb: (erst den apfel nehmen) or (erst in die Dusche steigen) ##
+        // ############################################################################
+        
         if (!inf) 
             ret += spPrefix(vcomp); 
 
@@ -12519,7 +12309,7 @@ modify TAction
          *   placeholder, add it at the end of the phrase
          */
         
-        ret += rexGroup(5)[3];
+        ret += rexGroup(4)[3];
         
         /* return the complete phrase string */
         return ret;
@@ -12644,8 +12434,8 @@ modify TIAction
     {
         local verb;
         local prep;
-        local distName; // -- new local var for distName
-        curcase.d_flag = nil; // -- set dative flag to NIL
+        local distName;       // ##### new local var for distName #####
+        curcase.d_flag = nil; // ##### set dative flag to NIL     #####
         
         /* presume we won't have a verb or preposition */
         verb = '';
@@ -12662,9 +12452,13 @@ modify TIAction
          *   there's nothing else in the command to get in the way.
          */
         if (whichObj == IndirectObject && resolvedAllObjects) //VORHER == directObject 
-        // -- we want to place the verb at the indirect object 
-        // -- (die Banane)
-        // -- (dem Affen geben)
+        
+        // #####################################################
+        // ## we place the verb in the indirect object phrase ##
+        // ## (die Banane)                                    ##
+        // ## (dem Affen geben)                               ##
+        // #####################################################
+            
         {
             /*
              *   extract the verb's participle form (including any
@@ -12722,7 +12516,7 @@ modify TIAction
             prep = prep.substr(1 ,prep.length() - 1);
         }
         
-        // -- obj.getAnnouncementDistinguisher(); old in 3.0.18
+        // ##### obj.getAnnouncementDistinguisher(); old in 3.0.18 #####
         obj.getAnnouncementDistinguisher(gActor.scopeList()); 
         
         if (curcase.d_flag)
@@ -12732,9 +12526,9 @@ modify TIAction
             
         /* build and return the complete phrase */
         if (verb == '')
-            return spSuffix(prep) + distName; // -- place verb at end
+            return spSuffix(prep) + distName; // ##### place verb at end #####
         else
-            return spSuffix(prep) + spSuffix(distName) + verb; // -- place verb at end
+            return spSuffix(prep) + spSuffix(distName) + verb; // ##### place verb at end #####
     }
 
     /* announce all defaulted objects */
@@ -12782,7 +12576,7 @@ modify TIAction
                  + '<space>+<lparen>(.*?)<space>*<alpha>+<rparen>'
                  + '<space>+<lparen>(.*?)<space>*<alpha>+<rparen>',
                  verbPhrase);
-
+        
         /* pull out the verb */
         ret = rexGroup(1)[3];
 
@@ -12819,8 +12613,12 @@ modify TIAction
         /* return the result */
         return ret;
     }
-    // -- TIACTION
-    // -- implementing the german parser questions - part 1: "WOMIT WODURCH ETC ..."
+    
+    // ########################################################
+    // ## TIACTION                                           ##
+    // ## parser questions - part 1: "WOMIT WODURCH ETC ..." ##
+    // ########################################################
+    
     getQuestionWord(which)
     {
         // -- "... TIACTION ..."; -> uncomment for testing
@@ -12848,7 +12646,7 @@ modify TIAction
         if (which == DirectObject)
         {
             
-            // -- German: replace aus|von depending on the kind of dobj  
+            // ##### German: replace aus|von depending on the kind of dobj #####
             if (dprep.startsWith('aus|von')) {
                 local obj = getDobj();
                 if (obj.ofKind(Container))
@@ -12857,7 +12655,7 @@ modify TIAction
                     dprep = dprep.findReplace('aus|von', 'von', ReplaceAll);
             }
             
-            // -- looking for dative flag ...
+            // ##### looking for dative flag ... #####
             if (dprep.endsWith('dativ'))
             {
                 dprep = dprep.substr(1 ,dprep.length() - 5);
@@ -12880,12 +12678,12 @@ modify TIAction
             else
                 return 'Wo' + dprep;
         }
-        // -- do we have an indirect object ?
+        // ##### do we have an indirect object ? #####
         
         else
         {
             
-            // -- German: replace aus|von depending on the kind of dobj  
+            // ##### German: replace aus|von depending on the kind of dobj #####
             if (iprep.startsWith('aus|von')) {
                 local obj = getIobj();
                 if (obj.ofKind(Container))
@@ -12894,7 +12692,7 @@ modify TIAction
                     iprep = iprep.findReplace('aus|von', 'von', ReplaceAll);
             }
             
-            // -- checking for dative flag ...
+            // ##### checking for dative flag ... #####
             if (iprep.endsWith('dativ'))
             {
                 iprep = iprep.substr(1 ,iprep.length() - 5);
@@ -12920,9 +12718,12 @@ modify TIAction
 
     }
     
-    // -- German: modified version of getQuestionInf
-    // -- "WOMIT WILLST DU IN DEM BEET GRABEN?"
-    // -- "WORIN WILLST DU MIT DEM SPATEN GRABEN?"
+    // ################################################
+    // ## German: modified version of getQuestionInf ##
+    // ## "WOMIT WILLST DU IN DEM BEET GRABEN?"      ##
+    // ## "WORIN WILLST DU MIT DEM SPATEN GRABEN?"   ##
+    // ################################################
+    
     getQuestionObject(which)
     {
         local ret;
@@ -12953,7 +12754,7 @@ modify TIAction
          *   asking for iobj: verb dprep it vcomp iprep ('what do you want
          *   to <open it with>', '<dig in it with>', '<look it up in>'
          */
-        //HIER WEITER -> IMPLEMENTIERUNG DES DATIV TOKENS ...
+
         /* parse the verbPhrase into its component parts */
         rexMatch('(.*)/<alphanum|-|squote>+(?:<space>+(<^lparen>*))?'
                  + '<space>+<lparen>(.*?)<space>*<alpha>+<rparen>'
@@ -12961,13 +12762,11 @@ modify TIAction
                  verbPhrase);
 
         /* pull out the verb*/
-        // ret = rexGroup(1)[3];
-        // -- now:
         ret = '';
         /* pull out the verb complementizer */
         vcomp = (rexGroup(2) == nil ? '' : rexGroup(2)[3]);
 
-        // -- set dcase and icase flags to NIL
+        // ##### set dcase and icase flags to NIL #####
         icase = nil;
         dcase = nil;
         /* pull out the direct and indirect object prepositions */
@@ -12976,7 +12775,7 @@ modify TIAction
 
         curcase.d_flag = nil;
         
-        // -- German: replace aus|von depending on the kind of dobj  
+        // ##### replace aus|von depending on the kind of dobj #####
         if (dprep.startsWith('aus|von')) {
             local obj = getDobj();
             if (obj.ofKind(Container))
@@ -12985,19 +12784,19 @@ modify TIAction
                 dprep = dprep.findReplace('aus|von', 'von', ReplaceAll);
         }
         
-        // -- set dcase and icase flags if dativ token ...
+        // ##### set dcase and icase flags if dativ token ... #####
         if (dprep.endsWith('dativ'))
         {
             dcase = true;
             dprep = dprep.substr(1 ,dprep.length() - 5);
         }
-        // -- cut dative token, if there is one
+        // ##### cut dative token, if there is one #####
         if (dprep.endsWith(' '))
         {
             dprep = dprep.substr(1 ,dprep.length() - 1);
         }
         
-        // -- German: replace aus|von depending on the kind of dobj  
+        // ##### German: replace aus|von depending on the kind of dobj #####
         if (iprep.startsWith('aus|von')) {
             local obj = getIobj();
             if (obj.ofKind(Container))
@@ -13006,20 +12805,19 @@ modify TIAction
                 iprep = iprep.findReplace('aus|von', 'von', ReplaceAll);
         }
         
-        // -- cut blank if there is one
+        // ##### cut blank if there is one #####
         if (iprep.endsWith('dativ'))
         {
             icase = true;
             iprep = iprep.substr(1 ,iprep.length() - 5);
         }        
-        // -- cut dative token, if there is one
+        // ##### cut dative token, if there is one #####
         if (iprep.endsWith(' '))
         {
             iprep = iprep.substr(1 ,iprep.length() - 1);
         }   
-        // -- cut blank if there is one
-        
-        // -- decide whether dativ token is active
+        // ##### cut blank if there is one #####
+        // ##### decide whether dativ token is active #####
         if (which == DirectObject && icase == true)
             curcase.d_flag = true;
         if (which == IndirectObject && dcase == true)
@@ -13142,7 +12940,7 @@ modify TIAction
         icase = nil;
 
         /* parse the verbPhrase into its component parts */
-        rexMatch('(.*)/(<alphanum|-|squote>+)(?:<space>+(<^lparen>*))?'
+        rexMatch('(.*)/(.*)'
                  + '<space>+<lparen>(.*?)<space>*<alpha>+<rparen>'
                  + '<space>+<lparen>(.*?)<space>*<alpha>+<rparen>',
                  vp);
@@ -13151,16 +12949,16 @@ modify TIAction
         local verb = rexGroup(2)[3];
         
         /* start off with the infinitive or participle, as desired */
-        ret = ''; // first set ret to ''
+        ret = ''; // ##### first set ret to '' #####
 
         /* get the complementizer */
-        vcomp = (rexGroup(3) == nil ? '' : rexGroup(3)[3]);
+        vcomp = '';
 
         /* get the direct and indirect object prepositions */
-        dprep = rexGroup(4)[3];
-        iprep = rexGroup(5)[3];
+        dprep = rexGroup(3)[3];
+        iprep = rexGroup(4)[3];
 
-        // -- German: replace aus|von depending on the kind of dobj  
+        // ##### replace aus|von depending on the kind of dobj #####
         if (dprep.startsWith('aus|von')) {
             local obj = getDobj();
             if (obj.ofKind(Container))
@@ -13169,7 +12967,7 @@ modify TIAction
                 dprep = dprep.findReplace('aus|von', 'von', ReplaceAll);
         }
         
-        // -- German: If we have a dative flag ... cut it off and set dcase
+        // ##### If we have a dative flag ... cut it off and set dcase #####
         if (dprep.endsWith('dativ'))
         {
             dcase = true;
@@ -13180,7 +12978,7 @@ modify TIAction
             dprep = dprep.substr(1 ,dprep.length() - 1);
         }
         
-        // -- German: replace aus|von depending on the kind of iobj  
+        // ##### replace aus|von depending on the kind of iobj #####
         if (iprep.startsWith('aus|von')) {
             local obj = getIobj();
             if (obj.ofKind(Container))
@@ -13189,13 +12987,13 @@ modify TIAction
                 iprep = iprep.findReplace('aus|von', 'von', ReplaceAll);
         }
         
-        // -- German: If we have a dative flag ... cut it off and set icase        
+        // ##### If we have a dative flag ... cut it off and set icase #####   
         if (iprep.endsWith('dativ'))
         {
             icase = true;
             iprep = iprep.substr(1 ,iprep.length() - 5);
         }        
-        // -- cut blank if there is one
+        // ##### cut blank if there is one #####
         if (iprep.endsWith(' '))
         {
             iprep = iprep.substr(1 ,iprep.length() - 1);
@@ -13230,7 +13028,8 @@ modify TIAction
         if (icase == true)
         {
             iobj = getIobj();
-            iobjText = iobj.demName;
+            if (iobj != nil)
+                iobjText = iobj.demName;
         }
         /* if we have an indirect object, add it with its preposition */
         if (iobjText != nil)
@@ -13530,7 +13329,6 @@ modify TopicTAction
 
     getQuestionWord(which)
     {
-        // -- "... TOPICTIACTION ..."; -> uncomment for testing
         local dprep;
         local iprep;
         local ddativ;
@@ -13555,7 +13353,7 @@ modify TopicTAction
         if (which == DirectObject)
         {
             
-            // -- German: replace aus|von depending on the kind of dobj  
+            // ##### replace aus|von depending on the kind of dobj #####
             if (dprep.startsWith('aus|von')) {
                 local obj = getDobj();
                 if (obj.ofKind(Container))
@@ -13564,7 +13362,7 @@ modify TopicTAction
                     dprep = dprep.findReplace('aus|von', 'von', ReplaceAll);
             }
             
-            // cut dativ token if there is one ...
+            // ##### cut dativ token if there is one ... #####
             if (dprep.endsWith('dativ'))
             {
                 dprep = dprep.substr(1 ,dprep.length() - 5);
@@ -13587,11 +13385,11 @@ modify TopicTAction
             else
                 return 'Wo' + dprep;
         }
-        // -- do we have a topic object?   
+        // ##### do we have a topic object? #####
         else
         {
             
-            // -- German: replace aus|von depending on the kind of dobj  
+            // ##### replace aus|von depending on the kind of dobj #####
             if (iprep.startsWith('aus|von')) {
                 local obj = getIobj();
                 if (obj.ofKind(Container))
@@ -13600,7 +13398,7 @@ modify TopicTAction
                     iprep = iprep.findReplace('aus|von', 'von', ReplaceAll);
             }
             
-            // -- check for dative flag ...
+            // ##### check for dative flag ... #####
             if (iprep.endsWith('dativ'))
             {
                 iprep = iprep.substr(1 ,iprep.length() - 5);
@@ -13626,9 +13424,9 @@ modify TopicTAction
     }
 ;
 
-// ******
-// -- German: VERB RULES modified for German language
-// ******
+// #############################################
+// ## VERB RULES modified for German language ##
+// #############################################
 
 /* ------------------------------------------------------------------------ */
 /*
@@ -13639,9 +13437,9 @@ modify TopicTAction
  *   language-specific grammar rules here.
  */
 
-// ***
-// -- TakeAction
-// ***
+// ##########
+// TakeAction
+// ##########
 
 VerbRule(Nimm)
     verb('nimm','nehm','pack','greif') (|'dir') dobjList
@@ -13649,14 +13447,13 @@ VerbRule(Nimm)
     | verb('steck') 'dir' dobjList prep('ein') 
     : TakeAction
     verbPattern('zu nehmen/nehmen', '(was)')
-    //verbPhrase = (verb_ == nil ? 'zu nehmen/nehmen ' : gVerbPhraseFrom(self)) + '(was)'
 ;
 
-// ***
-// -- TakeFromAction
-// ***
+// ##############
+// TakeFromAction
+// ##############
 
-// -- German: we say 'etwas AUS der Kiste nehmen', but 'etwas VON dem Tisch nehmen' ***
+// ##### we say 'etwas AUS der Kiste nehmen', but 'etwas VON dem Tisch nehmen' #####
 VerbRule(NimmVon)
     verb('nimm','nehm','pack','greif','entfern') dobjList prep('von','aus') singleIobj
     | verb('nimm','nehm','pack','greif') 'dir' dobjList prep('von','aus') singleIobj
@@ -13664,9 +13461,9 @@ VerbRule(NimmVon)
     verbPattern('zu nehmen/nehmen', '(was) (aus|von dativ was)')
 ;
 
-// ***
-// -- RemoveAction
-// ***
+// ############
+// RemoveAction
+// ############
 
 VerbRule(Entfern)
     verb('entfern') dobjList |
@@ -13675,9 +13472,9 @@ VerbRule(Entfern)
     verbPattern('zu entfernen/entfernen', '(was)')
 ;
 
-// ***
-// -- DropAction
-// ***
+// ##########
+// DropAction
+// ##########
 
 VerbRule(LegAb)
     verb('leg','lege','stell','stelle') dobjList prep('ab','hin','weg')
@@ -13686,9 +13483,9 @@ VerbRule(LegAb)
     verbPattern('abzulegen/ablegen', '(was)')
 ;
 
-// ***
-// -- ExamineAction
-// ***
+// #############
+// ExamineAction
+// #############
 
 VerbRule(Untersuch)
     verb('untersuch','betracht','schau') dobjList
@@ -13698,9 +13495,9 @@ VerbRule(Untersuch)
     verbPattern('zu betrachten/betrachten', '(was)')
 ;
 
-// ***
-// -- ReadAction
-// ***
+// ##########
+// ReadAction
+// ##########
 
 VerbRule(Lies)
     verb('lies','les','studier','entziffer') dobjList
@@ -13708,9 +13505,9 @@ VerbRule(Lies)
     verbPattern('zu lesen/lesen', '(was)')
 ;
 
-// ***
-// -- LookInAction
-// ***
+// ############
+// LookInAction
+// ############
 
 VerbRule(SchauIn)
     verb('such') 'in' dobjList
@@ -13719,9 +13516,9 @@ VerbRule(SchauIn)
     verbPattern('zu schauen/schauen', '(in was)')
 ;
 
-// ***
-// -- LookVagueActions
-// ***
+// ################
+// LookVagueActions
+// ################
 
 // -- in German we have a common use of
 // -- untersuche schrank .....
@@ -13802,188 +13599,9 @@ VerbRule(SchauDahinter)
     verbPhrase = 'dahinterzuschauen/dahinterschauen' 
 ;
 
-// -- german: our reminder object keeps track of the last mentioned object
-
-reminder : object
-    myLastObj = nil
-    setLastObj(obj) {
-        myLastObj = obj;
-    }
-    getLastObj() {
-        return myLastObj;
-    }
-;
-
-modify TAction
-    getCurrentObjects()
-    {
-        reminder.setLastObj(dobjCur_);
-        return [dobjCur_];
-    }
-;
-
-// -- german: our verHelper object stores pariciples of the last verb
-
-verbHelper : object
-    reversed = nil
-    blank = true
-    participle = ''
-    longParticiple = ''
-    lastVerb = 'undefined'
-    setParticiple(txt) {
-        participle = txt;
-    }
-;
-
-// -- german: our infHelper object builds verbphrases from verbrule objects
-
-infHelper : object
-    
-    tab = [
-        'öffn' -> 'öffnen',
-        'nimm' -> 'nehmen', 
-        'wirf' -> 'werfen', 
-        'lies' -> 'lesen', 
-        'gib' -> 'geben', 
-        'iss' -> 'essen',
-        'steige' -> 'steigen',
-        'friss' -> 'fressen',
-        'brich' -> 'brechen',
-        'zerbrich' -> 'zerbrechen',
-        'säuber' -> 'säubern',
-        'entziffer' -> 'entziffern',
-        'schnüffl' -> 'schnüffeln',
-        'schnüffel' -> 'schnüffeln',
-        'schnupper' -> 'schnuppern',
-        * -> 'undefined'
-    ]
-    
-    buildVerbPhraseFrom(obj) {
-         
-        local verb = obj.verb_;
-        local prep = obj.prep_;
-        local misc = (obj.misc_ ? obj.misc_ + ' ' : '');
-        local verbPhrase = nil;    
-
-        // if we end up with 'e', cut it off
-        if (verb.endsWith('e'))
-            verb = verb.substr(1, verb.length() - 1);
-        
-        // if our verb is in the table with irregular infinitives, replace it
-        local irregular = tab[verb];
-        if (irregular != 'undefined')
-            verb = irregular;
-        else
-            verb = verb + 'en';
-               
-        // if we have no prep, the form is rather simple
-        if (prep == nil)
-            verbPhrase = misc + 'zu ' + verb + '/' + misc + verb + ' ';
-        // if we have a prep, use it
-        else if (prep)
-            verbPhrase = prep + 'zu' + verb + '/' + prep + verb + ' ';
-        
-        return(verbPhrase);
-    }
-;
-
-tokHelper : object
-    
-    token = [
-        'durchs' -> 'durch',
-        'ans' -> 'an', 
-        'am' -> 'an',
-        'aufs' -> 'auf',
-        'vom' -> 'von',
-        'übers' -> 'über',
-        'überm' -> 'über',
-        'ums' -> 'um',
-        'ins' -> 'in',
-        'im' -> 'in',
-        'unters' -> 'unter',
-        'unterm' -> 'unter',
-        'hinters' -> 'hinter',
-        'hinterm' -> 'hinter',
-        'runter' -> 'hinunter',
-        'hinab' -> 'hinunter',
-        'herab' -> 'hinunter',
-        'herunter' -> 'hinunter',
-        'herauf' -> 'hinauf',
-        'rauf' -> 'hinauf',
-        'raus' -> 'hinaus',
-        'heraus' -> 'hinaus',
-        'rein' -> 'hinein',
-        'herein' -> 'hinein',
-        'rüber' -> 'hinüber',
-        'drüber' -> 'hinüber',
-        'herüber' -> 'hinüber',
-        'zum' -> 'zu',
-        'zur' -> 'zu',
-        * -> 'undefined'
-    ]
-   
-    checkForValidTokens(txt) { 
-        
-        // get keys from token lookuptable
-        local keys = token.keysToList();
-        
-        // iterate through the keys in token lookuptable
-        foreach(local val in keys) {
-
-            // if we find a matching start value (rüberspringen), replace it
-            // with the value (hinüberspringen)
-            
-            // We have special rules at the beginning of a sentence:
-            // We don't want to replace "durchs", "ans" because we 
-            // have trouble with verbs like "*durchs*uch" ...
-            // have trouble with verbs like "*rein*ige" ...
-            
-            if (txt.startsWith(val)) {
-                
-                if (txt.length() > val.length()) {
-                    if (!val.endsWith('s')) {
-                        local test = txt.substr(val.length() + 1, txt.length());
-                        if (checkForValidWord(test)) {
-                            txt  = txt.substr(val.length() + 1, txt.length());
-                            txt  = token[val] + txt;
-                            break;
-                        }
-                    }
-                }
-                else {
-                    txt  = txt.substr(val.length() + 1, txt.length());
-                    txt  = token[val] + txt;
-                    break;
-                }
-            }
-        }
-
-        //txt = token[txt];
-        // return either new or old value
-        return(txt);
-    }
-
-    checkForValidWord(txt) {
-
-        // it could be that we are already defined "as we are"
-        if (cmdDict.isWordDefined(txt))
-            return true;
-        // it could be that we defined "truncated"
-        txt = strangeObj.testEndings(txt);
-        if (cmdDict.isWordDefined(txt))
-            return true;
-        // it could be that we defined as "irregular infinitve"
-        local irregular = infHelper.tab[txt];
-        if (irregular != 'undefined')
-            return true;
-        // we are really unknown :-(
-        return nil;
-    }
-;
-
-// ***
+// ###############
 // -- SearchAction
-// ***
+// ###############
 
 VerbRule(Durchsuch)
     verb('durchsuch','durchkämm','durchwühl') dobjList
@@ -13993,9 +13611,9 @@ VerbRule(Durchsuch)
     verbPattern('zu durchsuchen/durchsuchen', '(was)')
 ;
 
-// ***
+// ####################
 // -- LookThroughAction
-// ***
+// ####################
 
 VerbRule(SchauDurch)
     verb('blick','blicke','schau') ('durch'|'aus'|'zu') dobjList (|'hinaus')
@@ -14003,9 +13621,9 @@ VerbRule(SchauDurch)
     verbPattern('zu schauen/schauen', '(durch was)')
 ;
 
-// ***
+// ##################
 // -- LookUnderAction
-// ***
+// ##################
 
 VerbRule(SchauUnter)
     verb('blick','blicke','schau','such','wühl') 'unter' dobjList (|'nach')
@@ -14014,9 +13632,9 @@ VerbRule(SchauUnter)
     verbPattern('zu schauen/schauen', '(unter was)')
 ;
 
-// ***
+// ###################
 // -- LookBehindAction
-// ***
+// ###################
 
 VerbRule(SchauHinter)
     verb('blick','blicke','schau','such','wühl') 'hinter' dobjList (|'nach')
@@ -14025,9 +13643,9 @@ VerbRule(SchauHinter)
     verbPattern('zu schauen/schauen', '(hinter was)')
 ;
 
-// ***
+// #############
 // -- FeelAction
-// ***
+// #############
 
 VerbRule(Fuehl)
     verb('berühr','fühl','tast','taste','betast','streif') dobjList
@@ -14037,9 +13655,9 @@ VerbRule(Fuehl)
     verbPattern('zu berühren/berühren', '(was)')
 ;
 
-// ***
+// ##############
 // -- TasteAction
-// ***
+// ##############
 
 VerbRule(Schmeck)
     verb('schmeck','leck','probier') dobjList
@@ -14048,9 +13666,9 @@ VerbRule(Schmeck)
     verbPattern('zu schmecken/schmecken', '(was)')
 ;
 
-// ***
+// ##############
 // -- SmellAction
-// ***
+// ##############
 
 VerbRule(RiechAn)
     verb('riech','schnüffel','schnüffl','schnupper') dobjList
@@ -14066,9 +13684,9 @@ VerbRule(RiechAn)
     noMatch(msgObj, actor, txt) { msgObj.noMatchNotAware(actor, txt); }
 ;
 
-// ***
+// ######################
 // -- SmellImplicitAction
-// ***
+// ######################
 
 VerbRule(RiechImplizit)
     verb('riech','schnüffel','schnüffl','schnupper')
@@ -14076,9 +13694,9 @@ VerbRule(RiechImplizit)
     verbPhrase = 'zu riechen/riechen'
 ;
 
-// ***
+// #################
 // -- ListenToAction
-// ***
+// #################
 
 VerbRule(HoerAn)
     verb('hör','horch') dobjList 'an'
@@ -14107,9 +13725,9 @@ VerbRule(HoerZu)
     noMatch(msgObj, actor, txt) { msgObj.noMatchNotAware(actor, txt); }
 ;
     
-// ***
+// ######################
 // -- ListenImlicitAction
-// ***
+// ######################
 
 VerbRule(HoerImplizit)
     verb('hör','lausch','horch')
@@ -14117,9 +13735,9 @@ VerbRule(HoerImplizit)
     verbPhrase = 'zu hören/hören'
 ;
 
-// ***
+// ##############
 // -- PutInAction
-// ***
+// ##############
 
 VerbRule(LegIn)
     verb('leg','lege','platzier','pack','stell','stelle') dobjList 'in' singleIobj (|'hinein')
@@ -14128,9 +13746,9 @@ VerbRule(LegIn)
     askIobjResponseProd = inSingleNoun
 ;
 
-// ***
+// ##############
 // -- PutOnAction
-// ***
+// ##############
 
 VerbRule(LegAuf)
     verb('leg','lege','platzier','pack','stell','stelle') dobjList 'auf' singleIobj
@@ -14139,9 +13757,9 @@ VerbRule(LegAuf)
     askIobjResponseProd = aufSingleNoun
 ;
 
-// ***
+// #################
 // -- PutUnderAction
-// ***
+// #################
 
 VerbRule(LegUnter)
     verb('leg','lege','platzier','pack','stell','stelle') dobjList 'unter' singleIobj    
@@ -14150,9 +13768,9 @@ VerbRule(LegUnter)
     askIobjResponseProd = unterSingleNoun
 ;
 
-// ***
+// ##################
 // -- PutBehindAction
-// ***
+// ##################
 
 VerbRule(LegHinter)
     verb('leg','lege','platzier','pack','stell','stelle') dobjList 'hinter' singleIobj    
@@ -14161,9 +13779,9 @@ VerbRule(LegHinter)
     askIobjResponseProd = hinterSingleNoun
 ;
 
-// ***
+// ##############
 // -- PutInAction
-// ***
+// ##############
 
 VerbRule(LegInWas)
     [badness 500] 
@@ -14178,9 +13796,9 @@ VerbRule(LegInWas)
     }
 ;
 
-// ***
+// #############
 // -- WearAction
-// ***
+// #############
 
 VerbRule(ZiehAn)
     verb('trag') dobjList
@@ -14191,9 +13809,9 @@ VerbRule(ZiehAn)
     verbPattern('anzuziehen/anziehen', '(was)')
 ;
 
-// ***
+// #############
 // -- DoffAction
-// ***
+// #############
 
 VerbRule(ZiehAus)
     verb('leg','lege','zieh','nimm','nehm','setz') dobjList prep('ab')
@@ -14202,9 +13820,9 @@ VerbRule(ZiehAus)
     verbPattern('auszuziehen/ausziehen', '(was)')
 ;
 
-// ***
+// #############
 // -- KissAction
-// ***
+// #############
 
 VerbRule(Kuess)
     verb('küss','knutsch') singleDobj
@@ -14212,9 +13830,9 @@ VerbRule(Kuess)
     verbPattern('zu küssen/küssen', '(wen)')
 ;
 
-// ***
+// ###############
 // -- AskForAction
-// ***
+// ###############
 
 VerbRule(BitteUm)
     verb('bitt') singleDobj 'um' singleTopic
@@ -14240,9 +13858,9 @@ VerbRule(BittWenUm)
     }
 ;
 
-// ***
+// #################
 // -- AskAboutAction
-// ***
+// #################
 
 VerbRule(FragWas)
     verb('frag','befrag') singleDobj ('nach'|'über') singleTopic
@@ -14283,9 +13901,9 @@ VerbRule(FragNachWas)
     }
 ;
 
-// ***
+// ##################
 // -- TellAboutAction
-// ***
+// ##################
 
 VerbRule(ErzaehlWas)
     verb('erzähl','bericht','berichte') singleDobj ('von'|'über') singleTopic
@@ -14325,9 +13943,9 @@ VerbRule(ErzaehlVonWas)
     }
 ;
 
-// ***
+// ###############
 // -- TalkToAction
-// ***
+// ###############
 
 VerbRule(RedMit)
     verb('red','sprich','sprech') 'mit' singleDobj 
@@ -14378,9 +13996,9 @@ VerbRule(Sprich)
     }
 ;
 
-// ***
+// ###############
 // -- TopicsAction
-// ***
+// ###############
 
 VerbRule(Themen)
     'thema' | 'themen'
@@ -14388,9 +14006,9 @@ VerbRule(Themen)
     verbPhrase = 'die Themen zu zeigen/die Themen zeigen'
 ;
 
-// ***
+// ##############
 // -- HelloAction
-// ***
+// ##############
 
 VerbRule(Hallo)
     ('sag' | ) ('hallo'|'hi'|'grüß' 'gott'|'servus')
@@ -14398,9 +14016,9 @@ VerbRule(Hallo)
     verbPhrase = 'zu grüßen/grüßen'
 ;
 
-// ***
+// ################
 // -- GoodByeAction
-// ***
+// ################
 
 VerbRule(Wiedersehen)
     ('sag' | ) ('auf' ('wiedersehn'|'wiederseh') | 'wiederseh' | 'wiedersehn' 
@@ -14409,9 +14027,9 @@ VerbRule(Wiedersehen)
     verbPhrase = 'zu verabschieden/verabschieden'
 ;
 
-// ***
+// ############
 // -- YesAction
-// ***
+// ############
 
 VerbRule(Ja)
     'ja' | 'okay' | 'sag' 'ja' | 'in' 'ordnung' | 'jo'
@@ -14419,9 +14037,9 @@ VerbRule(Ja)
     verbPhrase = 'zu bejahen/bejahen'
 ;
 
-// ***
+// ###########
 // -- NoAction
-// ***
+// ###########
 
 VerbRule(Nein)
     'nein' | 'nee' | 'sag' 'nein' | 'nö' | 'nein' 'danke'
@@ -14429,9 +14047,9 @@ VerbRule(Nein)
     verbPhrase = 'zu verneinen/verneinen'
 ;
 
-// ***
+// #############
 // -- YellAction
-// ***
+// #############
 
 VerbRule(Schrei)
     verb('schrei','brüll','ruf','jaul')
@@ -14439,9 +14057,9 @@ VerbRule(Schrei)
     verbPhrase = 'zu schreien/schreien'
 ;
 
-// ***
+// ###############
 // -- GiveToAction
-// ***
+// ###############
 
 VerbRule(GibWas)
     verb('gib','geb','übergeb','übergib') dobjList 'an' singleIobj
@@ -14486,9 +14104,9 @@ VerbRule(BietWasWem)
     }
 ;
 
-// ***
+// ###############
 // -- ShowToAction
-// ***
+// ###############
 
 VerbRule(ZeigWas)
     verb('zeig') dobjList singleIobj
@@ -14513,9 +14131,9 @@ VerbRule(ZeigWasWem)
     }
 ;
 
-// ***
+// ##############
 // -- ThrowAction
-// ***
+// ##############
 
 VerbRule(Wirf)
     verb('wirf','werf','schmeiß') dobjList (|'weg'|'fort')
@@ -14523,9 +14141,9 @@ VerbRule(Wirf)
     verbPattern('zu werfen/werfen', '(was)')
 ;
 
-// ***
+// ################
 // -- ThrowAtAction
-// ***
+// ################
 
 VerbRule(WirfAuf)
     verb('werf','wirf','schmeiß') dobjList ('auf'|'in'|'gegen') singleIobj
@@ -14534,9 +14152,9 @@ VerbRule(WirfAuf)
     askIobjResponseProd = aufSingleNoun
 ;
 
-// ***
+// ################
 // -- ThrowToAction
-// ***
+// ################
 
 VerbRule(WirfNach)
     verb('werf','wirf','schmeiß') dobjList 'nach' singleIobj
@@ -14545,9 +14163,9 @@ VerbRule(WirfNach)
     askIobjResponseProd = nachSingleNoun
 ;
 
-// ***
+// #################
 // -- ThrowDirAction
-// ***
+// #################
 
 VerbRule(WirfDir)
     verb('werf','wirf','schmeiß') dobjList ('nach' ('dem' | ) | ) singleDir
@@ -14564,9 +14182,9 @@ VerbRule(WirfDirUnten)
     getDirection() { return downDirection; }
 ;
 
-// ***
+// ###############
 // -- FollowAction
-// ***
+// ###############
 
 VerbRule(Folg)
     verb('folg','verfolg','geh') singleDobj (|'nach'|'hinterher')
@@ -14575,9 +14193,9 @@ VerbRule(Folg)
     askDobjResponseProd = singleNoun
 ;
 
-// ***
+// ###############
 // -- AttackAction
-// ***
+// ###############
 
 VerbRule(Attackier)
     verb('attackier','schlag','tret','box','hau','bekämpf','töt') singleDobj
@@ -14589,9 +14207,9 @@ VerbRule(Attackier)
     askDobjResponseProd = singleNoun
 ;
 
-// ***
+// ###################
 // -- AttackWithAction
-// ***
+// ###################
 
 VerbRule(AttackWith)
     verb('attackier','schlag','tret','box','hau','bekämpf','töt') singleDobj 'mit' singleIobj
@@ -14604,9 +14222,9 @@ VerbRule(AttackWith)
     askIobjResponseProd = mitSingleNoun
 ;
 
-// ***
+// ##############################################################
 // -- mostly technical verbs, so we leave the english identifiers
-// ***
+// ##############################################################
 
 VerbRule(Inventory)
     'i' | 'inv' | 'inventar' | 'inventar'
@@ -14813,7 +14431,7 @@ VerbRule(About)
 ;
 
 VerbRule(Script)
-    'script' | 'script' 'on' | 'skript' | 'skript' ('an'|'ein')
+    'script' | 'script' 'on' | 'skript' | 'skript' ('an'|'ein') | 'mitschrift'
     : ScriptAction 
     verbPhrase = 'das Skript zu starten/das Skript starten'
 ;
@@ -14878,17 +14496,17 @@ VerbRule(ReplayQuiet)
     scriptOptionFlags = ScriptFileQuiet
 ;
 
-// ***
+// ####################
 // -- VagueTravelAction
-// ***
+// ####################
 
 VerbRule(ReiseZiellos) ('spazier'|'geh') (|'umher'|'herum') : VagueTravelAction
     verbPhrase = 'zu gehen/gehen'
 ;
 
-// ***
+// ###############
 // -- TravelAction
-// ***
+// ###############
 
 VerbRule(Reise)
     ('spazier' | 'geh') (|'nach') singleDir | singleDir
@@ -14910,9 +14528,9 @@ class EnTravelVia: TravelViaAction
     verbPhrase = 'zu benutzen/benutzen (was)'
 ;
 
-// ***
+// #############
 // -- PortAction
-// ***
+// #############
 
 VerbRule(BackBord)
     ('spazier' | 'geh') 'nach' ('backbord' | 'bb')
@@ -14921,9 +14539,9 @@ VerbRule(BackBord)
     verbPhrase = 'nach Backbord zu gehen/nach Backbord gehen'
 ;
 
-// ***
+// ##################
 // -- StarboardAction
-// ***
+// ##################
 
 VerbRule(Steuerbord)
     ('spazier' | 'geh') 'nach' ('steuerbord' | 'sb')
@@ -14932,9 +14550,9 @@ VerbRule(Steuerbord)
     verbPhrase = 'nach Steuerbord zu gehen/nach Steuerbord gehen'
 ;
 
-// ***
+// ###########
 // -- InAction
-// ***
+// ###########
 
 VerbRule(Rein)
     'hinein' | 'drinnen'
@@ -14943,9 +14561,9 @@ VerbRule(Rein)
     verbPhrase = 'hineinzugehen/hineingehen'
 ;
 
-// ***
+// ############
 // -- OutAction
-// ***
+// ############
 
 VerbRule(Raus)
     'hinaus' | 'draußen'
@@ -14954,9 +14572,9 @@ VerbRule(Raus)
     verbPhrase = 'hinauszugehen/hinausgehen (aus dativ was)'
 ;
 
-// ***
+// ##################
 // -- GoThroughAction
-// ***
+// ##################
 
 VerbRule(GehDurch)
     verb('geh','spazier','spring','kletter','steig','steige') 'durch' singleDobj
@@ -14965,9 +14583,9 @@ VerbRule(GehDurch)
     askDobjResponseProd = durchSingleNoun
 ;
 
-// ***
+// ##############
 // -- EnterAction
-// ***
+// ##############
 
 VerbRule(Betret)
     verb('betret','betritt') singleDobj
@@ -14978,9 +14596,9 @@ VerbRule(Betret)
     askDobjResponseProd = singleNoun
 ;
 
-// ***
+// ###############
 // -- GoBackAction
-// ***
+// ###############
 
 VerbRule(GehZurueck)
     ('geh' | 'kehr') 'zurück'
@@ -14988,9 +14606,9 @@ VerbRule(GehZurueck)
     verbPhrase = 'zurück zu gehen/zurück gehen'
 ;
 
-// ***
+// ############
 // -- DigAction
-// ***
+// ############
 
 VerbRule(Grab)
     ('grab' | 'grab' 'in') singleDobj
@@ -14999,9 +14617,9 @@ VerbRule(Grab)
     askDobjResponseProd = inSingleNoun
 ;
 
-// ***
+// ################
 // -- DigWithAction
-// ***
+// ################
 
 VerbRule(GrabMit)
     ('grab' | 'grab' 'in') singleDobj 'mit' singleIobj
@@ -15013,9 +14631,9 @@ VerbRule(GrabMit)
     askIobjResponseProd = mitSingleNoun
 ;
 
-// ***
+// #############
 // -- JumpAction
-// ***
+// #############
 
 VerbRule(Spring)
     'spring' | 'hüpf'
@@ -15023,9 +14641,9 @@ VerbRule(Spring)
     verbPhrase = 'zu springen/springen'
 ;
 
-// ***
+// #################
 // -- JumpOffIAction
-// ***
+// #################
 
 VerbRule(SpringAb)
     verb('spring') prep('ab','hinunter')
@@ -15033,9 +14651,9 @@ VerbRule(SpringAb)
     verbPhrase = 'abzuspringen/abspringen'
 ;
 
-// ***
+// ################
 // -- JumpOffAction
-// ***
+// ################
 
 VerbRule(SpringVon)
     verb('spring') 'von' singleDobj (|'ab'|'hinunter')
@@ -15044,9 +14662,9 @@ VerbRule(SpringVon)
     askDobjResponseProd = singleNoun
 ;
 
-// ***
+// #################
 // -- JumpOverAction
-// ***
+// #################
 
 VerbRule(SpringUeber)
     verb('spring') 'über' singleDobj (|'hinüber')
@@ -15055,9 +14673,9 @@ VerbRule(SpringUeber)
     askDobjResponseProd = ueberSingleNoun
 ;
 
-// ***
+// #############
 // -- PushAction
-// ***
+// #############
 
 VerbRule(Schieb)
     verb('drück','schieb','schubs') dobjList (|prep('an'))
@@ -15065,9 +14683,9 @@ VerbRule(Schieb)
     verbPattern('zu schieben/schieben','(was)')
 ;
 
-// ***
+// #############
 // -- PullAction
-// ***
+// #############
 
 VerbRule(Zieh)
     verb('zieh') (|'an') dobjList
@@ -15075,9 +14693,9 @@ VerbRule(Zieh)
     verbPhrase = 'zu ziehen/ziehen (was)'
 ;
 
-// ***
+// #############
 // -- MoveAction
-// ***
+// #############
 
 VerbRule(Beweg)
     verb('beweg') dobjList
@@ -15085,9 +14703,9 @@ VerbRule(Beweg)
     verbPhrase = 'zu bewegen/bewegen (was)'
 ;
 
-// ***
+// ###############
 // -- MoveToAction
-// ***
+// ###############
 
 VerbRule(BewegNach)
     verb('beweg','schieb','schubs') dobjList ('nach'|'unter'|'zu') singleIobj (|'hin')
@@ -15097,9 +14715,9 @@ VerbRule(BewegNach)
     omitIobjInDobjQuery = true
 ;
 
-// ***
+// #################
 // -- MoveWithAction
-// ***
+// #################
 
 VerbRule(BewegMit)
     verb('beweg','schieb','schubs') singleDobj 'mit' singleIobj
@@ -15110,9 +14728,9 @@ VerbRule(BewegMit)
     omitIobjInDobjQuery = true
 ;
 
-// ***
+// #############
 // -- TurnAction
-// ***
+// #############
 
 VerbRule(Dreh)
     verb('dreh','rotier','verdreh') dobjList
@@ -15120,9 +14738,9 @@ VerbRule(Dreh)
     verbPattern('zu drehen/drehen','(was)')
 ;
 
-// ***
+// #################
 // -- TurnWithAction
-// ***
+// #################
 
 VerbRule(DrehMitWas)
     verb('dreh','rotier','verdreh') singleDobj 'mit' singleIobj
@@ -15132,9 +14750,9 @@ VerbRule(DrehMitWas)
     askIobjResponseProd = mitSingleNoun
 ;
 
-// ***
+// ###############
 // -- TurnToAction
-// ***
+// ###############
 
 VerbRule(DrehAufWas)
     verb('dreh','rotier','verdreh') singleDobj 'auf' singleLiteral
@@ -15144,9 +14762,9 @@ VerbRule(DrehAufWas)
     omitIobjInDobjQuery = true
 ;
 
-// ***
+// ############
 // -- SetAction
-// ***
+// ############
 
 VerbRule(StellEin)
     verb('stell','stelle') dobjList (|prep('ein'))
@@ -15154,9 +14772,9 @@ VerbRule(StellEin)
     verbPattern('zu stellen/stellen','(was)')
 ;
 
-// ***
+// ##############
 // -- SetToAction
-// ***
+// ##############
 
 VerbRule(StellEinAuf)
     verb('stell','stelle') singleDobj 'auf' singleLiteral (|'ein')
@@ -15166,9 +14784,9 @@ VerbRule(StellEinAuf)
     omitIobjInDobjQuery = true
 ;
 
-// ***
+// ###############
 // -- TypeOnAction
-// ***
+// ###############
 
 VerbRule(TippAuf)
      'tipp' ('auf'|'in') singleDobj
@@ -15176,9 +14794,9 @@ VerbRule(TippAuf)
     verbPhrase = 'zu tippen/tippen (auf dativ was)'
 ;
 
-// ***
+// ######################
 // -- TypeLiteralOnAction
-// ***
+// ######################
 
 VerbRule(TippTextAuf)
     verb('tipp') singleLiteral ('auf'|'in') singleDobj
@@ -15201,9 +14819,9 @@ VerbRule(TippTextAufWas)
     }
 ;
 
-// ***
+// ################
 // -- ConsultAction
-// ***
+// ################
 
 VerbRule(SchlagNachIn)
     verb('schlag') prep('nach') 'in' singleDobj
@@ -15216,9 +14834,9 @@ VerbRule(SchlagNachIn)
     askDobjResponseProd = singleNoun
 ;
 
-// ***
+// #####################
 // -- ConsultAboutAction
-// ***
+// #####################
 
 VerbRule(SchlagNachUeber)
     verb('schlag','lies','les') (|'über') singleTopic 'in' singleDobj prep('nach')
@@ -15233,9 +14851,9 @@ VerbRule(SchlagNachUeber)
     askDobjResponseProd = inSingleNoun
 ;
 
-// ***
+// #########################################
 // -- ConsultAboutAction -- ConsultWhatAbout
-// ***
+// #########################################
 
 VerbRule(SchlagNachWorin)
     verb('schlag','lies','les','schau') singleTopic prep('nach')
@@ -15252,9 +14870,9 @@ VerbRule(SchlagNachWorin)
     }
 ;
 
-// ***
+// ###############
 // -- SwitchAction
-// ***
+// ###############
 
 VerbRule(SchaltUm)
     'schalt' dobjList (|'um')
@@ -15262,9 +14880,9 @@ VerbRule(SchaltUm)
     verbPhrase = 'umzuschalten/umschalten (was)'
 ;
 
-// ***
+// #############
 // -- FlipAction
-// ***
+// #############
 
 VerbRule(DrehUm)
     verb('dreh') dobjList prep('um')
@@ -15276,9 +14894,9 @@ VerbRule(DrehUm)
     defaultForRecursion = true
 ;
 
-// ***
+// ###############
 // -- TurnOnAction
-// ***
+// ###############
 
 VerbRule(SchaltEin)
     verb('schalt') dobjList prep('an','ein')
@@ -15288,9 +14906,9 @@ VerbRule(SchaltEin)
     verbPattern('einzuschalten/einschalten','(was)')
 ;
 
-// ***
+// ################
 // -- TurnOffAction
-// ***
+// ################
 
 VerbRule(SchaltAus)
     verb('stell','stelle','schalt','mach') dobjList prep('aus')
@@ -15299,9 +14917,9 @@ VerbRule(SchaltAus)
     verbPattern('auszuschalten/ausschalten','(was)')
 ;
 
-// ***
+// ##############
 // -- LightAction
-// ***
+// ##############
 
 VerbRule(ZuendAn)
     verb('zünd') dobjList prep('an')
@@ -15310,9 +14928,9 @@ VerbRule(ZuendAn)
     verbPattern('anzuzünden/anzünden','(was)')
 ;
 
-// ***
+// #############
 // -- BurnAction
-// ***
+// #############
 
 VerbRule(Verbrenn)
     'verbrenn' dobjList
@@ -15320,9 +14938,9 @@ VerbRule(Verbrenn)
     verbPhrase = 'zu verbrennen/verbrennen (was)'
 ;
 
-// ***
+// #################
 // -- BurnWithAction
-// ***
+// #################
 
 VerbRule(ZuendAnMit)
     verb('erhell','erleucht','entzünd','entfach','entflamm','verbrenn') singleDobj 'mit' singleIobj
@@ -15335,9 +14953,9 @@ VerbRule(ZuendAnMit)
 
 ;
 
-// ***
+// ###################
 // -- ExtinguishAction
-// ***
+// ###################
 
 VerbRule(LoeschAus)
     verb('blas','lösch') dobjList prep('aus')
@@ -15345,9 +14963,9 @@ VerbRule(LoeschAus)
     verbPattern('auszulöschen/auslöschen','(was)')
 ;
 
-// ***
+// ##############
 // -- BreakAction
-// ***
+// ##############
 
 VerbRule(Brech)
     verb('brech','brich','zerbrech','zerbrich','ruinier','zerstör') dobjList
@@ -15356,9 +14974,9 @@ VerbRule(Brech)
     verbPattern('zu brechen/brechen','(was)')
 ;
 
-// ***
+// ################
 // -- CutWithAction
-// ***
+// ################
 
 VerbRule(SchneidWomit)
     [badness 500] 
@@ -15383,9 +15001,9 @@ VerbRule(SchneidMit)
     askIobjResponseProd = mitSingleNoun
 ;
 
-// ***
+// ############
 // -- EatAction
-// ***
+// ############
 
 VerbRule(Iss)
     verb('iss','ess','friss','fress','konsumier','verzehr') dobjList
@@ -15394,9 +15012,9 @@ VerbRule(Iss)
 
 ;
 
-// ***
+// ##############
 // -- DrinkAction
-// ***
+// ##############
 
 VerbRule(Trink)
     verb('trink','schluck') dobjList
@@ -15405,9 +15023,9 @@ VerbRule(Trink)
     verbPattern('zu trinken/trinken','(was)')
 ;
 
-// ***
+// #############
 // -- PourAction
-// ***
+// #############
 
 VerbRule(Entleer)
     verb('entleer') dobjList
@@ -15416,9 +15034,9 @@ VerbRule(Entleer)
     verbPattern('zu entleeren/entleeren','(was)')
 ;
 
-// ***
+// #################
 // -- PourIntoAction
-// ***
+// #################
 
 VerbRule(EntleerIn)
     verb('entleer','leer','schütt','schütte','gieß','kipp','kippe') dobjList 'in' singleIobj (|'hinein')
@@ -15427,9 +15045,9 @@ VerbRule(EntleerIn)
     askIobjResponseProd = inSingleNoun
 ;
 
-// ***
+// #################
 // -- PourOntoAction
-// ***
+// #################
 
 VerbRule(EntleerAuf)
     verb('entleer','leer','schütt','schütte','gieß','kipp','kippe') dobjList 'auf' singleIobj
@@ -15438,9 +15056,9 @@ VerbRule(EntleerAuf)
     askIobjResponseProd = aufSingleNoun
 ;
 
-// ***
+// ##############
 // -- ClimbAction
-// ***
+// ##############
 
 VerbRule(KletterAuf)
     'kletter' (|'auf') singleDobj
@@ -15458,9 +15076,9 @@ VerbRule(Erkletter)
     verbPattern('zu erklettern/erklettern','(was)')
 ;
 
-// ***
+// ################
 // -- ClimbUpAction
-// ***
+// ################
 
 VerbRule(KletterHinauf)
     verb('kletter','steig','steige','geh') (|'an') singleDobj prep('hinauf','hoch')
@@ -15496,9 +15114,9 @@ VerbRule(SteigHinaufWas)
     }
 ;
 
-// ***
+// ##################
 // -- ClimbDownAction
-// ***
+// ##################
 
 VerbRule(KletterHinunter)
     verb('kletter','steig','steige','geh') (|'an') singleDobj prep('hinunter')
@@ -15534,9 +15152,9 @@ VerbRule(KletterHinunterWas)
     }
 ;
 
-// ***
+// ##############
 // -- CleanAction
-// ***
+// ##############
 
 VerbRule(Reinig)
     verb('reinig','kehr','kehre','feg','säuber') dobjList
@@ -15545,9 +15163,9 @@ VerbRule(Reinig)
     verbPattern('zu reinigen/reinigen','(was)')
 ;
 
-// ***
+// ##################
 // -- CleanWithAction
-// ***
+// ##################
 
 VerbRule(ReinigMit)
     verb('reinig','kehr','kehre','feg','säuber') dobjList 'mit' singleIobj
@@ -15559,9 +15177,9 @@ VerbRule(ReinigMit)
     omitIobjInDobjQuery = true
 ;
 
-// ***
+// #################
 // -- AttachToAction
-// ***
+// #################
 
 VerbRule(BefestigAn)
     verb('verbind') dobjList 'mit' singleIobj
@@ -15610,9 +15228,9 @@ VerbRule(VerbindeMitWas)
     }
 ;
 
-// ***
+// ###################
 // -- DetachFromAction
-// ***
+// ###################
 
 VerbRule(TrennAb)
     verb('lös','trenn','locker') dobjList 'von' singleIobj (|'ab')
@@ -15622,9 +15240,9 @@ VerbRule(TrennAb)
     askIobjResponseProd = vonSingleNoun
 ;
 
-// ***
+// ###############
 // -- DetachAction
-// ***
+// ###############
 
 VerbRule(Trenn)
     verb('lös','trenn','locker') dobjList (|'ab')
@@ -15633,9 +15251,9 @@ VerbRule(Trenn)
     verbPattern('zu trennen/trennen','(was)')
 ;
 
-// ***
+// #############
 // -- OpenAction
-// ***
+// #############
 
 VerbRule(Oeffne)
     verb('öffn') dobjList
@@ -15644,9 +15262,9 @@ VerbRule(Oeffne)
     verbPattern('zu öffnen/öffnen','(was)')
 ;
 
-// ***
+// ##############
 // -- CloseAction
-// ***
+// ##############
 
 VerbRule(Schliess)
     verb('schließ') dobjList
@@ -15655,9 +15273,9 @@ VerbRule(Schliess)
     verbPattern('zu schließen/schließen','(was)')
 ;
 
-// ***
+// #############
 // -- LockAction
-// ***
+// #############
 
 VerbRule(SperrZu)
     verb('versperr','verschließ') dobjList
@@ -15666,9 +15284,9 @@ VerbRule(SperrZu)
     verbPattern('abzusperren/absperren','(was)')
 ;
 
-// ***
+// ###############
 // -- UnlockAction
-// ***
+// ###############
 
 VerbRule(SperrAuf)
     verb('sperr','schließ') dobjList prep('auf') 
@@ -15676,9 +15294,9 @@ VerbRule(SperrAuf)
     verbPattern('aufzusperren/aufsperren','(was)')
 ;
 
-// ***
+// #################
 // -- LockWithAction
-// ***
+// #################
 
 VerbRule(SperrAbMit)
     verb('versperr','verschließ') singleDobj 'mit' singleIobj
@@ -15690,9 +15308,9 @@ VerbRule(SperrAbMit)
     askIobjResponseProd = mitSingleNoun
 ;
 
-// ***
+// ###################
 // -- UnlockWithAction
-// ***
+// ###################
 
 VerbRule(SperrAufMit)
     verb('sperr','schließ') singleDobj 'mit' singleIobj prep('auf')
@@ -15704,9 +15322,9 @@ VerbRule(SperrAufMit)
     askIobjResponseProd = mitSingleNoun
 ;
 
-// ***
+// ##############
 // -- SitOnAction
-// ***
+// ##############
 
 VerbRule(SetzDichAuf)
     (('sitz'|'sitze') | 'setz' ('dich'|'mich')) ('auf' | 'in')
@@ -15720,9 +15338,9 @@ VerbRule(SetzDichAuf)
         { return (obj != nil ? obj.actorInPrep + ' ' : prep); }
 ;
 
-// ***
+// ############
 // -- SitAction
-// ***
+// ############
 
 VerbRule(SetzDichHin)
     (('sitz'|'sitze') | 'setz' ('dich'|'mich')) (|'nieder'|'hin') 
@@ -15730,9 +15348,9 @@ VerbRule(SetzDichHin)
     verbPhrase = 'zu setzen/setzen'
 ;
 
-// ***
+// ##############
 // -- LieOnAction
-// ***
+// ##############
 
 VerbRule(LegDichAuf)
     (('lieg'|'liege')|('leg'|'lege')) ('dich'|'mich') ('auf'|'in') singleDobj ( | 'nieder'|'hin')
@@ -15746,9 +15364,9 @@ VerbRule(LegDichAuf)
         { return (obj != nil ? obj.actorInPrep + ' ' : prep); }
 ;
 
-// ***
+// ############
 // -- LieAction
-// ***
+// ############
 
 VerbRule(LegDichHin)
     (('lieg'|'liege') | ('leg'|'lege') ('dich'|'mich')) ( | 'nieder'|'hin') 
@@ -15756,9 +15374,9 @@ VerbRule(LegDichHin)
     verbPhrase = 'hinzulegen/hinlegen'
 ;
 
-// ***
+// ################
 // -- StandOnAction
-// ***
+// ################
 
 VerbRule(StellDichAuf)
     ('steh' | ('stell'|'stelle') ('dich'|'mich')) ('auf'|'in') singleDobj
@@ -15771,9 +15389,9 @@ VerbRule(StellDichAuf)
         { return (obj != nil ? obj.actorInPrep + ' ' : prep); }
 ;
 
-// ***
+// ##############
 // -- StandAction
-// ***
+// ##############
 
 VerbRule(StellDichHin)
     'steh' | 'steh' 'auf' | ('stell'|'stelle') ('dich'|'mich') 'hin'
@@ -15781,9 +15399,9 @@ VerbRule(StellDichHin)
     verbPhrase = 'aufzustehen/aufstehen'
 ;
 
-// ***
+// #################
 // -- GetOutOfAction
-// ***
+// #################
 
 VerbRule(Verlass)
     ('verlass' | 'geh' 'aus') singleDobj
@@ -15812,9 +15430,9 @@ VerbRule(SteigAus)
     
 ;
 
-// ***
+// #################
 // -- GetOffOfAction
-// ***
+// #################
 
 VerbRule(SteigAb)
     'geh' 'von' singleDobj 'hinunter'
@@ -15828,9 +15446,9 @@ VerbRule(SteigAb)
 
 ;
 
-// ***
+// ###############
 // -- GetOutAction
-// ***
+// ###############
 
 VerbRule(GehRaus)
     verb('komm','kletter') prep('hinunter','hinaus')
@@ -15838,9 +15456,9 @@ VerbRule(GehRaus)
     verbPhrase = 'hinauszukommen/hinauskommen'
 ;
 
-// ***
+// ##############
 // -- BoardAction
-// ***
+// ##############
 
 VerbRule(SteigIn)
     ('besteig'  
@@ -15854,9 +15472,9 @@ VerbRule(SteigIn)
     askDobjResponseProd = singleNoun
 ;
 
-// ***
+// ##############
 // -- SleepAction
-// ***
+// ##############
 
 VerbRule(Schlaf)
     verb('schlaf') (|prep('aus','ein')) 
@@ -15864,9 +15482,9 @@ VerbRule(Schlaf)
     verbPhrase = 'zu schlafen/schlafen'
 ;
 
-// ***
+// #################
 // -- PlugIntoAction
-// ***
+// #################
 
 VerbRule(SteckIn)
     'steck' dobjList 'in' singleIobj (|'ein'|'hinein')
@@ -15887,9 +15505,9 @@ VerbRule(SteckInWas)
     }
 ;
 
-// ***
+// ###############
 // -- PlugInAction
-// ***
+// ###############
 
 VerbRule(SteckEin)
     verb('steck') dobjList (|prep('ein'))
@@ -15897,9 +15515,9 @@ VerbRule(SteckEin)
     verbPhrase = 'einzustecken/einstecken (was)'
 ;
 
-// ***
+// ###################
 // -- UnplugFromAction
-// ***
+// ###################
 
 VerbRule(SteckAusVon)
     verb('lös','trenn') dobjList 'von' singleIobj (|prep('ab'))
@@ -15908,9 +15526,9 @@ VerbRule(SteckAusVon)
     askIobjResponseProd = vonSingleNoun
 ;
 
-// ***
+// #################
 // -- UnplugInAction
-// ***
+// #################
 
 VerbRule(SteckAus)
     verb('steck') dobjList prep('aus')
@@ -15918,9 +15536,9 @@ VerbRule(SteckAus)
     verbPhrase = 'auszustecken/ausstecken (was)'
 ;
 
-// ***
+// ##############
 // -- ScrewAction
-// ***
+// ##############
 
 VerbRule(SchraubZu)
     verb('schraub','schraube','dreh','zieh') dobjList prep('fest','zu')
@@ -15928,9 +15546,9 @@ VerbRule(SchraubZu)
     verbPattern('zuzudrehen/zudrehen','(was)')
 ;
 
-// ***
+// ##################
 // -- ScrewWithAction
-// ***
+// ##################
 
 VerbRule(SchraubZuMit)
     verb('schraub','schraube','dreh','zieh') dobjList 'mit' singleIobj prep('fest','zu')
@@ -15940,9 +15558,9 @@ VerbRule(SchraubZuMit)
     askIobjResponseProd = mitSingleNoun
 ;
 
-// ***
+// ################
 // -- UnscrewAction
-// ***
+// ################
 
 VerbRule(SchraubAuf)
     verb('schraub','schraube','dreh') dobjList prep('auf','locker','ab')
@@ -15950,9 +15568,9 @@ VerbRule(SchraubAuf)
     verbPattern('aufzudrehen/aufdrehen','(was)')
 ;
 
-// ***
+// ####################
 // -- UnscrewWithAction
-// ***
+// ####################
 
 VerbRule(SchraubAufMit)
     verb('schraub','schraube','dreh') dobjList 'mit' singleIobj prep('auf','locker','ab')
@@ -15963,9 +15581,9 @@ VerbRule(SchraubAufMit)
     askIobjResponseProd = mitSingleNoun
 ;
 
-// ***
+// ######################
 // -- PushTravelDirAction
-// ***
+// ######################
 
 VerbRule(SchiebNachDir)
     verb('schieb','zieh','beweg','stoß','schubs') singleDobj 'nach' singleDir
@@ -15973,9 +15591,9 @@ VerbRule(SchiebNachDir)
     verbPattern('zu schieben/schieben','(was) nach ' + dirMatch.dir.name)
 ;
 
-// ***
+// ##########################
 // -- PushTravelThroughAction
-// ***
+// ##########################
 
 VerbRule(SchiebDurch)
     verb('schieb','zieh','beweg','stoß','schubs') singleDobj
@@ -15984,9 +15602,9 @@ VerbRule(SchiebDurch)
     verbPattern('durchzuziehen/durchziehen','(was) (durch was)')
 ;
 
-// ***
+// ########################
 // -- PushTravelEnterAction
-// ***
+// ########################
 
 VerbRule(SchiebHinein)
     verb('schieb','zieh','beweg','stoß','schubs') singleDobj
@@ -15995,9 +15613,9 @@ VerbRule(SchiebHinein)
     verbPattern('hineinzuziehen/hineinziehen','(was) (in was)')
 ;
 
-// ***
+// ###########################
 // -- PushTravelGetOutOfAction
-// ***
+// ###########################
 
 VerbRule(SchiebHinaus)
     verb('schieb','zieh','beweg','stoß','schubs') singleDobj
@@ -16006,9 +15624,9 @@ VerbRule(SchiebHinaus)
     verbPattern('herauszuziehen/herausziehen','(was) (aus dativ was)')
 ;
 
-// ***
+// ##########################
 // -- PushTravelClimbUpAction
-// ***
+// ##########################
 
 VerbRule(SchiebHinauf)
     verb('schieb','zieh','beweg','stoß','schubs') singleDobj
@@ -16018,9 +15636,9 @@ VerbRule(SchiebHinauf)
     omitIobjInDobjQuery = true
 ;
 
-// ***
+// ############################
 // -- PushTravelClimbDownAction
-// ***
+// ############################
 
 VerbRule(SchiebHinunter)
     verb('schieb','zieh','beweg','stoß','schubs') singleDobj
@@ -16029,9 +15647,9 @@ VerbRule(SchiebHinunter)
     verbPattern('herunterzuziehen/herunterziehen','(was) (von was)')
 ;
 
-// ***
+// ##############
 // -- ExitsAction
-// ***
+// ##############
 
 VerbRule(Ausgang)
     'exits' | 'ausgäng' | 'ausgang'
@@ -16074,9 +15692,9 @@ VerbRule(NurUps)
     verbPhrase = 'zu korrigieren/korrigieren'
 ;
 
-// ******
+// ###############################
 // -- German: debug verbs -- DEBUG
-// ******
+// ###############################
 
 /* ------------------------------------------------------------------------ */
 /*
@@ -16093,9 +15711,9 @@ VerbRule(Debug)
     verbPhrase = 'zu debuggen/debuggen'
 ;
 
-// ******
+// #################################
 // -- German: debug verbs -- DECLINE
-// ******
+// #################################
 
 VerbRule(decline)
     'deklinier' singleDobj
@@ -16138,9 +15756,9 @@ modify Thing
     }
 ;
 
-// ******
+// ############################################################################
 // -- German: debug verbs -- GONEAR AND PURLOIN (SIMILAR TO INFORM) AND PRONOUN
-// ******
+// ############################################################################
 
 /* The purpose of the everything object is to contain a list of all usable game objects 
    which can be used as a list of objects in scope for certain debugging verb. 
@@ -16229,9 +15847,9 @@ VerbRule(Pronoun)
   verbPhrase = 'Pronomen zu zeigen/Pronomen zeigen' 
 ; 
 
-// ******
+// #################################
 // -- German: debug verbs -- PURLOIN
-// ******
+// #################################
 
 DefineTAction(Purloin) 
     cacheScopeList() 
@@ -16264,9 +15882,9 @@ modify Thing
     } 
 ; 
 
-// ******
+// ################################
 // -- German: debug verbs -- GONEAR
-// ******
+// ################################
 
 DefineTAction(Gonear) 
    cacheScopeList() 
@@ -16775,9 +16393,9 @@ modify MultiLoc
   } 
 ; 
 
-// ******
+// ###############################
 // -- German: debug verbs -- VOCAB
-// ******
+// ###############################
 
 DefineIAction(Vocab)
     execAction()
@@ -16970,9 +16588,9 @@ VerbRule(Token)
     verbPhrase = 'die Token anzuzeigen/anzeigen' 
 ; 
 
-// ******
+// ###############################
 // -- German: debug verbs -- FINAL
-// ******
+// ###############################
 
 DefineIAction(Final)
     execAction()
@@ -17035,9 +16653,9 @@ VerbRule(Final)
     verbPhrase = 'den Finalcheck anzuzeigen/anzeigen' 
 ; 
 
-// ******
+// ##################################
 // -- German: debug verbs -- MESSAGES
-// ******
+// ##################################
 
 DefineTAction(Message)
 ;
@@ -17156,16 +16774,199 @@ dummyChest : Thing '' 'Truhe'
 
 #endif /* __DEBUG */
 
-// ******
-// -- German: an object which keeps track of the case for list writing
-// -- standard is accusative
-// ******
+// ##############################################################
+// ## reminder object keeps track of the last mentioned object ##
+// ##############################################################
 
-// curcase remembers the actual case wanted for the output in a name or list
-// this is especially designed for list output and should be set
-// in the showListPrefixWide function inside the list writing routine
-// e.g. showListPrefixWide(itemCount, pov, parent) { "{Du/er} {sieht} {hier|dort} <<withCaseAccusative>>"; }
- 
+reminder : object
+    myLastObj = nil
+    setLastObj(obj) {
+        myLastObj = obj;
+    }
+    getLastObj() {
+        return myLastObj;
+    }
+;
+
+modify TAction
+    getCurrentObjects()
+    {
+        reminder.setLastObj(dobjCur_);
+        return [dobjCur_];
+    }
+;
+
+// ##########################################################
+// ## verbHelper object stores pariciples of the last verb ##
+// ##########################################################
+
+verbHelper : object
+    reversed = nil
+    blank = true
+    participle = ''
+    longParticiple = ''
+    lastVerb = 'undefined'
+    setParticiple(txt) {
+        participle = txt;
+    }
+;
+
+// ###############################################################
+// ## infHelper object builds verbphrases from verbrule objects ##
+// ###############################################################
+
+infHelper : object
+    
+    tab = [
+        'öffn' -> 'öffnen',
+        'nimm' -> 'nehmen', 
+        'wirf' -> 'werfen', 
+        'lies' -> 'lesen', 
+        'gib' -> 'geben', 
+        'iss' -> 'essen',
+        'steige' -> 'steigen',
+        'friss' -> 'fressen',
+        'brich' -> 'brechen',
+        'zerbrich' -> 'zerbrechen',
+        'säuber' -> 'säubern',
+        'entziffer' -> 'entziffern',
+        'schnüffl' -> 'schnüffeln',
+        'schnüffel' -> 'schnüffeln',
+        'schnupper' -> 'schnuppern',
+        * -> 'undefined'
+    ]
+    
+    buildVerbPhraseFrom(obj) {
+         
+        local verb = obj.verb_;
+        local prep = obj.prep_;
+        local misc = (obj.misc_ ? obj.misc_ + ' ' : '');
+        local verbPhrase = nil;    
+
+        // if we end up with 'e', cut it off
+        if (verb.endsWith('e'))
+            verb = verb.substr(1, verb.length() - 1);
+        
+        // if our verb is in the table with irregular infinitives, replace it
+        local irregular = tab[verb];
+        if (irregular != 'undefined')
+            verb = irregular;
+        else
+            verb = verb + 'en';
+               
+        // if we have no prep, the form is rather simple
+        if (prep == nil)
+            verbPhrase = misc + 'zu ' + verb + '/' + misc + verb + ' ';
+        // if we have a prep, use it
+        else if (prep)
+            verbPhrase = prep + 'zu' + verb + '/' + prep + verb + ' ';
+        
+        return(verbPhrase);
+    }
+;
+
+// #######################################################
+// ## tokHelper object helds token List for replacement ##
+// #######################################################
+
+tokHelper : object
+    
+    token = [
+        'durchs' -> 'durch',
+        'ans' -> 'an', 
+        'am' -> 'an',
+        'aufs' -> 'auf',
+        'vom' -> 'von',
+        'übers' -> 'über',
+        'überm' -> 'über',
+        'ums' -> 'um',
+        'ins' -> 'in',
+        'im' -> 'in',
+        'unters' -> 'unter',
+        'unterm' -> 'unter',
+        'hinters' -> 'hinter',
+        'hinterm' -> 'hinter',
+        'runter' -> 'hinunter',
+        'hinab' -> 'hinunter',
+        'herab' -> 'hinunter',
+        'herunter' -> 'hinunter',
+        'herauf' -> 'hinauf',
+        'rauf' -> 'hinauf',
+        'raus' -> 'hinaus',
+        'heraus' -> 'hinaus',
+        'rein' -> 'hinein',
+        'herein' -> 'hinein',
+        'rüber' -> 'hinüber',
+        'drüber' -> 'hinüber',
+        'herüber' -> 'hinüber',
+        'zum' -> 'zu',
+        'zur' -> 'zu',
+        * -> 'undefined'
+    ]
+   
+    checkForValidTokens(txt) { 
+        
+        // get keys from token lookuptable
+        local keys = token.keysToList();
+        
+        // iterate through the keys in token lookuptable
+        foreach(local val in keys) {
+
+            // if we find a matching start value (rüberspringen), replace it
+            // with the value (hinüberspringen)
+            
+            // We have special rules at the beginning of a sentence:
+            // We don't want to replace "durchs", "ans" because we 
+            // have trouble with verbs like "*durchs*uch" ...
+            // have trouble with verbs like "*rein*ige" ...
+            
+            if (txt.startsWith(val)) {
+                
+                if (txt.length() > val.length()) {
+                    if (!val.endsWith('s')) {
+                        local test = txt.substr(val.length() + 1, txt.length());
+                        if (checkForValidWord(test)) {
+                            txt  = txt.substr(val.length() + 1, txt.length());
+                            txt  = token[val] + txt;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    txt  = txt.substr(val.length() + 1, txt.length());
+                    txt  = token[val] + txt;
+                    break;
+                }
+            }
+        }
+
+        //txt = token[txt];
+        // return either new or old value
+        return(txt);
+    }
+
+    checkForValidWord(txt) {
+
+        // it could be that we are already defined "as we are"
+        if (cmdDict.isWordDefined(txt))
+            return true;
+        // it could be that we defined "truncated"
+        txt = strangeObj.testEndings(txt);
+        if (cmdDict.isWordDefined(txt))
+            return true;
+        // it could be that we defined as "irregular infinitve"
+        local irregular = infHelper.tab[txt];
+        if (irregular != 'undefined')
+            return true;
+        // we are really unknown :-(
+        return nil;
+    }
+;
+
+// ################################################
+// ## curcase object keeps track of current case ##
+// ################################################
+
 curcase: object
     isNom = true
     isGen = nil
@@ -17208,10 +17009,14 @@ curcase: object
     }
 ;
 
-// ******
-// -- German: an object which keeps track of the case for list writing
-// -- standard is accusative
-// ******
+// ###############################################################
+// ## curlistcase object keeps track of current case for lists  ##
+// ###############################################################
+
+// ###############################################################
+// ## e.g. usage: showListPrefixWide(itemCount, pov, parent)    ##
+// ## { "{Du/er} {sieht} {hier|dort} <<withCaseAccusative>>"; } ##
+// ###############################################################
 
 curlistcase: object
     isNom = nil
@@ -17253,10 +17058,9 @@ curlistcase: object
     }
 ;
 
-// ******
-// -- German: an object which keeps track of the ârticle for list writing
-// -- standard is indefinite
-// ******
+// #####################################################################
+// ## curlistart object keeps track of current article mode for lists ##
+// #####################################################################
 
 curlistart: object
     isDef = nil
@@ -17275,17 +17079,19 @@ curlistart: object
     }
 ;
 
-// ******
-// -- German: adjectives -- endings
-// ******
-// Endings for German adjectives
-// These snippets are added to any name, that ends with [^],
-// e.g. name = 'klein[^] Buch'
-// We distinguish the direct case (which is default) and the indirect case
-// (which is set by r_flag in the curcase object)
-// e.g. case Nominative: 
-// indirect article: "ein kleines Buch"
-// direct article: "das kleine Buch"
+// ############################################
+// ## adjectives - endings with adjEnding{}  ##
+// ############################################
+
+// ##################################################################
+// ## These snippets are added to any name, that ends with [^],    ##
+// ## e.g. name = 'klein[^] Buch'                                  ##
+// ## We distinguish the direct case (which is default) and the    ##
+// ## indirect case (which is set by r_flag in the curcase object) ##
+// ##                                                              ##
+// ## indirect article: "ein kleines Buch"                         ##
+// ## direct article: "das kleine Buch"                            ##
+// ##################################################################
 
 modify Thing
     adjEnding { 
@@ -17345,11 +17151,11 @@ modify Thing
                 else
                     ending = 'en';
             }
-        // -- say(ending);
+        // ##### say(ending); #####
         return ending;
     }
 
-    adjPluralEnding { // -- German: function for all adjective endings --
+    adjPluralEnding { // ##### function for all adjective endings #####
         local ending;
 
         if (curcase.r_flag)
@@ -17360,7 +17166,7 @@ modify Thing
         return ending;
     }
     
-    // -- German: four "safe" ways to change the gender
+    // ##### four "safe" ways to change the gender #####
     
     changeIt() {
         isHer = nil;
@@ -17387,7 +17193,7 @@ modify Thing
     }   
 ;
 
-// We treat 'steig auf (Plattform)' as standing on it
+// ##### We treat 'steig auf (Plattform)' as standing on it #####
 
 modify Surface
 	dobjFor(Board) asDobjFor(StandOn)
@@ -17500,28 +17306,28 @@ modify Actor
                 strangeObj.name += ' ';
         }
         
-        // -- if we have a word beginning with a miscWord it is likely to
-        // -- be absolute nonsense
-        
+        // ##### if we have a word beginning with a miscWord it is likely to #####
+        // ##### be absolute nonsense #####
+         
         if (nonsense == true)
             strangeObj.name = '';
         
     }
     
-    // return function for childInNameGen(
+    // ##### return function for childInNameGen( #####
     
     returnName(txt) {
         constructName(txt);
         return strangeObj.name;
     }
     
-    // ******
-    // -- German: output - keinen <txt> case accusative
-    // ******
+    // #################################################
+    // ##### output - keinen <txt> case accusative #####
+    // #################################################
     
     keinen(txt)
     {
-        // -- if we decide to have simple answers, set gameMain.useNoTxt to nil
+        // ##### if we decide to have simple answers, set gameMain.useNoTxt to nil #####
         if (gameMain.useNoTxt == nil) {
             "so etwas nicht";
             return;
@@ -17548,7 +17354,7 @@ modify Actor
     
     keinenAsString(txt)
     {
-        // -- if we decide to have simple answers, set gameMain.useNoTxt to nil
+        // ##### if we decide to have simple answers, set gameMain.useNoTxt to nil #####
         if (gameMain.useNoTxt == nil) {
             return 'so etwas nicht';
         }
@@ -17570,13 +17376,13 @@ modify Actor
             return '<<strangeObj.keinenName>>';
     }
     
-    // ******
-    // -- German: output - viele <txt>
-    // ******
+    // ################################
+    // ##### output - viele <txt> #####
+    // ################################
     
     viele(txt)
     {
-        // -- if we decide to have simple answers, set gameMain.useNoTxt to nil
+        // ##### if we decide to have simple answers, set gameMain.useNoTxt to nil #####
         if (gameMain.useNoTxt == nil) {
             "viele davon";
             return;
@@ -17599,13 +17405,13 @@ modify Actor
         return;
     }
     
-    // ******
-    // -- German: output - welchen <txt>
-    // ******
+    // ##################################
+    // ##### output - welchen <txt> #####
+    // ##################################
     
     welchen(txt)
     {
-        // -- if we decide to have simple answers, set gameMain.useNoTxt to nil
+        // ##### if we decide to have simple answers, set gameMain.useNoTxt to nil #####
         if (gameMain.useNoTxt == nil) {
             "was genau";
             return;
@@ -17629,12 +17435,16 @@ modify Actor
     }
 ;
 
-// -- Our object which generates the correct output for keinen(txt) viele(txt) welche(txt)
+// ###############################################
+// ## object which generates the correct output ##
+// ## for keinen(txt) viele(txt) welche(txt)    ##
+// ###############################################
+
 strangeObj : Thing '' ''
     
     isNo = true
         
-    // -- this is our keinenName implementation
+    // ##### this is our keinenName implementation #####
     
     keinenName = (keinenNameFrom(name))
     keinenNameFrom(str) 
@@ -17647,7 +17457,7 @@ strangeObj : Thing '' ''
         isHim ? 'keinen ' : isHer ? 'keine ' : 'kein ' ) + str; 
     }
     
-    // -- this is our vieleName implementation
+    // ##### this is our vieleName implementation #####
     
     vieleName = (vieleNameFrom(name))
     vieleNameFrom(str) 
@@ -17659,7 +17469,7 @@ strangeObj : Thing '' ''
         return 'viele '+ str; 
     }
     
-    // -- this is our keinenName implementation
+    // ##### this is our keinenName implementation #####
     
     welchenName = (welchenNameFrom(name))
     welchenNameFrom(str) 
@@ -17672,7 +17482,7 @@ strangeObj : Thing '' ''
         isHim ? 'welchen ' : isHer ? 'welche ' : 'welches ' ) + str; 
     }
     
-    // -- we parse the endings
+    // ##### we parse the endings #####
     
     testEndings(txt) {
     
@@ -17768,11 +17578,11 @@ strangeObj : Thing '' ''
     } 
 ;
 
-// -- we need a new definiton of destInfo objects, because we have
-// -- to consider the different cases
-
-// -- zurück zu DEM wohnzimmer ... (dative)
-// -- in DAS wohnzimmer ... (accusative)
+// #################################################
+// ## we need a new definiton of destInfo objects ##
+// ## zurück zu DEM wohnzimmer ... (dative)       ##
+// ## in DAS wohnzimmer ... (accusative)          ##
+// #################################################
 
 replace DestInfo: object
     construct(dir, dest, destName, destIsBack)
@@ -17782,8 +17592,7 @@ replace DestInfo: object
         dest_ = dest;
         destName_ = destName;
         
-        // -- if we have a destination object, store both cases, accusative & dative
-        
+        // ##### if we have a destination object, store both cases, accusative & dative #####
         if (dest != nil) {
             denDestName_ = dest.denName;
             demDestName_ = dest.demName;
@@ -17815,10 +17624,11 @@ replace DestInfo: object
     /* list of other directions that go to our same destination */
     others_ = []
 ;
-
-// -- We provide a SpecialNounphraseProd together with a macro (see de_de.h)
-// -- for an easier way to define special grammar with multiple tokens like 
-// -- 'Neu' 'Delhi', 'Mann' 'mit' 'Hut', 'Kranky' 'der' 'Clown' and so on ...
+// #######################################################################
+// ## We provide a SpecialNounphraseProd predefined for special grammar ##
+// ## with multiple nouns/prepositions like                             ##
+// ## 'Neu' 'Delhi', 'Mann' 'mit' 'Hut', 'Kranky' 'der' 'Clown' ...     ##
+// #######################################################################
 
 class SpecialNounPhraseProd: NounPhraseWithVocab
     /* get the list of objects matching our special phrase */
@@ -17833,10 +17643,12 @@ class SpecialNounPhraseProd: NounPhraseWithVocab
     }
 ;
 
-// -- Huh! We modify gameMainDef for a little flag called useNoTxt
-// -- this flag does nothing exept when set to nil: then it
-// -- simplifies keinen(txt) / viele(txt) / welchen(txt) to a
-// -- more generic output
+// #############################################################
+// ## We modify gameMainDef for a little flag called useNoTxt ##
+// ## this flag does nothing exept when set to nil: then it   ##
+// ## simplifies keinen(txt) / viele(txt) / welchen(txt) to a ##
+// ## more generic output (Du siehst hier "so etwas" nicht)   ##
+// #############################################################
 
 modify GameMainDef
     useNoTxt = true
@@ -17844,11 +17656,13 @@ modify GameMainDef
     usePastPerfect = true
 ;
 
-// -- German: a non-prepositional phrasing with we have no way to
-// -- distinguish the dobj and iobj properly, so we replace the 
-// -- doActionMain() method with a tiny modification, which allows
-// -- us to set a special preferredIobj property and let the parser
-// -- change the dobj to iobj when fitting into our scheme.
+// ###################################################################
+// ## a non-prepositional phrasing has no way to                    ##
+// ## distinguish the dobj and iobj properly, so we replace the     ##
+// ## doActionMain() method with a tiny modification, which allows  ##
+// ## us to set a special preferredIobj property and let the parser ##
+// ## change the dobj to iobj when fitting into our scheme.         ##
+// ###################################################################
 
 modify TIAction
     preferredIobj = nil
@@ -17953,8 +17767,9 @@ modify TIAction
                 iobjInfo = iobjInfoCur_ = lst[i];
             }
 
-            // -- German: here goes the magic code
-            // -- we have now resolved objects for indirect and direct slot
+            // ###############################################################
+            // ## we have now resolved objects for indirect and direct slot ##
+            // ###############################################################
             
             if (preferredIobj != nil && dobjInfo.obj_.ofKind(preferredIobj) &&
                 !iobjInfo.obj_.ofKind(preferredIobj)) {
@@ -18098,12 +17913,18 @@ modify TIAction
     
 ;
 
+// #####################################################################
+// ## Modification in Actor for keeping track of the narrative Tense  ##
+// #####################################################################
+
 modify Actor
     pcReferralTense = Present
 ;
 
-// we define one object for singular plural parameter strings 
-// in the thirdPerson
+// ################################################################
+// ## we define one object for singular plural parameter strings ##
+// ## in the thirdPerson                                         ##
+// ################################################################
 
 dummyHim : Thing
     isHim = true
@@ -18115,3 +17936,6 @@ dummyThem : Thing
     globalParamName = 'plural'
 ;
 
+// #####################################################
+// ## We're done so far. This is the end of the file. ##
+// #####################################################

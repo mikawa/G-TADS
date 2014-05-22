@@ -39,7 +39,7 @@
 // -- setup of version info for Messages
 
 messagesInfo: object
-    version = '2.0 - 140327'
+    version = '2.0 - 140521'
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -2742,14 +2742,14 @@ playerActionMessages: MessageHelper
     mustSitOnMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {muss} {dich} erst auf {den obj/ihn} setzen{*}. ';
+        return '{Du/er} {muss} {dich/sich} erst auf {den obj/ihn} setzen{*}. ';
     }
 
     /* must be lying on/in object */
     mustLieOnMsg(obj)
     {
         gMessageParams(obj);
-        return '{Du/er} {muss} {dich} erst auf {den obj/ihn} legen{*}. ';
+        return '{Du/er} {muss} {dich/sich} erst auf {den obj/ihn} legen{*}. ';
     }
 
     /* must get on/in object */
@@ -2763,7 +2763,7 @@ playerActionMessages: MessageHelper
     mustBeInMsg(obj, loc)
     {
         gMessageParams(obj, loc);
-        return 'Dazu {muss actor} {du/er} {dich} erst in {dem obj/ihm} befinden{*}. ';
+        return 'Dazu {muss actor} {du/er} {dich/sich} erst in {dem obj/ihm} befinden{*}. ';
     }
 
     /* actor must be holding the object before we kann do that */
@@ -2805,7 +2805,7 @@ playerActionMessages: MessageHelper
     notWithVaporousMsg(obj)
     {
         gMessageParams(obj);
-        return 'Das {bringt singular} bei {einem obj/einer} nichts{*}. ';
+        return 'Das {bringt singular} nichts bei {einem obj/einer}{*}. ';
     }
 
     /* look in/look under/look through/look behind/search vaporous */
@@ -2942,19 +2942,19 @@ playerActionMessages: MessageHelper
     alreadyHoldingMsg = '{Du/er} {hat} {den dobj/ihn} schon{*}. '
 
     /* actor taking self ("take me") */
-    takingSelfMsg = '{Du/er} {koennt} {dich} nicht nehmen{*}. '
+    takingSelfMsg = '{Du/er} {koennt} {dich/sich} nicht nehmen{*}. '
 
     /* dropping an object not being carried */
     notCarryingMsg = '{Du/er} {hat} {den dobj/ihn} gar nicht{*}. '
 
     /* actor dropping self */
-    droppingSelfMsg = '{Du/er} {koennt} {dich} nicht ablegen{*}. '
+    droppingSelfMsg = '{Du/er} {koennt} {dich/sich} nicht ablegen{*}. '
 
     /* actor putting self in something */
     puttingSelfMsg = '{Du/er} {koennt} das nicht mit {dir} tun{*}. '
 
     /* actor throwing self */
-    throwingSelfMsg = '{Du/er} {koennt} {dich} nicht werfen{*}. '
+    throwingSelfMsg = '{Du/er} {koennt} {dich/sich} nicht werfen{*}. '
 
     /* we can't put the dobj in the iobj because it's already there */
     alreadyPutInMsg = '{Der dobj/er} {ist} schon in {dem iobj/ihm}{*}. '
@@ -3463,7 +3463,7 @@ playerActionMessages: MessageHelper
     cannotDoFromMsg(obj)
     {
         gMessageParams(obj);
-        return 'Das {geht singular} nicht von {dem obj/ihm} aus{*}. ';
+        return 'Das {geht singular} von {dem obj/ihm} aus nicht{*}. ';
     }
 
     /* cannot carry out a command from within a vehicle in a nested room */
@@ -3471,7 +3471,7 @@ playerActionMessages: MessageHelper
     {
         local loc = obj.location;
         gMessageParams(obj, loc);
-        return 'Das {geht singular} nicht, solange {der obj/er} in {dem loc/ihm} {!*}{ist obj}. ';
+        return 'Das {geht singular} nicht{*}, solange {der obj/er} in {dem loc/ihm} {!*}{ist obj}. ';
     }
 
     /* cannot go that way in a vehicle */
@@ -3513,7 +3513,7 @@ playerActionMessages: MessageHelper
     doorClosesBehindMsg(obj)
     {
         gMessageParams(obj);
-        return '<.p>Danach {schliesst} sich {der obj/er} hinter {dem actor/ihm}{*}. ';
+        return '<.p>Danach {schliesst obj} sich {der obj/er} hinter {dem actor/ihm}{*}. ';
     }
 
     /* the stairway does not go up/down */
@@ -3634,7 +3634,7 @@ playerActionMessages: MessageHelper
     objCannotHearActorMsg(obj)
     {
         return '\^<<buildSynthParam('subj', obj)>>' + obj.derName + ' ' + obj.verbZuHoeren +
-            ' {dich/ihn} offenbar nicht{*}. ';
+            ' {dich} offenbar nicht{*}. ';
     }
 
     /* actor cannot see object being shown to actor */
@@ -4172,7 +4172,7 @@ playerActionMessages: MessageHelper
     = '{Der dobj/er} {will} das sicher nicht{*}. '
 
     /* cannot kiss yourself */
-    cannotKissSelfMsg = '{Du/er} {koennt} {dich} nicht küssen{*}. '
+    cannotKissSelfMsg = '{Du/er} {koennt} {dich/sich} nicht küssen{*}. '
 
     /* it is now dark at actor's location */
     newlyDarkMsg = 'Es {ist singular} {jetzt|daraufhin} stockdunkel{*}. '
@@ -4688,25 +4688,25 @@ actorInventoryLister: DividedInventoryLister
     showInventoryEmpty(parent)
     {
         /* empty inventory */
-        "<<buildSynthParam('Einer/er', parent)>> {hat} nichts bei {dir}{*}. ";
+        "<<buildSynthParam('Einer/er', parent)>> {hat} nichts bei {dir/sich}{*}. ";
     }
     showInventoryWearingOnly(parent, wearing)
     {
         /* we're carrying nothing but wearing some items */
-        "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dir}{*}
+        "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dir/sich}{*}
         und {hat} <<wearing>> angezogen{*}. ";
     }
     showInventoryCarryingOnly(parent, carrying)
     {
         /* we have only carried items to report */
-        "<<buildSynthParam('Du/er', parent)>> {hat} <<carrying>> bei {dir}{*}. ";
+        "<<buildSynthParam('Du/er', parent)>> {hat} <<carrying>> bei {dir/sich}{*}. ";
     }
     showInventoryShortLists(parent, carrying, wearing)
     {
         local nm = gSynthMessageParam(parent);
         
         /* short lists - combine carried and worn in a single sentence */
-        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir}{*},
+        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir/sich}{*},
         und <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen{*}. ";
     }
     showInventoryLongLists(parent, carrying, wearing)
@@ -4714,7 +4714,7 @@ actorInventoryLister: DividedInventoryLister
         local nm = gSynthMessageParam(parent);
 
         /* long lists - show carried and worn in separate sentences */
-        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir}{*}.
+        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir/sich}{*}.
         <<buildParam('Du/er', nm)>> {hat} <<wearing>> angezogen{*}. ";
     }
 
@@ -4723,11 +4723,11 @@ actorInventoryLister: DividedInventoryLister
      *   need to provide the framing messages for the tall-mode listing.  
      */
     showListPrefixTall(itemCount, pov, parent)
-        { "<<buildSynthParam('Du/er', parent)>> {hat} bei {dir}{*}:"; }
+        { "<<buildSynthParam('Du/er', parent)>> {hat} bei {dir/sich}{*}:"; }
     showListContentsPrefixTall(itemCount, pov, parent)
-        { "<<buildSynthParam('Einer/er', parent)>>, der Folgendes bei {dir} {hat}{*}:"; }
+        { "<<buildSynthParam('Einer/er', parent)>>, der Folgendes bei {dir/sich} {hat}{*}:"; }
     showListEmpty(pov, parent)
-        { "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dir}{*}. "; }
+        { "<<buildSynthParam('Du/er', parent)>> {hat} nichts bei {dir/sich}{*}. "; }
 ;
 
 /*
@@ -4753,14 +4753,14 @@ actorHoldingDescInventoryListerLong: actorInventoryLister
     showInventoryCarryingOnly(parent, carrying)
     {
         /* we have only carried items to report */
-        "<.p><<buildSynthParam('Du/er', parent)>> {hat} <<carrying>> bei {sich}{*}. ";
+        "<.p><<buildSynthParam('Du/er', parent)>> {hat} <<carrying>> bei {dir/sich}{*}. ";
     }
     showInventoryShortLists(parent, carrying, wearing)
     {
         local nm = gSynthMessageParam(parent);
 
         /* short lists - combine carried and worn in a single sentence */
-        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {sich}{*},
+        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir/sich}{*},
         und <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen{*}. ";
     }
     showInventoryLongLists(parent, carrying, wearing)
@@ -4768,7 +4768,7 @@ actorHoldingDescInventoryListerLong: actorInventoryLister
         local nm = gSynthMessageParam(parent);
 
         /* long lists - show carried and worn in separate sentences */
-        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {sich}{*}.
+        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir/sich}{*}.
         <<buildParam('Einer/er', nm)>> {hat} <<wearing>> angezogen{*}. ";
     }
 ;
@@ -4787,14 +4787,14 @@ actorHoldingDescInventoryListerShort: actorInventoryLister
     showInventoryCarryingOnly(parent, carrying)
     {
         /* we have only carried items to report */
-        "<<buildSynthParam('Einer/er', parent)>> {hat} <<carrying>> bei {sichselbst}{*}. ";
+        "<<buildSynthParam('Einer/er', parent)>> {hat} <<carrying>> bei {sich}{*}. ";
     }
     showInventoryShortLists(parent, carrying, wearing)
     {
         local nm = gSynthMessageParam(parent);
 
         /* short lists - combine carried and worn in a single sentence */
-        "<<buildParam('Einer/er', nm)>> {hat} <<carrying>> bei {sichselbst}{*} und
+        "<<buildParam('Einer/er', nm)>> {hat} <<carrying>> bei {sich}{*} und
         <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen{*}. ";
     }
     showInventoryLongLists(parent, carrying, wearing)
@@ -4802,7 +4802,7 @@ actorHoldingDescInventoryListerShort: actorInventoryLister
         local nm = gSynthMessageParam(parent);
 
         /* long lists - show carried and worn in separate sentences */
-        "<<buildParam('Einer/er', nm)>> {hat} <<carrying>> bei {sichselbst}{*}.
+        "<<buildParam('Einer/er', nm)>> {hat} <<carrying>> bei {sich}{*}.
         <<buildParam('Einer/er', nm)>> {hat} <<wearing>> angezogen{*}. ";
     }
 ;
