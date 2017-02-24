@@ -51,7 +51,7 @@
 // -- setup of version info for Library
 
 libraryInfo: object
-    version = '2.0 - 140521'
+    version = '2.2 - 150930'
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -11664,7 +11664,7 @@ class ListImpCtx: ImplicitAnnouncementContext, GetVerbPhraseContext
 modify Action
     /*
      *   In the English grammar, all 'predicate' grammar definitions
-     *   (which are usually made via the VerbRule macro) are associated
+     *   (which are usually made via the VerbRule macro) are associated
      *   with Action match tree objects; in fact, each 'predicate' grammar
      *   match tree is the specific Action subclass associated with the
      *   grammar for the predicate.  This means that the Action associated
@@ -13488,8 +13488,8 @@ VerbRule(LegAb)
 // #############
 
 VerbRule(Untersuch)
-    verb('untersuch','betracht','schau') dobjList
-    | verb('schau') dobjList prep('an')
+    verb('untersuch','betracht','schau','sieh','seh') dobjList
+    | verb('schau','sieh','seh') dobjList prep('an')
     | ('u'|'x'|'b') dobjList
     : ExamineAction
     verbPattern('zu betrachten/betrachten', '(was)')
@@ -13511,7 +13511,7 @@ VerbRule(Lies)
 
 VerbRule(SchauIn)
     verb('such') 'in' dobjList
-    | verb('schau') 'in' dobjList (|'hinein') 
+    | verb('schau','sieh','seh') 'in' dobjList (|'hinein') 
     : LookInAction
     verbPattern('zu schauen/schauen', '(in was)')
 ;
@@ -13570,31 +13570,31 @@ DefineIAction(LookBehindVague)
 ;
 
 VerbRule(SchauHinein)
-    'schau' 'hinein'
+    ('schau'|'sieh'|'seh') 'hinein'
     : LookInVagueAction
     verbPhrase = 'hineinzuschauen/hineinschauen'
 ;
 
 VerbRule(SchauHinaus)
-    'schau' 'hinaus'
+    ('schau'|'sieh'|'seh') 'hinaus'
     : LookOutVagueAction
     verbPhrase = 'hinauszuschauen/hinausschauen' 
 ;
 
 VerbRule(SchauHindurch)
-    'schau' 'hindurch'
+    ('schau'|'sieh'|'seh') 'hindurch'
     : LookThroughVagueAction
     verbPhrase = 'hindurchzuschauen/hindurchschauen' 
 ;
 
 VerbRule(SchauDarunter)
-    'schau' 'darunter' 
+    ('schau'|'sieh'|'seh') 'darunter' 
     : LookUnderVagueAction
     verbPhrase = 'darunterzuschauen/darunterschauen' 
 ;
 
 VerbRule(SchauDahinter)
-    'schau' 'dahinter'
+    ('schau'|'sieh'|'seh') 'dahinter'
     : LookBehindVagueAction
     verbPhrase = 'dahinterzuschauen/dahinterschauen' 
 ;
@@ -13606,7 +13606,7 @@ VerbRule(SchauDahinter)
 VerbRule(Durchsuch)
     verb('durchsuch','durchkämm','durchwühl') dobjList
     | verb('wühl') 'in' dobjList
-    | verb('schau') 'auf' dobjList
+    | verb('schau','sieh','seh') 'auf' dobjList
     : SearchAction
     verbPattern('zu durchsuchen/durchsuchen', '(was)')
 ;
@@ -13616,7 +13616,7 @@ VerbRule(Durchsuch)
 // ####################
 
 VerbRule(SchauDurch)
-    verb('blick','blicke','schau') ('durch'|'aus'|'zu') dobjList (|'hinaus')
+    verb('blick','blicke','schau','sieh','seh') ('durch'|'aus'|'zu') dobjList (|'hinaus')
     : LookThroughAction
     verbPattern('zu schauen/schauen', '(durch was)')
 ;
@@ -13626,8 +13626,8 @@ VerbRule(SchauDurch)
 // ##################
 
 VerbRule(SchauUnter)
-    verb('blick','blicke','schau','such','wühl') 'unter' dobjList (|'nach')
-    | verb('blick','blicke','schau','such','wühl') 'nach' 'unter' dobjList
+    verb('blick','blicke','schau','sieh','seh','such','wühl') 'unter' dobjList (|'nach')
+    | verb('blick','blicke','schau','sieh','seh','such','wühl') 'nach' 'unter' dobjList
     : LookUnderAction
     verbPattern('zu schauen/schauen', '(unter was)')
 ;
@@ -13637,8 +13637,8 @@ VerbRule(SchauUnter)
 // ###################
 
 VerbRule(SchauHinter)
-    verb('blick','blicke','schau','such','wühl') 'hinter' dobjList (|'nach')
-    | verb('blick','blicke','schau','such','wühl') 'nach' 'hinter' dobjList
+    verb('blick','blicke','schau','sieh','seh','such','wühl') 'hinter' dobjList (|'nach')
+    | verb('blick','blicke','schau','sieh','seh','such','wühl') 'nach' 'hinter' dobjList
     : LookBehindAction
     verbPattern('zu schauen/schauen', '(hinter was)')
 ;
@@ -14252,7 +14252,7 @@ VerbRule(Wait)
 ;
 
 VerbRule(Look)
-    'schau' | ('schau'|'sieh') ('dich'|'mich') 'um' | 'l' 
+    'schau' | ('schau'|'sieh'|'seh') ('dich'|'mich') 'um' | 'l' 
     : LookAction
     verbPhrase = 'umzuschauen/umschauen'
 ;
@@ -14843,8 +14843,8 @@ VerbRule(SchlagNachUeber)
     | verb('schlag','lies','les') 'in' singleDobj (|'über') singleTopic prep('nach')
     | verb('konsultier') singleDobj ('nach'|'über'|'zu') singleTopic
     | verb('durchsuch','durchforst','durchkämm') singleDobj 'nach' singleTopic
-    | verb('such','schau') 'in' singleDobj (|'nach') singleTopic
-    | verb('such','schau') singleTopic 'in' singleDobj (|'nach') 
+    | verb('such','schau','sieh','seh') 'in' singleDobj (|'nach') singleTopic
+    | verb('such','schau','sieh','seh') singleTopic 'in' singleDobj (|'nach') 
     : ConsultAboutAction
     verbPattern('nachzuschlagen/nachschlagen','(in dativ was) (was)')
     omitIobjInDobjQuery = true
@@ -14856,7 +14856,7 @@ VerbRule(SchlagNachUeber)
 // #########################################
 
 VerbRule(SchlagNachWorin)
-    verb('schlag','lies','les','schau') singleTopic prep('nach')
+    verb('schlag','lies','les','schau','sieh','seh') singleTopic prep('nach')
     | verb('lies','les','such','find') (|'etwas') 'über' singleTopic
     | verb('such') 'nach' singleTopic
     : ConsultAboutAction
@@ -15711,11 +15711,94 @@ VerbRule(Debug)
     verbPhrase = 'zu debuggen/debuggen'
 ;
 
+// ######################################
+// -- German: debug verbs -- ACTION-DEBUG
+// ######################################
+
+#ifdef PARSER_DEBUG
+
+modify libGlobal {
+    actionDebugMode = nil
+}
+
+/*************************************************************************/
+/* we call showAction from the replaced roomAfterAction() function below */
+/*************************************************************************/
+
+showAction()
+{
+    /* G-TADS */
+    /* show the current action */
+    "\n----------\n";
+    "Grammar-Tag= *<b><<gAction.grammarTag>></b>* <<gDobj ? showDirectObject():''>> <<gIobj ? showIndirectObject():''>> ";
+    "\n----------\n";
+    /* G-TADS */
+}
+
+showDirectObject()
+{
+    "DirectObject =*<b><<gDobj.pureName>></b>*";
+}
+
+showIndirectObject()
+{
+    "IndirectObject =*<b><<gIobj.pureName>></b>*";
+}
+
+replace callRoomAfterAction(room)
+{
+    /* G-TADS */
+    /* show the current action */
+    if (libGlobal.actionDebugMode)
+        showAction();
+    /* G-TADS */
+    
+    /* first, call roomAfterAction on this room */
+    room.roomAfterAction();
+
+    /* next, call roomAfterAction on the room's containers */
+    room.forEachContainer(callRoomAfterAction);
+}
+   
+DefineIAction(ActionDebug)
+    execAction()
+    {
+        local newMode;
+
+        /* 
+         *   get the mode - if the mode is explicitly stated in the
+         *   command, use the stated new mode, otherwise invert the current
+         *   mode 
+         */
+        newMode = (onOrOff_ == 'on'
+                   ? true
+                   : onOrOff_ == 'off'
+                   ? nil
+                   : !libGlobal.actionDebugMode);
+
+        /* set the new mode */
+        libGlobal.actionDebugMode = newMode;
+
+        /* mention the change */
+        "Action debugging is now
+        <<libGlobal.actionDebugMode ? 'on' : 'off'>>.\n";
+    }
+;
+
+grammar predicate(ActionDebug):
+    'action-debug' 'on'->onOrOff_
+    | 'action-debug' 'off'->onOrOff_
+    | 'action-debug'
+    : ActionDebugAction
+;
+
+#endif
+    
 // #################################
 // -- German: debug verbs -- DECLINE
 // #################################
 
-VerbRule(decline)
+VerbRule(Decline)
     'deklinier' singleDobj
     : DeclineAction
     verbPhrase = 'zu deklinieren/deklinieren (was)'

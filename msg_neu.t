@@ -39,7 +39,7 @@
 // -- setup of version info for Messages
 
 messagesInfo: object
-    version = '2.0 - 140521'
+    version = '2.2 - 150930'
 ;
 
 /* ------------------------------------------------------------------------ */
@@ -188,14 +188,14 @@ libMessages: MessageHelper
     distantThingDesc(obj)
     {
         gMessageParams(obj);
-        "{Es obj/er} {ist} zu weit weg{*}, um Genaueres erkennen zu können. ";
+        "{Du/er} {koennt} aus dieser Entfernung nichts Genaueres erkennen{*}. ";
     }
 
     /* generic long description of a Thing under obscured conditions */
     obscuredThingDesc(obj, obs)
     {
         gMessageParams(obj, obs);
-        "{Du/er} {koennt} nichts Spezielles durch {den obs/ihn} sehen{*}. ";
+        "{Du/er} {koennt} durch {den obs/ihn} nichts Besonderes erkennen{*}. ";
     }
 
     /* generic "listen" description of a Thing at a distance */
@@ -206,7 +206,7 @@ libMessages: MessageHelper
     obscuredThingSoundDesc(obj, obs)
     {
         gMessageParams(obj, obs);
-        "{Du/er} {koennt} nichts Besonderes durch {den obs/ihn} hören{*}. ";
+        "{Du/er} {koennt} durch {den obs/ihn} nichts Besonderes hören{*}. ";
     }
 
     /* generic "smell" description of a Thing at a distance */
@@ -217,7 +217,7 @@ libMessages: MessageHelper
     obscuredThingSmellDesc(obj, obs)
     {
         gMessageParams(obj, obs);
-        "{Du/er} {koennt} nichts Besonderes durch {den obs/ihn} riechen{*}. ";
+        "{Du/er} {koennt} durch {den obs/ihn} nichts Besonderes riechen{*}. ";
     }
 
     /* generic "taste" description of a Thing */
@@ -236,14 +236,14 @@ libMessages: MessageHelper
     {
         gMessageParams(obj);
         "{Du/er} {koennt} {den obj/ihn} nicht gut genug sehen{*}, um
-        {es/ihn} zu lesen. ";
+        etwas zu lesen. ";
     }
 
     /* dim light "read" description */
     dimReadDesc(obj)
     {
         gMessageParams(obj);
-        "Es {ist singular} nicht hell genug{*}, um {den obj/ihn} zu lesen. ";
+        "Es {ist singular} nicht hell genug{*}, um etwas zu lesen. ";
     }
 
     /* lit/unlit match description */
@@ -385,8 +385,7 @@ libMessages: MessageHelper
     /* there is no such footnote as the given number */
     noSuchFootnote(num)
     {
-        "<.parser>Diese Geschichte hatte niemals so eine
-        Fußnote.<./parser> ";
+        "<.parser>Diese Fußnote gibt es nicht.<./parser> ";
     }
 
     /* show the current footnote status */
@@ -465,8 +464,7 @@ libMessages: MessageHelper
     /* invalid token (i.e., punctuation) in command line */
     invalidCommandToken(ch)
     {
-        "<.parser>Diese Geschichte kann das Zeichen &lsquo;<<ch>>&rsquo; 
-        nicht in einem Befehl verwenden.<./parser> ";
+        "<.parser>Das Zeichen &lsquo;<<ch>>&rsquo; ist ungültig.<./parser> ";
     }
 
     /*
@@ -549,7 +547,7 @@ libMessages: MessageHelper
      *   happened.  
      */
     commandResultsEmpty =
-        ('Es passier' + tSel('t', 'te') + ' offensichtlich nichts.<.p>')
+        ('Es {passiert singular} offensichtlich nichts{*}.<.p>')
 
     /*
      *   Intra-command report separator.  This is used to separate report
@@ -578,19 +576,17 @@ libMessages: MessageHelper
     /* a command was issued to a non-actor */
     cannotTalkTo(targetActor, issuingActor)
     {
-        "\^<<targetActor.derName>> <<targetActor.verbZuSein>> nichts, womit  
-        <<issuingActor.itNom>> reden <<issuingActor.verbZuKann>>. ";
+        "\^<<issuingActor.derName>> <<issuingActor.verbZuKannKon>> mit <<targetActor.demName>> nicht reden{*}.";
     }
 
     /* greeting actor while actor is already talking to us */
     alreadyTalkingTo(actor, greeter)
     {
-        "\^<<greeter.derName>> <<greeter.verbZuHaben>> schon
-        die Aufmerksamkeit <<actor.desName>>. ";
+        "\^<<greeter.derName>> <<greeter.verbZuSein>> schon im Gespräch mit <<actor.demName>>{*}. ";
     }
 
     /* no topics to suggest when we're not talking to anyone */
-    noTopicsNotTalking = "<.parser>{Du/er} {spricht} momentan mit niemandem.<./parser> "
+    noTopicsNotTalking = "<.parser>{Du/er} {spricht} momentan mit niemandem{*}.<./parser> "
 
     /*
      *   Show a note about the OOPS command.  This is, by default, added
@@ -778,7 +774,7 @@ libMessages: MessageHelper
     /* 'again' used with no prior command */
     noCommandForAgain()
     {
-        "<.parser>Es gibt nichts zu wiederholen.<./parser> ";
+        "<.parser>Es gibt noch keinen Befehl zum Wiederholen.<./parser> ";
     }
 
     /* 'again' cannot be directed to a different actor */
@@ -791,7 +787,7 @@ libMessages: MessageHelper
     /* 'again': can no longer talk to target actor */
     againCannotTalkToTarget(issuer, target)
     {
-        "\^<<issuer.derName>> <<issuer.verbZuKann>> diesen Befehl nicht wiederholen. ";
+        "\^<<issuer.derName>> <<issuer.verbZuKannKon>> diesen Befehl nicht wiederholen{*}. ";
     }
 
     /* the last command cannot be repeated in the present context */
@@ -854,6 +850,7 @@ libMessages: MessageHelper
     showFinishMsg(msg) { "<.p>*** <<msg>>\ ***<.p>"; }
 
     /* standard game-ending messages for the common outcomes */
+    // *** HIER WEITER ***
     finishDeathMsg = '{DU/ER pc} {IST} GESTORBEN'
     finishVictoryMsg = ('DU HAST GEWONNEN')
     finishFailureMsg = ('DU HAST VERLOREN')
@@ -1868,7 +1865,7 @@ playerMessages: libMessages
      *   is the default for most verbs. 
      */
     noMatchCannotSee(actor, txt) { 
-        "\^<<actor.derName>> <<actor.verbZuSehen>> {hier|dort} <<actor.keinen(txt)>>. "; 
+        "\^<<actor.derName>> <<actor.verbZuSehen>> {hier|dort} <<actor.keinen(txt)>>{* actor}. "; 
     }
 
     /*
@@ -2798,14 +2795,14 @@ playerActionMessages: MessageHelper
     notWithIntangibleMsg(obj)
     {
         gMessageParams(obj);
-        return 'Das {bringt singular} bei {einem obj/einer} nichts{*}. ';
+        return 'Das kann man mit {einem obj/ihm} nicht machen. ';
     }
 
     /* generic failure message for varporous objects */
     notWithVaporousMsg(obj)
     {
         gMessageParams(obj);
-        return 'Das {bringt singular} nichts bei {einem obj/einer}{*}. ';
+        return 'Das kann man mit {einem obj/ihm} nicht machen. ';
     }
 
     /* look in/look under/look through/look behind/search vaporous */
@@ -3625,10 +3622,8 @@ playerActionMessages: MessageHelper
     }
 
     /* vague ASK/TELL (for ASK/TELL <actor> <topic> syntax errors) */
-    askVagueMsg = '<.parser>Die Geschichte versteht diesen Befehl nicht.
-        Bitte verwende FRAG JEMAND NACH EINEM THEMA (oder einfach F THEMA).<./parser> '
-    tellVagueMsg = '<.parser>Die Geschichte versteht diesen Befehl nicht.
-        Bitte verwende ERZÄHL JEMAND VON EINEM THEMA (oder einfach E THEMA).<./parser> '
+    askVagueMsg = '<.parser>Bitte verwende FRAG JEMAND NACH EINEM THEMA (oder einfach F THEMA).<./parser> '
+    tellVagueMsg = '<.parser>Bitte verwende ERZÄHL JEMAND VON EINEM THEMA (oder einfach E THEMA).<./parser> '
 
     /* object cannot hear actor */
     objCannotHearActorMsg(obj)
@@ -3662,8 +3657,7 @@ playerActionMessages: MessageHelper
     followAlreadyHereInDarkMsg = 'Es {ist singular} zu dunkel{*}, um {den dobj/ihn} zu sehen. '
 
     /* trying to follow an object, but don't know where it went from here */
-    followUnknownMsg = '{Du/er} {ist} {dir} nicht sicher{*}, wohin {der dobj/er} 
-        von {hier|dort} aus gegangen {!*}{ist}. '
+    followUnknownMsg = '{Du/er} {ist} {dir} nicht sicher{*}, wohin {der dobj/er} gegangen {!*}{ist}. '
 
     /*
      *   we're trying to follow an actor, but we last saw the actor in the
@@ -3718,13 +3712,13 @@ playerActionMessages: MessageHelper
         {ihn dobj/sie} los {!*}{laesst}. '
 
     /* moving object has no effect */
-    moveNoEffectMsg = '{Den dobj/ihn} zu bewegen {macht singular} wenig Sinn{*}. '
+    moveNoEffectMsg = '{Den dobj/ihn} zu bewegen {bringt singular} wenig{*}. '
 
     /* cannot move object to other object */
-    moveToNoEffectMsg = 'Das {macht singular} wenig Sinn{*}. '
+    moveToNoEffectMsg = 'Das {bringt singular} wenig{*}. '
 
     /* cannot push an object through travel */
-    cannotPushTravelMsg = 'Das {macht singular} wenig Sinn{*}. '
+    cannotPushTravelMsg = 'Das {bringt singular} wenig{*}. '
 
     /* acknowledge pushing an object through travel */
     okayPushTravelMsg(obj)

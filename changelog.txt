@@ -200,3 +200,7 @@ Version 2.0 -
 	-- Geringfügige Anpassungen der Ersetzungsstrings
 	-- Implementierung aller Verben in allen sechs Zeitformen für Standardantworten
 
+Version 2.2 - 150930
+
+	-- Verbergänzungen bei "schau"
+	-- Debug-Verb "actions"
