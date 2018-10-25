@@ -5259,9 +5259,9 @@ modify Traveler
          *   so we don't need a remote name at all
          */
         if (isIn(gPlayerChar.getOutermostRoom()))
-            return 'den Ort';
-        else
             return denTravelerLocName;
+        else
+            return 'den Ort';
     }
     
     demTravelerRemoteLocName()
@@ -5272,9 +5272,9 @@ modify Traveler
          *   so we don't need a remote name at all
          */
         if (isIn(gPlayerChar.getOutermostRoom()))
-            return 'dem Ort';
-        else
             return demTravelerLocName;
+        else
+            return 'dem Ort';
     }
     
 ;

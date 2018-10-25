@@ -1605,7 +1605,7 @@ libMessages: MessageHelper
     sayArrivingDir(traveler, dirName)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.travelerRemoteLocName>> von \^<<dirName>>{*}. ";
+        <<traveler.denTravelerRemoteLocName>> von \^<<dirName>>{*}. ";
     }
 
     /* a traveler is leaving in a given compass direction */
@@ -1621,7 +1621,7 @@ libMessages: MessageHelper
     sayArrivingShipDir(traveler, dirName)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.travelerRemoteLocName>> von \^<<dirName>>{*}. ";
+        <<traveler.denTravelerRemoteLocName>> von \^<<dirName>>{*}. ";
     }
 
     /* a traveler is leaving in a given shipboard direction */
@@ -1658,21 +1658,21 @@ libMessages: MessageHelper
     sayDepartingThroughPassage(traveler, passage)
     {
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuVerlassen>>
-        <<traveler.travelerRemoteLocName>> durch <<passage.denNameObj>>{*}. ";
+        <<traveler.denTravelerRemoteLocName>> durch <<passage.denNameObj>>{*}. ";
     }
 
     /* a traveler is arriving via a passage */
     sayArrivingThroughPassage(traveler, passage)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.travelerRemoteLocName>> durch <<passage.denNameObj>>{*}. ";
+        <<traveler.denTravelerRemoteLocName>> durch <<passage.denNameObj>>{*}. ";
     }
 
     /* a traveler is leaving via a path */
     sayDepartingViaPath(traveler, passage)
     {
         "\^<<traveler.travelerName(nil)>> <<traveler.verbZuVerlassen>>
-        <<traveler.travelerRemoteLocName>>{*} und <<traveler.verbZuBetreten>> 
+        <<traveler.denTravelerRemoteLocName>>{*} und <<traveler.verbZuBetreten>> 
         <<passage.denNameObj>>{*}. ";
     }
 
@@ -1680,7 +1680,7 @@ libMessages: MessageHelper
     sayArrivingViaPath(traveler, passage)
     {
         "\^<<traveler.travelerName(true)>> <<traveler.verbZuBetreten>>
-        <<traveler.travelerRemoteLocName>> von <<passage.demNameObj>>{*}. ";
+        <<traveler.denTravelerRemoteLocName>> von <<passage.demNameObj>>{*}. ";
     }
 
     /* a traveler is leaving up a stairway */
