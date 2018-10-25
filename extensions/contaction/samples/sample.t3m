@@ -1,0 +1,273 @@
+# TADS 3 makefile
+#
+# Warning: this file was mechanically generated.  You may edit this file
+# manually, but your changes might be modified or discarded when
+# you load this file into a TADS development tool.  The TADS tools
+# generally retain the comment at the start of the file and the
+# comment marked "##sources" below, but other comments might be
+# discarded, the formatting might be changed, and some option
+# settings might be modified.
+
+-pre
+-D LANGUAGE=en_us
+-D MESSAGESTYLE=neu
+-Fy obj
+-Fo obj
+-w1
+
+##sources
+-lib system
+-lib adv3/adv3
+-lib contaction/lib/contaction
+-source sample
+
+-res
+GameInfo.txt
+
+# The following is machine-generated - DO NOT EDIT
+[Config:devsys]
+*124 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_modid.t:R:44,58,557,273
+*126 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\contaction.t:R:0,0,513,215
+build:ext resfile cnt:I:0
+build:defaults set:I:1
+*124 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_actor.t:R:66,87,579,302
+watch win:vis:I:1
+watch win:pos:R:-190,243,191,503
+*126 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\samples\sample.t:R:-4,-30,551,291
+build:c ops:I:0
+log win vis::I:1
+log win pos::R:0,0,589,234
+*54 src win pos:c:\program files\tads 3\lib\adv3\objects.t:R:530,0,795,167
+*54 src win pos:c:\program files\tads 3\lib\adv3\precond.t:R:22,29,543,265
+build:include_files-sys:S:0:system
+build:include_files-sys:S:1:system
+build:include_files-sys:S:2:system
+build:include_files-sys:S:3:system
+build:include_files-sys:S:4:system
+build:include_files-sys:S:5:system
+build:include_files-sys:S:6:system
+build:include_files-sys:S:7:system
+build:include_files-sys:S:8:system
+build:include_files-sys:S:9:system
+build:include_files-sys:S:10:system
+build:include_files-sys:S:11:system
+build:include_files-sys:S:12:system
+build:include_files-sys:S:13:lib
+build:include_files-sys:S:14:system
+build:include_files-sys:S:15:system
+build:include_files-sys:S:16:lib
+build:include_files-sys:S:17:user
+*54 src win pos:c:\program files\tads 3\lib\adv3\actions.t:R:0,0,472,236
+project win:dock id:I:6
+*112 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\wips\sherlock\sherlock.t:R:-4,-30,596,356
+*54 src win pos:c:\program files\tads 3\lib\adv3\numbers.t:R:44,58,589,234
+watch win:expression list 0:S:0:actor_
+watch win:expression list 0:S:1:gActor
+ask reload src::I:1
+build:installer options:S:0:name=sample
+build:installer options:S:1:savext=sample
+search:start at top:I:0
+*120 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\wips\sherlock\sherlock actions.t:R:88,116,609,352
+*52 src win pos:c:\program files\tads 3\lib\adv3\modid.t:R:22,29,567,205
+breakpoints:global:S:0:l
+breakpoints:global:S:1:l
+*54 src win pos:c:\program files\tads 3\lib\adv3\hintsys.t:R:0,0,545,176
+*54 src win pos:c:\program files\tads 3\lib\adv3\menusys.t:R:0,0,545,176
+breakpoints:cond-mode:S:0:true
+breakpoints:cond-mode:S:1:true
+breakpoints:cond-mode:S:2:true
+breakpoints:cond-mode:S:3:true
+breakpoints:cond-mode:S:4:true
+breakpoints:cond-mode:S:5:true
+breakpoints:cond-mode:S:6:true
+breakpoints:cond-mode:S:7:true
+breakpoints:cond-mode:S:8:true
+breakpoints:cond-mode:S:9:true
+breakpoints:cond-mode:S:10:true
+breakpoints:cond-mode:S:11:true
+breakpoints:cond-mode:S:12:true
+src win pos:sherlock.h:R:530,334,795,501
+*52 src win pos:c:\program files\tads 3\lib\adv3\actor.t:R:-4,-30,583,306
+*52 src win pos:c:\program files\tads 3\lib\adv3\thing.t:R:0,0,491,236
+ask load dlg::I:1
+*52 src win pos:c:\program files\tads 3\lib\adv3\score.t:R:0,0,545,176
+*52 src win pos:c:\program files\tads 3\lib\adv3\sense.t:R:22,29,567,205
+src win pos:sherlock.t:R:265,0,530,251
+*110 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\wips\sherlock\holmes.t:R:44,58,548,294
+*127 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\cont_action.t:R:-4,-30,551,306
+search:wrap:I:1
+*122 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\cont_actor.t:R:-4,-30,576,291
+*52 src win pos:c:\program files\tads 3\lib\adv3\input.t:R:22,29,567,205
+*119 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\wips\sherlock\bakerstreet221b.t:R:0,0,513,246
+*54 src win pos:c:\program files\tads 3\include\gramprod.h:R:22,29,422,265
+ask exit dlg::I:1
+*125 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_action.t:R:-4,-30,583,306
+docking config::S:0:CB
+docking config::S:1:W0,270,269,304,319,604,469,D,watch win
+docking config::S:2:W0,270,269,2,319,302,469,D,locals win
+docking config::S:3:CR
+docking config::S:4:W3,170,170,205,45,802,313,M,log win
+docking config::S:5:CL
+docking config::S:6:CR
+docking config::S:7:CL
+docking config::S:8:W7,207,270,-217,17,-9,302,D,project win
+search:text:S:0:senseObj
+*47 src win pos:c:\program files\tads 3\lib\_main.t:R:0,0,526,201
+locals win:vis:I:1
+locals win:pos:R:217,243,589,503
+main win max::I:1
+*55 src win pos:c:\program files\tads 3\lib\adv3\disambig.t:R:0,0,545,176
+breakpoints:file:S:0:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_action.t
+breakpoints:file:S:1:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_actor.t
+breakpoints:status:S:0:e
+breakpoints:status:S:1:e
+breakpoints:cond:S:0:
+breakpoints:cond:S:1:
+search:exact case:I:0
+breakpoints:line:S:0:122
+breakpoints:line:S:1:200
+main win pos::R:-4,-4,804,604
+*130 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\en_us\ca_en_us.t:R:22,29,535,244
+*122 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\timesys\lib\ts_events.t:R:0,251,265,502
+*125 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_events.t:R:22,29,567,205
+build:ignore case:I:0
+build:exe:S:0:sample.exe
+*50 src win pos:c:\program files\tads 3\lib\adv3\pov.t:R:66,87,466,323
+src win list::S:0:c:\program files\tads 3\lib\adv3\report.t
+src win list::S:1:c:\program files\tads 3\lib\adv3\adv3.h
+src win list::S:2:c:\program files\tads 3\lib\adv3\action.t
+src win list::S:3:c:\program files\tads 3\lib\adv3\actor.t
+src win list::S:4:c:\program files\tads 3\lib\adv3\pov.t
+src win list::S:5:c:\program files\tads 3\lib\adv3\misc.t
+src win list::S:6:c:\program files\tads 3\lib\adv3\status.t
+src win list::S:7:c:\program files\tads 3\lib\adv3\events.t
+src win list::S:8:c:\program files\tads 3\lib\adv3\exec.t
+src win list::S:9:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\samples\sample.t
+src win list::S:10:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\en_us\ca_en_us.t
+src win list::S:11:c:\program files\tads 3\lib\adv3\en_us\msg_neu.t
+src win list::S:12:c:\program files\tads 3\lib\adv3\en_us\en_us.t
+src win list::S:13:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_action.t
+src win list::S:14:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_actor.t
+src win list::S:15:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_misc.t
+src win list::S:16:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_modid.t
+src win list::S:17:c:\program files\tads 3\lib\adv3\actions.t
+src win list::S:18:c:\program files\tads 3\lib\adv3\sense.t
+src win list::S:19:c:\program files\tads 3\lib\adv3\verify.t
+src win list::S:20:c:\program files\tads 3\lib\adv3\score.t
+src win list::S:21:c:\program files\tads 3\lib\adv3\resolver.t
+src win list::S:22:c:\program files\tads 3\lib\adv3\thing.t
+src win list::S:23:c:\program files\tads 3\lib\adv3\banner.t
+src win list::S:24:c:\program files\tads 3\lib\adv3\disambig.t
+src win list::S:25:c:\program files\tads 3\lib\adv3\extras.t
+src win list::S:26:c:\program files\tads 3\lib\adv3\footnote.t
+src win list::S:27:c:\program files\tads 3\lib\adv3\hintsys.t
+src win list::S:28:c:\program files\tads 3\lib\adv3\input.t
+src win list::S:29:c:\program files\tads 3\lib\adv3\lister.t
+src win list::S:30:c:\program files\tads 3\lib\adv3\menusys.t
+src win list::S:31:c:\program files\tads 3\lib\adv3\modid.t
+src win list::S:32:c:\program files\tads 3\lib\adv3\numbers.t
+src win list::S:33:c:\program files\tads 3\lib\adv3\objects.t
+src win list::S:34:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_events.t
+build:use charmap:I:0
+src win pos:bakerstreet221b.t:R:530,167,795,334
+hist win vis::I:0
+editor:cmdline:S:0:%f
+*51 src win pos:c:\program files\tads 3\lib\adv3\adv3.h:R:22,29,526,265
+*60 src win pos:c:\program files\tads 3\lib\adv3\en_us\msg_neu.t:R:44,58,548,294
+src win pos:watson.t:R:265,251,530,502
+build:include_files:S:0:tads.h
+build:include_files:S:1:t3.h
+build:include_files:S:2:lookup.h
+build:include_files:S:3:systype.h
+build:include_files:S:4:vector.h
+build:include_files:S:5:charset.h
+build:include_files:S:6:bytearr.h
+build:include_files:S:7:tadsgen.h
+build:include_files:S:8:tadsio.h
+build:include_files:S:9:reflect.h
+build:include_files:S:10:file.h
+build:include_files:S:11:dict.h
+build:include_files:S:12:tok.h
+build:include_files:S:13:adv3.h
+build:include_files:S:14:gramprod.h
+build:include_files:S:15:strcomp.h
+build:include_files:S:16:en_us.h
+*123 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_misc.t:R:0,0,513,215
+*55 src win pos:c:\program files\tads 3\lib\adv3\footnote.t:R:44,58,589,234
+gameover dlg::I:1
+*55 src win pos:c:\program files\tads 3\lib\adv3\resolver.t:R:44,58,540,294
+*53 src win pos:c:\program files\tads 3\lib\adv3\banner.t:R:44,58,589,234
+build:debug_image_file:S:0:sample_dbg.t3
+search dlg:old searches:S:0:senseObj
+search dlg:old searches:S:1:mixin
+search dlg:old searches:S:2:daemon:
+search dlg:old searches:S:3:canSense
+search dlg:old searches:S:4:callWithSenseContext
+search dlg:old searches:S:5:sense_
+search dlg:old searches:S:6:Fuse:
+search dlg:old searches:S:7:isPlayerChar
+search dlg:old searches:S:8:commandBusy
+search dlg:old searches:S:9:pendingCommand
+editor:program:S:0:C:\Program Files\EditPlus 2\editplus.exe
+*53 src win pos:c:\program files\tads 3\lib\adv3\action.t:R:0,0,521,236
+*120 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\timesys\lib\timesys.t:R:-4,-30,596,356
+*53 src win pos:c:\program files\tads 3\lib\adv3\parser.t:R:88,116,584,352
+*53 src win pos:c:\program files\tads 3\lib\adv3\travel.t:R:22,29,535,275
+startup:action:I:1
+*58 src win pos:c:\program files\tads 3\lib\adv3\en_us\en_us.t:R:22,29,494,265
+*53 src win pos:c:\program files\tads 3\lib\adv3\lister.t:R:88,116,592,352
+build:rlsgam:S:0:sample.t3
+*123 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\cont_action.t:R:-4,-30,596,213
+*53 src win pos:c:\program files\tads 3\lib\adv3\verify.t:R:44,58,589,234
+*53 src win pos:c:\program files\tads 3\lib\adv3\events.t:R:44,58,570,259
+*53 src win pos:c:\program files\tads 3\lib\adv3\extras.t:R:22,29,567,205
+main win mdi max::I:1
+*53 src win pos:c:\program files\tads 3\lib\adv3\report.t:R:88,116,488,352
+bpmove dlg::I:1
+*53 src win pos:c:\program files\tads 3\lib\adv3\status.t:R:66,87,501,302
+*51 src win pos:c:\program files\tads 3\lib\adv3\exec.t:R:44,58,444,294
+*51 src win pos:c:\program files\tads 3\lib\adv3\misc.t:R:66,87,562,323
+*53 src win pos:c:\program files\tads 3\lib\adv3\output.t:R:66,87,570,323
+search:dir:I:1
+build:installer prog:S:0:sample_Setup.exe
+project win:vis:I:1
+project win:pos:R:-207,17,-9,234
+stack win pos::R:-178,-3,306,218
+stack win vis::I:0
+src win title::S:0:c:\program files\tads 3\lib\adv3\report.t
+src win title::S:1:c:\program files\tads 3\lib\adv3\adv3.h
+src win title::S:2:c:\program files\tads 3\lib\adv3\action.t
+src win title::S:3:c:\program files\tads 3\lib\adv3\actor.t
+src win title::S:4:c:\program files\tads 3\lib\adv3\pov.t
+src win title::S:5:c:\program files\tads 3\lib\adv3\misc.t
+src win title::S:6:c:\program files\tads 3\lib\adv3\status.t
+src win title::S:7:c:\program files\tads 3\lib\adv3\events.t
+src win title::S:8:c:\program files\tads 3\lib\adv3\exec.t
+src win title::S:9:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\samples\sample.t
+src win title::S:10:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\en_us\ca_en_us.t
+src win title::S:11:c:\program files\tads 3\lib\adv3\en_us\msg_neu.t
+src win title::S:12:c:\program files\tads 3\lib\adv3\en_us\en_us.t
+src win title::S:13:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_action.t
+src win title::S:14:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_actor.t
+src win title::S:15:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_misc.t
+src win title::S:16:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_modid.t
+src win title::S:17:c:\program files\tads 3\lib\adv3\actions.t
+src win title::S:18:c:\program files\tads 3\lib\adv3\sense.t
+src win title::S:19:c:\program files\tads 3\lib\adv3\verify.t
+src win title::S:20:c:\program files\tads 3\lib\adv3\score.t
+src win title::S:21:c:\program files\tads 3\lib\adv3\resolver.t
+src win title::S:22:c:\program files\tads 3\lib\adv3\thing.t
+src win title::S:23:c:\program files\tads 3\lib\adv3\banner.t
+src win title::S:24:c:\program files\tads 3\lib\adv3\disambig.t
+src win title::S:25:c:\program files\tads 3\lib\adv3\extras.t
+src win title::S:26:c:\program files\tads 3\lib\adv3\footnote.t
+src win title::S:27:c:\program files\tads 3\lib\adv3\hintsys.t
+src win title::S:28:c:\program files\tads 3\lib\adv3\input.t
+src win title::S:29:c:\program files\tads 3\lib\adv3\lister.t
+src win title::S:30:c:\program files\tads 3\lib\adv3\menusys.t
+src win title::S:31:c:\program files\tads 3\lib\adv3\modid.t
+src win title::S:32:c:\program files\tads 3\lib\adv3\numbers.t
+src win title::S:33:c:\program files\tads 3\lib\adv3\objects.t
+src win title::S:34:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\ca_events.t
+*126 src win pos:C:\Documents and Settings\Kevin\My Documents\Interactive Fiction\TADS\TADS3\extensions\contaction\lib\cont_actor.t:R:-4,-30,576,291
+

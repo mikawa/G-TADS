@@ -1,0 +1,12 @@
+Name: TADS 3 Starter Game
+Byline: by An Author
+HtmlByline: by <a href="mailto:your-email@your-address.com"> YOUR NAME</a>
+AuthorEmail: YOUR NAME <your-email@your-address.com>
+Desc: CUSTOMIZE - this should provide a brief description of the game, in plain text format.
+HtmlDesc: CUSTOMIZE - this should provide a brief description of the game, in <b>HTML</b> format.
+Version: 1.0
+ReleaseDate: 2004-12-12
+Language: en-US
+LicenseType: Freeware
+CopyingRules: Nominal cost only; compilations allowed
+PresentationProfile: Multimedia

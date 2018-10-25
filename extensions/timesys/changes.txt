@@ -1,0 +1,30 @@
+======================================
+Changes for 3.0.3
+--------------------------------------
+Fixed the BigBen and Sun classes.
+
+======================================
+Changes for 3.0.2
+--------------------------------------
+Fixed a bug in the addDateTimeToTime() and subtractDateTimeFromTime() methods. Added these methods to the WallClock class so that they automatically update the gWallClock with the new value and display the new time on the screen.
+
+Changes for 3.0.1
+---------------------------------------
+* Derived TimeSysEventObject from BasicCaEventObject (defined in ContAction)
+* Fixes to the CycleSenseDateTimeDaemon
+* Renamed the TimeSys Events bypassInterrupt() to getBypassInterrupt()
+* Renamed the following Clock class attribute names:
+	minutesPerDay	to	minutesPerDay_
+	secondsPerDay	to	secondsPerDay_
+	secondsPerHour	to	secondsPerHour_
+   also removed the "static" keyword from these attributes
+* Added noonHour_, noonMinutes_, and noonSeconds_ to the Clock class
+* Added advanceBusyTime() for Actor to advance their busy time for an action by days, hours, minutes, and seconds
+* Added cvtCurrDtToGctu() to TimePiece class to return the game clock time units equivalent to the current datetime.
+* Added daysPerWeek attribute to the Calendar class to facilitate the changes in the toDayOfWeek() calculation
+* Moved toDateTime() from concrete classes into the abstract Calendar class
+* Added tags to grammar elements for replace/modify purposes.
+* Changed the calculation of the grammar timeNoonPhrase and grammar time2400Phrase to use the new noonHours value
+* Changed the grammar timeHrPhrase getIncrMinutes() to use the gWallClock.getClock().minutesPerHour value
+* Added clockMask_ and calendarMask_ attributes to the LangTimePiece class for use in the toDayString(), toDateString() and toTimeString() methods.
+* Added noonHours_ to the ClockMask for use in its format12Hour() and formatMarker() methods

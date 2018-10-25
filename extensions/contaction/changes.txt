@@ -1,0 +1,9 @@
+====================================
+Changes for release 2.6
+-----------------------------------------------------------------
+* Added bypassInterrupt_ attribute to the ContActEventMixIn class
+* Added getQueryActor() method to ContActEventMixIn class 
+* Renamed bypassInterrupt() to getBypassInterrupt() in the ContActEventMixIn class
+* Changed the callActorContActInterrupt() and callActorContActInterrupt() to use the checkSensoryContext() method in the ContActEventMixIn class
+* Changed the checkForDupActorQuery() to use the getQueryActor() method
+* Added the BasicCaEventObject class to support the CaCycleEvent class.
