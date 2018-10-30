@@ -5214,6 +5214,7 @@ modify Traveler
     denTravelerLocName()
     {
         /* get our location's name from the PC's perspective */
+        withCaseAccusative;
         local nm = location.getDestName(gPlayerChar, gPlayerChar.location);
 
         /* if there's a name, return it; otherwise, use "the area" */
