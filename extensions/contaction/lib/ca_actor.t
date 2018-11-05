@@ -287,9 +287,17 @@ modify Actor
             && mostRecentAction.isCompletedAction_ == nil 
             ? mostRecentAction : nil;
 
-        pa  = pendingCommand.length() > 0
-            && pendingCommand[1].action_.ofKind(actionClass)
-            ? pendingCommand[1].action_ : nil;
+        if (pendingCommand.length() > 0 && pendingCommand[1].action_ == nil)
+            
+            pa = nil;
+        
+        else {
+        
+            pa  = pendingCommand.length() > 0
+                && pendingCommand[1].action_.ofKind(actionClass)
+                ? pendingCommand[1].action_ : nil;
+        
+        }
 
         qa = pa != nil ? pa : ra;
 

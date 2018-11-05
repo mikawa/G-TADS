@@ -1,4 +1,4 @@
-#charset "us-ascii"
+#charset "latin1"
 /* 
  *  Copyright (c) 2001-2004 by Kevin Forchione. All rights reserved.
  *   
@@ -21,7 +21,7 @@
 contActionYesOrNo(action)
 {
         local str, ans, ret, pattern = '.*/ *(<Alpha>+) *%(?';
-        local queryStr = '\bMöchtest du weitermachen ';
+        local queryStr = '\bMöchtest du weiter ';
 
         /*
          *  Since we're about to ask the player a question in the 
