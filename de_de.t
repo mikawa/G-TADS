@@ -5667,22 +5667,22 @@ modify southwestDirection
 ;
 
 modify upDirection
-    name = 'hoch'
+    name = 'hinauf'
     destName = 'oben'
 ;
 
 modify downDirection
-    name = 'runter'
+    name = 'hinunter'
     destName = 'unten'
 ;
 
 modify outDirection
-    name = 'raus'
+    name = 'hinaus'
     destName = 'drauﬂen' //GERMAN: DISPLAY outDirection as 'drauﬂen'
 ;
 
 modify inDirection
-    name = 'rein'
+    name = 'hinein'
     destName = 'drinnen' //GERMAN: DISPLAY in Direction as 'drinnen'
 ;
 

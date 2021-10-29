@@ -3739,7 +3739,7 @@ playerActionMessages: MessageHelper
 
     /* default 'set to' acknowledgment */
     okaySetToMsg(val)
-        { return 'In Ordnung, {der dobj/er} {ist} jetzt auf ' + val + ' eingestellt{*}. '; }
+        { return '{Der dobj/er} {ist} jetzt auf ' + val + ' eingestellt{*}. '; }
 
     /* cannot turn object */
     cannotTurnMsg = '{Du/er} {koennt} {den dobj/ihn} nicht drehen{*}. '
@@ -3757,15 +3757,15 @@ playerActionMessages: MessageHelper
 
     /* default 'turn to' acknowledgment */
     okayTurnToMsg(val)
-        { return 'In Ordnung, {der dobj/er} {ist} nun auf ' + val + ' eingestellt{*}. '; }
+        { return '{Der dobj/er} {ist} nun auf ' + val + ' eingestellt{*}. '; }
 
     /* switch is already on/off */
     alreadySwitchedOnMsg = '{Der dobj/er} {ist} schon an{*}. '
     alreadySwitchedOffMsg = '{Der dobj/er} {ist} schon aus{*}. '
 
     /* default acknowledgment for switching on/off */
-    okayTurnOnMsg = 'In Ordnung, {der dobj/er} {ist} jetzt an{*}. '
-    okayTurnOffMsg = 'In Ordnung, {der dobj/er} {ist} jetzt aus{*}. '
+    okayTurnOnMsg = '{Der dobj/er} {ist} jetzt an{*}. '
+    okayTurnOffMsg = '{Der dobj/er} {ist} jetzt aus{*}. '
 
     /* flashlight is on but doesn't light up */
     flashlightOnButDarkMsg = '{Du/er} {schaltet} {den dobj/ihn} ein{-*}, 
@@ -4036,17 +4036,17 @@ playerActionMessages: MessageHelper
 
     /* default report for standing up/sitting down/lying down */
     okayPostureChangeMsg(posture)
-    { return 'In Ordnung, {du/er} ' + posture.msgVerbT + ' nun{*}. '; } //vorher posture.participle
+    { return '{Du/er} ' + posture.msgVerbT + ' nun{*}. '; } //vorher posture.participle
 
     /* default report for standing/sitting/lying in/on something */
     roomOkayPostureChangeMsg(posture, obj)
     {
         gMessageParams(obj);
-        return 'In Ordnung, {du/er} ' + posture.msgVerbT + ' nun {auf obj}{*}. '; //vorher posture.participle
+        return '{Du/er} ' + posture.msgVerbT + ' nun {auf obj}{*}. '; //vorher posture.participle
     }
 
     /* default report for getting off of a platform */
-    okayNotStandingOnMsg = 'In Ordnung, {du/er} {verlaesst} {den dobj/ihn}{*}. '
+    okayNotStandingOnMsg = '{Du/er} {verlaesst} {den dobj/ihn}{*}. '
 
     /* cannot fasten/unfasten */ // -- We have no fasten / unfasten in german
     cannotFastenMsg = '{Du/er} {cannot} fasten {the dobj/him}. '
@@ -4333,7 +4333,7 @@ npcActionMessages: playerActionMessages
         {er iobj/sie} {passt} nicht ins Schloss{*}. '
 
     /* acknowledge entering "follow" mode */
-    okayFollowModeMsg = '<q>In Ordnung, Ich werde {dem dobj/ihm} folgen.</q> '
+    okayFollowModeMsg = '<q>Ich werde {dem dobj/ihm} folgen.</q> '
 
     /* note that we're already in "follow" mode */
     alreadyFollowModeMsg = '<q>Ich folge schon {dem dobj/ihm}.</q> '
@@ -4700,7 +4700,7 @@ actorInventoryLister: DividedInventoryLister
         local nm = gSynthMessageParam(parent);
         
         /* short lists - combine carried and worn in a single sentence */
-        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir/sich}{*},
+        "<<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir/sich}{*}
         und <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen{*}. ";
     }
     showInventoryLongLists(parent, carrying, wearing)
@@ -4754,7 +4754,7 @@ actorHoldingDescInventoryListerLong: actorInventoryLister
         local nm = gSynthMessageParam(parent);
 
         /* short lists - combine carried and worn in a single sentence */
-        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir/sich}{*},
+        "<.p><<buildParam('Du/er', nm)>> {hat} <<carrying>> bei {dir/sich}{*}
         und <<buildParam('hat', nm)>>{subj} <<wearing>> angezogen{*}. ";
     }
     showInventoryLongLists(parent, carrying, wearing)
