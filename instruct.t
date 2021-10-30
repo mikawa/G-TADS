@@ -141,7 +141,7 @@ DefineSystemAction(Instructions)
      *   
      *   Set this to nil if the game doesn't allow truncation at all.  
      */
-    truncationLength = 16 // In German we have many rather long words ...
+    truncationLength = 10 // The german parser uses truncation length of 10
 
     /*
      *   This property should be set on a game-by-game basis to indicate
@@ -220,79 +220,63 @@ DefineSystemAction(Instructions)
      *   SpecialTopic objects defined.  
      */
     conversationInstructions =
-        "Du kannst mit anderen Charakteren Konversation betreiben, indem 
-        du sie nach etwas fragst, oder ihnen von etwas erzählst, das in
-        der Geschichte vorkommt. Zum Beispiel, könntest du FRAG ZAUBERER
-        NACH ZAUBERSTAB oder ERZÄHL DER WACHE VON DEM ALARM eingeben. Du
-        solltest immer das FRAG NACH oder ERZÄHL VON Schema einhalten, denn
-        die Geschichte kann andere Formate in der Regel nicht verarbeiten. 
-        Du musst dir nicht den Kopf über komplizierte Formulierungen wie 
-        <q>frag die Wache, wie man das Fenster öffnet</q> zerbrechen.
-        In den meisten Fällen bekommst du das beste Ergebnis, wenn du nach
-        bestimmten Gegenständen oder Personen, denen du im Spielverlauf 
-        begegnet bist, fragst. Abstrakte Themen wie DIE BEDEUTUNG DES LEBENS
-        dürften eher selten akzeptiert werden. Wie auch immer: falls du zu der 
-        Überzeugung gelangst, du <i>solltest</i> jemand nach einem akstrakten 
-        Thema befragen, dann tu es - es kann nicht schaden.
+        "Du kannst mit anderen Charakteren reden, indem du sie nach bestimmten
+        Themen oder auch Gegenständen, die im Spiel vorkommen fragst. Zum 
+        Beispiel könntest du FRAG ZAUBERER NACH ZAUBERSTAB oder ERZÄHL DER 
+        WACHE VON DEM ALARM eingeben. Weichst du von diesem Schema ab, kann es
+        sein, dass die Geschichte deine Eingabe nicht versteht. Vermeide 
+        komplizierte Formulierungen wie <q>frag die Wache, wie man das Fenster
+        öffnet</q>, verwende stattdessen <q>frag die Wache nach dem Fenster</q>.
+        Abstrakte Themen wie DIE BEDEUTUNG DES LEBENS sind eher unwahrscheinlich,
+        aber falls du zu der Überzeugung gelangst, du <i>solltest</i> jemand nach 
+        einem akstrakten Thema befragen, dann tu es - es kann nicht schaden.
 
         \bWenn du dieselbe Person nach mehreren Themen in Folge befragen oder
-        ihr davon erzählen willst, kannst du dir einige Tipparneit sparen,
-        indem du FRAGE NACH mit F oder ERZÄHLE VON mit E abkürzst. Wenn du
-        zum Beispiel mit dem Zauberer im Gespräch bist, kannst du FRAGE DEN
-        ZAUBERER NACH DEM AMULETT mit F AMULETT abkürzen. Diese Eingabe richtet
-        deine Frage an dieselbe Person, die du in deinem letzten FRAGE oder
-        ERZÄHLE Befehl angesprochen hast.
+        davon erzählen willst, kannst du FRAGE NACH mit F oder ERZÄHLE VON mit 
+        E abkürzen, also beispielsweise statt FRAGE DEN ZAUBERER NACH DEM AMULETT
+        einfach nur F AMULETT eingeben. Damit sprichst du die Person an, die du
+        zuletzt angesprochen hast.
 
         <<firstObj(InConversationState, ObjInstances) != nil ?
-          "\bUm mit jemandem ins Gespräch zu kommen, tippe REDE MIT (Person).  
-          Damit versuchst du, die Aufmerksamkeit der Person auf dich zu lenken
-          und eine Konversation zu beginnen. REDE MIT ist in der Regel optional,
-          weil du direkt mit FRAGE oder ERZÄHLE starten kannst, wenn du willst." : "">>
+          "\bVerwende REDE MIT (Person), um eine Konversation zu beginnen. REDE MIT
+          ist in der Regel optional, weil du auch direkt mit FRAGE oder ERZÄHLE das
+          Gesrpäch beginnen kannst." : "">>
 
         <<firstObj(SpecialTopic, ObjInstances) != nil ?
-          "\bDie Geschichte kann gelegentlich spezielle Möglichkeiten in einem 
-          Gespräch vorschlagen, wie z.B.:
+          "\bDie Geschichte kann gelegentlich spezielle Optionen im Gespräch 
+          vorschlagen, wie z.B.:
 
           \b\t(Du kannst dich entschuldigen, oder erklären warum du die Aliens nicht magst.)
 
-          \bWenn du willst, kannst du einen der Vorschläge verwenden, indem du
-          den Vorschlag wörtlich eingibst. Normalerweise genügt es, die ersten
-          paar Wörter einzugeben.
+          \bDann kannst du einen der Vorschläge verwenden, indem du den Vorschlag wörtlich
+          eingibst. Normalerweise genügt es, die ersten Wörter einzugeben.
 
           \b\t&gt;ENTSCHULDIGE DICH
-          \n\t&gt;ERKLÄR WARUM DU DIE ALIENS NICHT MAGST
+          \n\t&gt;ERKLÄR WARUM DU DIE ALIENS (NICHT MAGST)
 
-          \bSpezielle Möglichkeiten wie diese sind nur möglich, wenn sie unmittelbar
-          vorgeschlagen werden. Du musst sie daher nicht auswendig lernen. Die 
-          Geschichte schlägt dir diese zum gegebenen Zeitpunkt vor. Diese speziellen
-          Optionen schränken dich nicht ein. Du kannst nach wie vor genauso gut einen
-          gewöhnlichen Befehl eintippen, anstatt auf die spezielle Eingabe zurück
-          zu greifen." : "">>
+          \bSolche Eingaben sind in der Regel nur möglich, wenn sie dir vorgeschlagen 
+          werden. Diese speziellen Optionen schränken dich nicht ein. Du kannst nach 
+          wie vor genauso gut eine Standardformulierung verwenden." : "">>
 
         <<firstObj(SuggestedTopic, ObjInstances) != nil ?
           "\bWenn du dir nicht sicher bist, welche Themen diskutiert werden können,
-          hilft der Befehl THEMEN, wenn du dich im Gespräch mit einer Person
-          befindest. Er zeigt dir eine Liste mit Dingen, die als Gesprächsthemen
-          zur Auswahl stehen und die den Gesprächspartner interessieren könnten.
-          Der Befehl listet für gewöhnlich nicht alle Themen auf, also experimentiere
-          frei." : "">>
+          tippe THEMEN, wenn du dich im Gespräch mit einer Person befindest. Dann
+          wird dir eine Liste mit Dingen, die als Gesprächsthemen zur Auswahl stehen 
+          ausgegeben. Aber du bekommst hier nur eine Auswahl an Themen." : "">>
 
-        \bDu kannst auch mit anderen Charakteren durch physische Objekte interagieren.
-        Zum Beispiel kannst du versuchen, jemandem etwas zu zeigen oder zu geben, wie
-        GIB DAS GELD DEM BEAMTEN oder ZEIGE DAS GÖTZENBILD DEM PROFESSOR.  Du könntest
-        auch mit anderen Charakteren kämpfen wie GREIF TROLL MIT SCHWERT AN oder WIRF
-        AXT AUF ZWERG.
+        \bDu kannst auch physische Objekte in das Gespräch einbeziehen, also deinem
+        Gesprächspartner etwas zeigen oder geben, wie zum Beispiel bei GIB DAS GELD 
+        DEM BEAMTEN oder ZEIGE DAS GÖTZENBILD DEM PROFESSOR.
 
-        \bManchmal kannst du einem anderen Charakter dazu auffordern, etwas für dich
-        zu erledigen. Hierfür gibst du den Namen des Charakters ein, gefolgt von 
-        einem Komma, und dann den entsprechenden Befehl, in der selben Form, wie du
-        diesen Befehl auch für dich selbst verwendest. Zum Beispiel:
+        \bManchmal kannst du eine andere Person dazu auffordern, etwas für dich
+        zu erledigen. Hierfür gibst du den Namen der Person ein, gefolgt von 
+        einem Komma, und dann den entsprechenden Befehl, zum Beispiel:
 
         \b\t&gt;ROBOTER, GEH NACH NORDEN
 
-        \bEs gibt aber keine Garantie, dass der Charakter deinem Befehl Folge leistet.
-        Die meisten Personen haben eine eigene Einstellung zu den Dingen und werden 
-        nicht automatisch und blind alles was du willst, ausführen. "
+        \Natürlich gibt keine Garantie, dass diese Person deinem Befehl Folge leistet.
+        Die meisten Leute haben eine eigene Einstellung zu den Dingen und werden 
+        nicht automatisch und blind alles ausführen, was du ihenn aufträgst. "
 
     /* execute the command */
     execSystemAction()
@@ -341,9 +325,7 @@ DefineSystemAction(Instructions)
         startedScript = nil;
         
         /* show the introductory message */
-        "Diese Geschichte kann detaillierte Instruktionen zu Interactive
-        Fiction anzeigen, speziell für jemanden, der mit den Konventionen 
-        von IF bislang nicht vertraut ist";
+        "Diese Geschichte kann den Verlauf der Geschichte aufzeichnen";
 
         /*
          *   Check to see if we're already scripting.  If we aren't, offer
@@ -357,8 +339,8 @@ DefineSystemAction(Instructions)
              *   they're not already logging; ask if they'd like to start
              *   doing so 
              */
-            ", und du kannst diese in eine Datei schreiben lassen, die du
-            dann ausdrucken kannst. Willst du fortfahren? Mit
+            " und alle Ausgabetexte in eine Datei schreiben, die du dann ausdrucken 
+            oder weitergeben kannst. Willst du fortfahren? Mit
             \n(<a href='Ja'>J</a> stimmst du zu, oder tipp 
             <a href='Skript'>SKRIPT</a> um diese in eine Datei zu schreiben) &gt; ";
 
@@ -366,7 +348,7 @@ DefineSystemAction(Instructions)
             str = inputManager.getInputLine(nil, nil);
 
             /* if they want to capture them to a file, set up scripting */
-            if (rexMatch('<nocase><space>*s(c(r(i(pt?)?)?)?)?<space>*', str)
+            if (rexMatch('<nocase><space>*s(k(r(i(pt?)?)?)?)?<space>*', str)
                 == str.length())
             {
                 /* try setting up a scripting file */
@@ -391,7 +373,7 @@ DefineSystemAction(Instructions)
              *   they're already logging; just confirm that they want to
              *   see the instructions 
              */
-            "; willst du fortfahren?
+            ", willst du fortfahren?
             \n(Zustimmung mit J) &gt; ";
 
             /* stop if they don't want to proceed */
@@ -430,16 +412,15 @@ DefineSystemAction(Instructions)
     showCommandsChapter()
     {
         "\b<b>Eingeben von Befehlen</b>\b
-        Du hast eventuell schon bemerkt, dass du mit der Geschichte interagierst,
-        indem du einen Befehl eingibst, wann immer das folgende Zeichen ausgegeben
-        wird:
+        Vermutlich hast du schon bemerkt, dass du mit dem folgenden Zeichen
+        zu einer Eingabe aufgefordert wirst:
         \b";
 
         gLibMessages.mainCommandPrompt(rmcCommand);
 
         "\bSo weit so gut, jetzt denkst du wahrscheinlich an zwei Dinge:
-        <q>Super, Ich kann tippen was auch immer ich will, in deutscher
-        Sprache und die Geschichte wird erkennen, was ich will,</q> oder <q>
+        <q>Ich kann tippen was auch immer ich will, in deutscher Sprache und 
+        die Geschichte wird erkennen, was ich möchte,</q> oder <q>
         Super, jetzt muss ich auch noch eine weitere komplexe Sprache für ein
         Computer Programm lernen. Ich werde stattdessen etwas anderes 
         spielen.</q>  Nun ja, keins von beiden ist die ganze Wahrheit.
@@ -498,10 +479,9 @@ DefineSystemAction(Instructions)
         \n\t Steig in den Wagen
         \n\t Setz dich auf den Stuhl
         \n\t Stell dich auf den Tisch
-        \n\t Stell dich auf das Blumenbett
         \n\t Leg dich auf das Bett
         \n\t Tippe Hallo auf Tastatur
-        \n\t Schlage Bob im Telefonbuch nach";
+        \n\t Schlage Johann im Telefonbuch nach";
 
         /* show the conversation-related verbs */
         foreach (local cur in conversationVerbs)
@@ -525,10 +505,9 @@ DefineSystemAction(Instructions)
         else
             "\bDie meisten Verben, die du benötigst, um die Geschichte zu
             vollenden, sind oben gezeigt. In seltenen Fällen werden zusätzliche
-            Befehle benötigt, sie folgen aber mit Sicherheit dem obigen Schema.";
+            Befehle benötigt, sie folgen aber meist dem obigen Schema.";
 
-        "\bEin paar dieser Befehle bedürfen einer genauerer Erklärung.
-        Schau dich um (das kannst du abkürzen mit schau oder l) zeigt dir
+        "\bSchau dich um (das kannst du abkürzen mit schau oder l) zeigt dir
         die Beschreibung deines momentanen Aufenthaltsortes an.  Damit kannst
         du jederzeit deine Erinnerung an den Ort und die hier erwähnten Objekte
         auffrischen.  Inventar (oder nur i) zeigt alles an, das du angezogen hast
@@ -540,35 +519,35 @@ DefineSystemAction(Instructions)
     showAbbrevChapter()
     {
         "\b<b>Abkürzungen</b>
-        \bDu benötigst manche Befehle extrem oft, daher kannst du die gebräuchlichsten
+        \bDu benötigst manche Befehle öfter, daher kannst du die gebräuchlichsten
         auch abkürzen:
 
         \b
-        \n\t Schau dich um entspricht schau oder einfach l
-        \n\t Inventar wird abgekürzt mit i
-        \n\t Geh nach Norden kann einfach als Norden eingegeben werden, oder nur n 
-        (genauso o, w, s, no, so, nw, sw, H für Hoch und R für Runter)
+        \n\t Schau dich um entspricht schau oder einfach l.
+        \n\t Inventar wird abgekürzt mit i.
+        \n\t Geh nach Norden kann einfach als Norden eingegeben werden, oder nur N 
+        (genauso O, W, S, NO, SO, NW, SW, H für Hinauf und R für Hinunter).
         \n\t Schau die Diskette an kann als untersuche Diskette oder einfach x 
-        Diskette eingegeben werden
-        \n\t Warte kann zu z verkürzt werden
+        Diskette eingegeben werden.
+        \n\t Warte kann zu z verkürzt werden.
         <<conversationAbbr>>
 
         \b<b>Ein paar weitere Feinheiten</b>
         \bWenn du Befehle eingibst, kannst du Groß- und Kleinschreibung nach
         Belieben verwenden. Du kannst Artikel wie der, die, das eingeben oder
-        kannst sie nach Belieben auch weglassen. ";
+        auch weglassen. ";
 
         if (truncationLength != nil)
         {
             "Du kannst ein Wort auf die ersten <<
             spellInt(truncationLength)>> Buchstaben abkürzen, darfst aber keine
             Buchstaben hinzufügen. Das bedeutet, du kannst, zum Beispiel, das
-            Wort EXTREMGUTANGENOMMENERMEDIKAMENTENMIX abkürzen mit <<
-            'EXTREMGUTANGENOMMENERMEDIKAMENTENMIX'.substr(1, truncationLength)
+            Wort SCHLÜSSELBUND abkürzen mit <<
+            'SCHLÜSSELBUND'.substr(1, truncationLength)
             >> oder <<
-            'EXTREMGUTANGENOMMENERMEDIKAMENTENMIX'.substr(1, truncationLength+2)
+            'SCHLÜSSELBUND'.substr(1, truncationLength+2)
             >>, aber nicht mit <<
-            'EXTREMGUTANGENOMMENERMEDIKAMENTENMIX'.substr(1, truncationLength)
+            'SCHLÜSSELBUND'.substr(1, truncationLength)
             >>SDF. ";
         }
     }
@@ -577,39 +556,39 @@ DefineSystemAction(Instructions)
     showTravelChapter()
     {
         "\b<b>Fortbewegung</b>
-        \bDu befindest dich jederzeit während der Geschichte an einem
-        bestimmten <q>Aufenthaltsort.</q> Dieser wird beschrieben, wenn du
-        ihn das erste mal betrittst, und wieder, wenn du SCHAU eingibst.
-        Jeder Ort hat normalerweise einen Namen, der vor der Beschreibung
-        ausgegeben wird. Der Name ist nützlich, wenn du eine Karte zeichnest
-        und hilft dir, die Orientierung zu behalten, wenn du dich fortbewegst.
+        \bDu befindest dich während der Geschichte an verschiedenen <q>Aufenthaltsorten</q>.
+        Du erhälst deren Beschreibung, wenn du sie das erste mal betrittst, und 
+        dann wieder, wenn du SCHAU eingibst.
+        Jeder Ort hat einen Namen, der vor der Beschreibung ausgegeben wird. Der 
+        Name ist zweckmäßig, um eine Karte zu zeichnen und hilft dir, die Orientierung 
+        zu behalten, wenn du dich fortbewegst.
 
-        \bJeder Aufenthaltsort ist ein einzelner Raum oder Teil einer Landschaft
-        oder einer Stadt. (Manchmal ist ein einzelner Raum so groß, dass er durch
-        mehrere zusammenhängende Orte repräsentiert wird, aber das kommt eher
-        selten vor.) Bist du einmal an einem Ort angelangt, kannst du für 
+        \bJeder Aufenthaltsort ist ein Raum oder Teil einer Landschaft
+        oder einer Stadt. (Manchmal ist ein einzelner Raum so groß, dass er als
+        mehrere zusammenhängende Orte dargestellt wird, aber das kommt eher
+        selten vor). Bist du einmal an einem Ort angelangt, kannst du für 
         gewöhnlich alle dort vorhandenen Objekte sehen und erreichen. Somit
-        spielt es keine Rolle, wo genau innerhalb des Raums du dich befindest.
-        Manchmal ist etwas außerhalb deiner Reichweite, vielleicht weil sich
-        der Gegenstand auf einem hohen Regal oder auf der anderen Seite eines
-        Grabens befindet. In diesen Fällen lohnt es sich, die Position genauer
-        zu betrachten -- vielleicht lässt sich der Gegenstand erreichen, wenn
-        du dich z.B. auf einen Tisch stellst (STELL DICH AUF DEN TISCH.)
+        spielt es keine Rolle, wo genau du dich innerhalb des Raums befindest.
+        Manchmal ist ein Gegenstand außerhalb deiner Reichweite, weil dieser sich
+        auf einem hohen Regal oder auf der anderen Seite eines Grabens befindet. 
+        In diesen Fällen lohnt es sich, deine Position genauer
+        zu betrachten. Vielleicht lässt sich der Gegenstand erreichen, wenn
+        du dich z.B. auf einen Tisch stellst (STELL DICH AUF DEN TISCH).
 
         \bDie Fortbewegung zwischen den Räumen erfolgt normalerweise mit einem
         Richtungsbefehl wie Geh nach Norden, Geh hoch, usw.
-        (Du kannst die Kardinalrichtungen und vertikalen Richtungen allesamt
-        abkürzen mit: N, S, O, W, H, R. Das geht auch mit den Diagonalen:
-        NO, NW, SO, SW.) Die Geschichte erwähnt mögliche Ausgänge in der Regel
-        in der entsprechenden Beschreibung des Aufenthaltsortes, so dass du
+        (Du kannst die Richtungen und vertikalen Richtungen allesamt
+        abkürzen mit: N, S, O, W, H, R, auch die Diagonalen: NO, NW, SO, SW).
+        Die Geschichte erwähnt mögliche Ausgänge in der Regel in der 
+        entsprechenden Beschreibung des Aufenthaltsortes, so dass du
         niemals blind raten musst.
         
-        \bIn den meisten Fällen bringt dich die Umkehrung der Richtung wieder
+        \bIn den meisten Fällen bringt dich die umgekehrte Richtung wieder
         zurück in den Raum, den du verlassen hast, aber manchmal können die
         Passagen sich auch winden und drehen.
 
         \bWenn eine Tür (oder Tor) beschrieben wird, brauchst du dich meistens
-        nicht darum bemühen, sie zu öffnen, das passiert automatisch.
+        nicht darum bemühen, sie zu öffnen, das geschieht automatisch.
         Nur wenn die Türe durch etwas blockiert wird oder sie verschlossen ist,
         musst du dich genauer um die Lösung des Problems kümmern.";
     }
@@ -621,7 +600,7 @@ DefineSystemAction(Instructions)
         \bDu kannst in der Geschichte Gegenstände finden, die du mitnhemen
         oder auf andere Weise manipulieren kannst. Wenn du etwas mitnehmen
         willst, gib NIMM gefolgt von dem Namen des Gegenstands ein: NIMM
-        BUCH. Wenn du etwas ablegen willst, LEG es AB.
+        BUCH. Wenn du etwas ablegen willst, LEG BUCH AB.
         
         \bDu brauchst dich nicht darum zu kümmern, wie du etwas mit dir 
         herumträgst, also spielt es keine Rolle, in welcher Hand du etwas
@@ -631,11 +610,11 @@ DefineSystemAction(Instructions)
         lege Gegenstände in eine Tasche oder einen ähnlichen Behälter, etwa
         einen Rucksack etc. Das erhöht in diesem Fall deine Tragekapazität.
 
-        \bOft bekommst du einen Haufen Zusatzinformationen (und manchmal
-        lebenswichtige Hinweise) wenn du Objekte näher untersuchst. Das 
-        kannst du mit UNTERSUCHE etwas, SCHAU etwas AN, BETRACHTE etwas, 
-        machen. Der Befehl kann mit X oder B abgekürzt werden (X GEMÄLDE).
-        Erfahrene Spieler haben die Angewohnheit, ALLES und JEDEN erstmal
+        \bOft bekommst du Zusatzinformationen (und manchmal lebenswichtige
+        Hinweise) wenn du Objekte näher untersuchst. Dies kannst du mit UNTERSUCHE 
+        etwas, SCHAU etwas AN, BETRACHTE etwas, tun. Der Befehl kann mit X oder B 
+        abgekürzt werden (X GEMÄLDE).
+        Erfahrene Spieler haben die Angewohnheit, erst ALLES und JEDEN 
         zu untersuchen, wenn sie einen neuen Raum betreten. ";
     }
 
@@ -643,7 +622,7 @@ DefineSystemAction(Instructions)
     showConversationChapter()
     {
         "\b<b>Interaktion mit anderen Charakteren</b>
-        \bDu kannst im Verlauf der Geschichte auf andere Leute oder 
+        \bDu wirst im Verlauf der Geschichte auf andere Leute oder 
         Kreaturen treffen. Manchmal kannst du mit diesen interagieren.\b";
 
         /* show the customizable conversation instructions */
@@ -714,33 +693,30 @@ DefineSystemAction(Instructions)
             if (crueltyLevel == 2)
                 "(Du solltest vorsichtshalber alle älteren Spielstände aufheben
                 statt sie zu überschreiben, weil du unter Umständen nicht immer
-                gleich merken wirst, wenn das Spiel ungewinnbar wird. Du wirst
+                gleich merken wirst, wenn das Spiel unlösbar wird. Du wirst
                 feststellen, manchmal weiter zurück gehen zu müssen, als deine
                 letzte gespeicherte Position, die du als sicher betrachtest 
                 hattest.)";
             break;
         }
 
-        "\bTo save your position, type SAVE at the command prompt.
-        The story will ask you for the name of a disk file to use to store
-        snapshot.  You&rsquo;ll have to specify a filename suitable for
-        your computer system, and the disk will need enough free space
-        to store the file; you&rsquo;ll be told if there&rsquo;s any problem
-        saving the file.  You should use a filename that doesn&rsquo;t already
-        exist on your machine, because the new file will overwrite any
-        existing file with the same name.
+        "\bUm deinen Spielstand zu speichern, gib SPEICHERN ein. Die Geschichte
+        wird dich nach einem Namen für die Datei fragen, in der ein Schnappschuss
+        des Spielstands gespeichert wird. Wenn auf deinem Speichermedium nicht genug
+        Platz für die Datei ist, wirst du darauf hingewiesen. Du solltest verschiedene
+        Namen verwenden, denn die Datei wird überschrieben.
 
-        \bDu kannst die Geschichte wieder fortsetzen, indem du LADEN eingibst.
+        \bDu kannst die Geschichte wieder fortsetzen, wenn du LADEN eingibst.
         Die Geschichte fragt dich nach dem Namen der Datei, in die gespeichert
-        wurde. Nach dem Lesen der Datei, ist der Zustand der Geschichte wieder
-        exakt derselbe wie vor dem Speichern.";
+        wurde. Nach dem Lesen der Datei, ist der Spielstand wieder exakt derselbe 
+        wie vor dem Speichern.";
 
         "\b<b>Undo</b>
-        \bSogar wenn du den Spielstand nicht gespeichert hast, kannst du wenige
+        \bSogar wenn du den Spielstand nicht gespeichert hast, kannst du 
         Befehle zurücknehmen, wenn du UNDO oder ZURÜCK eingibst. Jedes mal wenn
         du UNDO eingibst, nimmt die Geschichte einen Befehl zurück. Der Vorgang
-        ist auf ein paar wenige Versuche beschränkt, so dass dies das Speichern
-        nicht ersetzt, aber es ist gerade richtig, falls du unversehens in eine
+        ist auf wenige Versuche beschränkt, so dass dies das Speichern
+        nicht ersetzt, aber es ist gerade richtig, falls du plötzlich in eine
         gefährliche Situation gerätst und wieder zurück willst.";
     }
 
@@ -770,10 +746,10 @@ DefineSystemAction(Instructions)
             Anzeigen aus. AUSGANG STATUS zeigt die Ausgänge nur in der Statuszeile
             und AUSGANG RAUM zeigt die Ausgänge nur nach der Raumbeschreibung.";
         
-        "\UPS: korrigiert ein einzelnes, vertipptes Wort in einem Befehl, ohne
+        "\ÄH: korrigiert ein einzelnes, vertipptes Wort in einem Befehl, ohne
         den ganze Eingabe wiederholen zu müssen. Des geht nur unmittelbar nach
         dem die Geschichte ein Wort in deinem Befehl nicht erkannt hat. Tippe
-        UPS gefolgt von dem korrigierten Wort.
+        ÄH gefolgt von dem korrigierten Wort.
         \bENDE (oder nur Q): Beendet die Geschichte.
         \bNEUSTART: Beginnt die Geschichte von Neuem.
         \bLADEN: Stellt einen Spielstand wieder her, der zuvor mittels 
@@ -784,12 +760,12 @@ DefineSystemAction(Instructions)
         ausdrucken oder weiterverwenden kannst.
         \bSKRIPT AUS: Beendet den Mitschnitt der mit SKRIPT gestartet wurde. 
         \bUNDO: Nimmt den letzten Befehl zurück.
-        \bSPEICHER STANDARD: Speichert deine Einstellungen für Sachen wie
+        \bSTANDARD SPEICHERN: Speichert deine Einstellungen für Sachen wie
         NACHRICHT, AUSGANG und FUSSNOTEN als Standard. Das heißt, deine
         Einstellungen werden automatisch wiederhergestellt, sobald du
         ein neues Spiel startest oder das Spiel neustartest.
-        \bLADE STANDARD: Stellt die Einstellungen wieder her, die zuvor
-        mit SPEICHER STANDARD gespeichert wurden. ";
+        \bSTANDARD LADEN: Stellt die Einstellungen wieder her, die zuvor
+        mit STANDARD SPEICHERN gespeichert wurden. ";
     }
     
     /* Unknown Words chapter */
@@ -802,7 +778,7 @@ DefineSystemAction(Instructions)
         Wort eingibst, wird dir die Geschichte sagen, welches Wort das war.
         Wenn dies passiert und die Geschichte auch keine Synonyme für das Wort
         versteht, kannst du davon ausgehen, dass dieses Objekt für das Spiel
-        nicht wichtig ist. ";
+        unwichtig ist. ";
     }
 
     /* Ambiguous Commands chapter */
@@ -836,7 +812,7 @@ DefineSystemAction(Instructions)
         \n\t &gt;GOLDENEN
         \n\t Aufgesperrt.
 
-        \bWenn die Geschcihte eine Frage stellt und du nicht mit dem Befehl
+        \bWenn die Geschichte eine Frage stellt und du nicht mit dem Befehl
         weitermachen willst ,kannst du auch einen ganz neuen Befehl eingeben,
         statt die Frage zu beantworten.";
     }
@@ -862,9 +838,9 @@ DefineSystemAction(Instructions)
         \n\t LEGE CD UND SEIL IN DIE SCHACHTEL
         \n\t LEGE SEIL UND SCHACHTEL AB
         
-        \bDu kannst das Wort ALLES verwenden um dich auf alles
-        erreichbare zu beziehen, oder AUSSER (direkt nach ALLES),
-        um manche Objekte auszuschließen:
+        \bDu kannst das Wort ALLES verwenden um dich auf alle
+        erreichbaren Gegenstände zu beziehen, oder AUSSER (direkt nach
+        ALLES), um manche Objekte auszuschließen:
 
         \b
         \n\t NIMM ALLES
@@ -878,10 +854,9 @@ DefineSystemAction(Instructions)
         enthält, legst du mit LEG ALLES AB die Schachtel und das Seil ab,
         die CD bleibt aber in der Schachtel.
 
-        \b<b><q>Es, ihn, sie</q> und <q>sie, ihnen</q></b>
+        \b<b><q>Es, ihn, sie</q> und <q>sie, ihnen:</q></b>
         \bDu kannst die Artikel verwenden, um dich auf das letzte Objekt
-        aus einem vorangegangenen Befehl zu beziehen, das dem jeweiligen Genus
-        entsprach:
+        aus einem vorangegangenen Befehl zu beziehen:
 
         \b
         \n\t NIMM DIE SCHACHTEL
@@ -891,7 +866,7 @@ DefineSystemAction(Instructions)
         
         \b<b>Mehrere Befehle auf einmal</b>
         \bDu kannst in einer Eingabezeile mehrere Befehele auf einmal
-        eingeben, wenn du diese trennst durch einen PUNKT, durch ein KOMMA und
+        eingeben, wenn du diese durch einen PUNKT trennst, durch ein KOMMA und
         DANN oder durch ein KOMMA oder ein UND. Zum Beispiel:
 
         \b
@@ -899,15 +874,15 @@ DefineSystemAction(Instructions)
         \n\t NIMM DIE SCHACHTEL. ÖFFNE SIE
         \n\t SCHLIESS DIE TÜR MIT DEM SCHLÜSSEL AUF. ÖFFNE SIE, DANN GEH NACH NORDEN
 
-        \bWenn die Geschichte einen dieser Befehle nicht versteht, wird dir gesagt,
-        warum und alles in der Zeile danach ignoriert.";
+        \bWenn die Geschichte einen dieser Befehle nicht versteht, wird dir gesagt
+        warum und deine weitere Eingabe ignoriert.";
     }
 
     /* General Tips chapter */
     showTipsChapter()
     {
         "\b<b>Ein paar Tipps</b>
-        \bJetzt wo du einige technische Details bei der Befehlseingabe kennst,
+        \bJetzt wo du einige technische Details der Befehlseingabe kennst,
         willst du vielleicht mehr über eine erfolgreiche Strategie zum
         Weiterkommen in der Geschichte lernen. Erfahrene Spieler gehen
         nach folgendem Schema vor:
@@ -917,36 +892,36 @@ DefineSystemAction(Instructions)
         das aus der Raumbeschreibung nicht hervorgeht. Nennt die Geschichte
         weitere Teile an einem Objekt, untersuche diese auch.
 
-        \bZeichne eine Karten, wenn die Geschichte mehr als ein paar Orte hat.
-        Wenn du einen Ort betrittst, zeichne die Ausgänge ein - so ist es leicht
-        zu sehen, falls du einen Ausgang noch nichterkundet hast. Wenn du festhängst,
+        \bZeichne eine Karte, wenn die Geschichte mehr als ein paar Orte hat.
+        Wenn du einen Ort betrittst, zeichne die Ausgänge ein, so ist es leicht
+        zu sehen, falls du einen Ausgang noch nicht erkundet hast. Wenn du festhängst,
         erkunde die unerforschten Gebiete zuerst. Vielleicht findest du dort, was
         du gerade brauchst.
 
         \bWenn die Geschichte ein Wort oder Synonyme nicht erkennt, ist dieses
-        Wort für die Geschichte wahrscheinlich nicht relevant. Wenn du mit
+        Wort für die Geschichte wahrscheinlich unwichtig. Wenn du mit
         etwas interagierst und die Meldung <q>das ist nicht wichtig</q> erscheint,
-        kannst du dieses Objekt ziemlich wahrscheinlich ignorieren. Es existiert 
-        eher der Atmosphäre wegen, nicht der Interaktion wegen.
+        kannst du dieses Objekt vermutlich ignorieren. Es dient dann eher der 
+        Atmosphäre der Geschichte.
 
-        \bWenn du etwas tun willst und es partout nicht funktioniert, pass auf,
+        \bWenn du etwas tun willst und es nicht funktioniert, pass auf,
         warum es nicht geht. Wenn alles, was du versuchst, unter die Kategorie
         (<q>nichts passiert</q> oder <q>Das kannst du nicht öffnen</q>) fällt,
         bist du vielleicht einfach auf der falschen Fährte. Geh einen Schritt
         zurück und denk dir alternative Wege aus, an das Problem heranzugehen.
         Wenn die Antwort etwas spezieller ausfällt, könnte das ein wichtiger
         Hinweis sein. <q>Die Wache sagt, <q>Du kannst das hier nicht öffnen!</q>\ 
-        und schnappt sich die Schachtel aus deiner Hand.</q> Das könnte darauf
+        und nimmt dir die Schachtel aus der Hand.</q> Das könnte darauf
         hinweisen, dass du entweder die Wache dazu bringen musst, diesen Ort zu
-        verlassen oder du eben die Schachtel woandershin mitnehmen musst, bevor
-        du sie öffnen kannst, zum Beispiel.
+        verlassen oder du eben die Schachtel woandershin öffnen musst, ohne dem
+        Blick der Wache ausgesetzt zu sein.
 
         \bWenn du ganz steckenbleibst, versuche das Problem zurück zu stellen
         und löse erst ein anderes Problem. Oder speichere den Spielstand und
         mach eine Pause. Vielleicht kommt die Einsicht zur Lösung des Problems,
         wenn du es am wenigsten erwartest. Einige Geschichten spielt man besser
-        über einen längeren Zeitraum, und wenn dir die Geschichte gefällt, warum
-        sich dann abhetzten?
+        über einen längeren Zeitraum und wenn dir die Geschichte gefällt, warum
+        sich dann abhetzen?
 
         \bLetztendlich, wenn alles schiefgeht, kannst du um Hilfe fragen. Ein
         guter Platz hierfür ist das deutsche IF Forum unter
@@ -1020,10 +995,10 @@ topInstructionsMenu: MenuItem 'Wie man Interactive Fiction spielt';
     heading = nil
     menuContents =
         "\b<b>Einführung</b>
-        \bWillkommen! Wenn du noch nie zuvor Interactive Fiction
-        gespielt hast, können dir diese Informationen weiterhelfen.
+        \bWillkommen! Wenn du noch nie zuvor Textadventures gespielt hast, 
+        können dir die folgenden Informationen weiterhelfen.
         Wenn du bereits weißt, wie man diese Art von Spiel spielt,
-        wirst du wahrscheinlich auf diese ausführlichen Instruktionen
+        wirst du wahrscheinlich auf diese ausführlichen Erläuterungen
         verzichten können, aber vielleicht gibt es mit INFO noch
         einige wichtige Hinweise auf die speziellen Funktionen dieser
         Geschichte.
