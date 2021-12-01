@@ -3510,7 +3510,7 @@ playerActionMessages: MessageHelper
     doorClosesBehindMsg(obj)
     {
         gMessageParams(obj);
-        return '<.p>Danach {schliesst obj} sich {der obj/er} hinter {dem actor/ihm}{*}. ';
+        return '<.p>{Der obj/er} {schliesst} sich hinter {dem actor/ihm}{*}. ';
     }
 
     /* the stairway does not go up/down */
@@ -4970,7 +4970,7 @@ class BaseContentsLister: Lister
     }
     showListContentsPrefixTall(itemCount, pov, parent)
     {
-        "<<parent.einName>>, <<parent.objInPrep>><<withListCaseNominative>><<withListArtIndefinite>> <<parent.isPlural ? 'denen' : parent.isHer ? 'der' : 'dem' >>
+        "<<parent.einName>>, <<parent.objInPrep>><<withListCaseNominative>><<withListArtIndefinite>> <<parent.isPlural ? 'diesen' : parent.isHer ? 'der' : 'dem' >>
         <<itemCount == 1 ? '{ist singular}' : '{ist plural}'>>{*}:";
     }
     showListContentsSuffixTall(itemCount, pov, parent) // -- German: added to get the default listcase accusative!
@@ -5131,7 +5131,7 @@ class BaseInlineContentsLister: ContentsLister
     showListEmpty(pov, parent) { }
     showListPrefixWide(cnt, pov, parent)
     {
-        " (<<parent.objInPrep>> <<parent.isPlural ? 'denen' : parent.isHer ? 'der' : 'dem' >> 
+        " (<<parent.objInPrep>> <<parent.isPlural ? 'diesen' : parent.isHer ? 'der' : 'dem' >> 
         <<cnt == 1 ? '{ist singular}' : '{ist plural}'>><<withListCaseNominative>><<withListArtIndefinite>> ";
     }
     showListSuffixWide(itemCount, pov, parent)
